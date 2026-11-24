@@ -4,7 +4,6 @@ import type {
   GameSessionData,
   GameSettings,
   GameStatus,
-  ReserveCardTarget,
   RevealedCards,
   TokenBank,
   TopDeckCards,
@@ -146,7 +145,7 @@ export class GameSession {
   }
 
   // Action 2: Reserve any one face-up card or the card from the top of the face-down deck
-  public reserveCard(target: ReserveCardTarget): void {
+  public reserveCard(cardId: string): void {
     // Logic to update game state will be implemented based on the rules later
   }
 

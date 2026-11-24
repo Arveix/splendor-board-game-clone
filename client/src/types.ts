@@ -34,11 +34,6 @@ export interface TopDeckCards {
   tier3: string | null;
 }
 
-export interface ReserveCardTarget {
-  cardId?: string;
-  tier?: 'tier1' | 'tier2' | 'tier3';
-}
-
 export interface Player {
   id: string;
   name: string;
