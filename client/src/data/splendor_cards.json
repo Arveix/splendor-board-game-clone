@@ -1,0 +1,1203 @@
+{
+ "title": "Splendor Card Set",
+ "development_cards": {
+  "1": [
+   {
+    "id": "DC-BLK-01",
+    "color": "Black",
+    "points": 0,
+    "cost": {
+     "black": 0,
+     "white": 1,
+     "red": 1,
+     "blue": 1,
+     "green": 1
+    }
+   },
+   {
+    "id": "DC-BLK-02",
+    "color": "Black",
+    "points": 0,
+    "cost": {
+     "black": 0,
+     "white": 0,
+     "red": 1,
+     "blue": 0,
+     "green": 2
+    }
+   },
+   {
+    "id": "DC-BLK-03",
+    "color": "Black",
+    "points": 0,
+    "cost": {
+     "black": 0,
+     "white": 2,
+     "red": 0,
+     "blue": 0,
+     "green": 2
+    }
+   },
+   {
+    "id": "DC-BLK-04",
+    "color": "Black",
+    "points": 0,
+    "cost": {
+     "black": 1,
+     "white": 0,
+     "red": 3,
+     "blue": 0,
+     "green": 1
+    }
+   },
+   {
+    "id": "DC-BLK-05",
+    "color": "Black",
+    "points": 0,
+    "cost": {
+     "black": 0,
+     "white": 0,
+     "red": 0,
+     "blue": 0,
+     "green": 3
+    }
+   },
+   {
+    "id": "DC-BLK-06",
+    "color": "Black",
+    "points": 0,
+    "cost": {
+     "black": 0,
+     "white": 1,
+     "red": 1,
+     "blue": 2,
+     "green": 1
+    }
+   },
+   {
+    "id": "DC-BLK-07",
+    "color": "Black",
+    "points": 0,
+    "cost": {
+     "black": 0,
+     "white": 2,
+     "red": 1,
+     "blue": 2,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-BLK-08",
+    "color": "Black",
+    "points": 1,
+    "cost": {
+     "black": 0,
+     "white": 0,
+     "red": 0,
+     "blue": 4,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-BLU-01",
+    "color": "Blue",
+    "points": 0,
+    "cost": {
+     "black": 2,
+     "white": 1,
+     "red": 0,
+     "blue": 0,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-BLU-02",
+    "color": "Blue",
+    "points": 0,
+    "cost": {
+     "black": 1,
+     "white": 1,
+     "red": 2,
+     "blue": 0,
+     "green": 1
+    }
+   },
+   {
+    "id": "DC-BLU-03",
+    "color": "Blue",
+    "points": 0,
+    "cost": {
+     "black": 1,
+     "white": 1,
+     "red": 1,
+     "blue": 0,
+     "green": 1
+    }
+   },
+   {
+    "id": "DC-BLU-04",
+    "color": "Blue",
+    "points": 0,
+    "cost": {
+     "black": 0,
+     "white": 0,
+     "red": 1,
+     "blue": 1,
+     "green": 3
+    }
+   },
+   {
+    "id": "DC-BLU-05",
+    "color": "Blue",
+    "points": 0,
+    "cost": {
+     "black": 3,
+     "white": 0,
+     "red": 0,
+     "blue": 0,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-BLU-06",
+    "color": "Blue",
+    "points": 0,
+    "cost": {
+     "black": 0,
+     "white": 1,
+     "red": 2,
+     "blue": 0,
+     "green": 2
+    }
+   },
+   {
+    "id": "DC-BLU-07",
+    "color": "Blue",
+    "points": 0,
+    "cost": {
+     "black": 2,
+     "white": 0,
+     "red": 0,
+     "blue": 0,
+     "green": 2
+    }
+   },
+   {
+    "id": "DC-BLU-08",
+    "color": "Blue",
+    "points": 1,
+    "cost": {
+     "black": 0,
+     "white": 0,
+     "red": 4,
+     "blue": 0,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-GRN-01",
+    "color": "Green",
+    "points": 0,
+    "cost": {
+     "black": 0,
+     "white": 2,
+     "red": 0,
+     "blue": 1,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-GRN-02",
+    "color": "Green",
+    "points": 0,
+    "cost": {
+     "black": 0,
+     "white": 0,
+     "red": 2,
+     "blue": 2,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-GRN-03",
+    "color": "Green",
+    "points": 0,
+    "cost": {
+     "black": 0,
+     "white": 1,
+     "red": 0,
+     "blue": 3,
+     "green": 1
+    }
+   },
+   {
+    "id": "DC-GRN-04",
+    "color": "Green",
+    "points": 0,
+    "cost": {
+     "black": 1,
+     "white": 1,
+     "red": 1,
+     "blue": 1,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-GRN-05",
+    "color": "Green",
+    "points": 0,
+    "cost": {
+     "black": 2,
+     "white": 1,
+     "red": 1,
+     "blue": 1,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-GRN-06",
+    "color": "Green",
+    "points": 0,
+    "cost": {
+     "black": 2,
+     "white": 0,
+     "red": 2,
+     "blue": 1,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-GRN-07",
+    "color": "Green",
+    "points": 0,
+    "cost": {
+     "black": 0,
+     "white": 0,
+     "red": 3,
+     "blue": 0,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-GRN-08",
+    "color": "Green",
+    "points": 1,
+    "cost": {
+     "black": 4,
+     "white": 0,
+     "red": 0,
+     "blue": 0,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-RED-01",
+    "color": "Red",
+    "points": 0,
+    "cost": {
+     "black": 0,
+     "white": 3,
+     "red": 0,
+     "blue": 0,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-RED-02",
+    "color": "Red",
+    "points": 0,
+    "cost": {
+     "black": 3,
+     "white": 1,
+     "red": 1,
+     "blue": 0,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-RED-03",
+    "color": "Red",
+    "points": 0,
+    "cost": {
+     "black": 0,
+     "white": 0,
+     "red": 0,
+     "blue": 2,
+     "green": 1
+    }
+   },
+   {
+    "id": "DC-RED-04",
+    "color": "Red",
+    "points": 0,
+    "cost": {
+     "black": 2,
+     "white": 2,
+     "red": 0,
+     "blue": 0,
+     "green": 1
+    }
+   },
+   {
+    "id": "DC-RED-05",
+    "color": "Red",
+    "points": 0,
+    "cost": {
+     "black": 1,
+     "white": 2,
+     "red": 0,
+     "blue": 1,
+     "green": 1
+    }
+   },
+   {
+    "id": "DC-RED-06",
+    "color": "Red",
+    "points": 0,
+    "cost": {
+     "black": 1,
+     "white": 1,
+     "red": 0,
+     "blue": 1,
+     "green": 1
+    }
+   },
+   {
+    "id": "DC-RED-07",
+    "color": "Red",
+    "points": 0,
+    "cost": {
+     "black": 0,
+     "white": 2,
+     "red": 2,
+     "blue": 0,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-RED-08",
+    "color": "Red",
+    "points": 1,
+    "cost": {
+     "black": 0,
+     "white": 4,
+     "red": 0,
+     "blue": 0,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-WHT-01",
+    "color": "White",
+    "points": 0,
+    "cost": {
+     "black": 1,
+     "white": 0,
+     "red": 0,
+     "blue": 2,
+     "green": 2
+    }
+   },
+   {
+    "id": "DC-WHT-02",
+    "color": "White",
+    "points": 0,
+    "cost": {
+     "black": 1,
+     "white": 0,
+     "red": 2,
+     "blue": 0,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-WHT-03",
+    "color": "White",
+    "points": 0,
+    "cost": {
+     "black": 1,
+     "white": 0,
+     "red": 1,
+     "blue": 1,
+     "green": 1
+    }
+   },
+   {
+    "id": "DC-WHT-04",
+    "color": "White",
+    "points": 0,
+    "cost": {
+     "black": 0,
+     "white": 0,
+     "red": 0,
+     "blue": 3,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-WHT-05",
+    "color": "White",
+    "points": 0,
+    "cost": {
+     "black": 0,
+     "white": 0,
+     "red": 0,
+     "blue": 2,
+     "green": 2
+    }
+   },
+   {
+    "id": "DC-WHT-06",
+    "color": "White",
+    "points": 0,
+    "cost": {
+     "black": 1,
+     "white": 0,
+     "red": 1,
+     "blue": 1,
+     "green": 2
+    }
+   },
+   {
+    "id": "DC-WHT-07",
+    "color": "White",
+    "points": 0,
+    "cost": {
+     "black": 1,
+     "white": 3,
+     "red": 0,
+     "blue": 1,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-WHT-08",
+    "color": "White",
+    "points": 1,
+    "cost": {
+     "black": 0,
+     "white": 0,
+     "red": 0,
+     "blue": 0,
+     "green": 4
+    }
+   }
+  ],
+  "2": [
+   {
+    "id": "DC-BLK-09",
+    "color": "Black",
+    "points": 1,
+    "cost": {
+     "black": 0,
+     "white": 3,
+     "red": 0,
+     "blue": 2,
+     "green": 2
+    }
+   },
+   {
+    "id": "DC-BLK-10",
+    "color": "Black",
+    "points": 1,
+    "cost": {
+     "black": 2,
+     "white": 3,
+     "red": 0,
+     "blue": 0,
+     "green": 3
+    }
+   },
+   {
+    "id": "DC-BLK-11",
+    "color": "Black",
+    "points": 2,
+    "cost": {
+     "black": 0,
+     "white": 0,
+     "red": 2,
+     "blue": 1,
+     "green": 4
+    }
+   },
+   {
+    "id": "DC-BLK-12",
+    "color": "Black",
+    "points": 2,
+    "cost": {
+     "black": 0,
+     "white": 5,
+     "red": 0,
+     "blue": 0,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-BLK-13",
+    "color": "Black",
+    "points": 2,
+    "cost": {
+     "black": 0,
+     "white": 0,
+     "red": 3,
+     "blue": 0,
+     "green": 5
+    }
+   },
+   {
+    "id": "DC-BLK-14",
+    "color": "Black",
+    "points": 3,
+    "cost": {
+     "black": 6,
+     "white": 0,
+     "red": 0,
+     "blue": 0,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-BLU-09",
+    "color": "Blue",
+    "points": 1,
+    "cost": {
+     "black": 0,
+     "white": 0,
+     "red": 3,
+     "blue": 2,
+     "green": 2
+    }
+   },
+   {
+    "id": "DC-BLU-10",
+    "color": "Blue",
+    "points": 1,
+    "cost": {
+     "black": 3,
+     "white": 0,
+     "red": 0,
+     "blue": 2,
+     "green": 3
+    }
+   },
+   {
+    "id": "DC-BLU-11",
+    "color": "Blue",
+    "points": 2,
+    "cost": {
+     "black": 0,
+     "white": 5,
+     "red": 0,
+     "blue": 3,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-BLU-12",
+    "color": "Blue",
+    "points": 2,
+    "cost": {
+     "black": 0,
+     "white": 0,
+     "red": 0,
+     "blue": 5,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-BLU-13",
+    "color": "Blue",
+    "points": 2,
+    "cost": {
+     "black": 4,
+     "white": 2,
+     "red": 1,
+     "blue": 0,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-BLU-14",
+    "color": "Blue",
+    "points": 3,
+    "cost": {
+     "black": 0,
+     "white": 0,
+     "red": 0,
+     "blue": 6,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-GRN-09",
+    "color": "Green",
+    "points": 1,
+    "cost": {
+     "black": 0,
+     "white": 3,
+     "red": 3,
+     "blue": 0,
+     "green": 2
+    }
+   },
+   {
+    "id": "DC-GRN-10",
+    "color": "Green",
+    "points": 1,
+    "cost": {
+     "black": 2,
+     "white": 2,
+     "red": 0,
+     "blue": 3,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-GRN-11",
+    "color": "Green",
+    "points": 2,
+    "cost": {
+     "black": 1,
+     "white": 4,
+     "red": 0,
+     "blue": 2,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-GRN-12",
+    "color": "Green",
+    "points": 2,
+    "cost": {
+     "black": 0,
+     "white": 0,
+     "red": 0,
+     "blue": 0,
+     "green": 5
+    }
+   },
+   {
+    "id": "DC-GRN-13",
+    "color": "Green",
+    "points": 2,
+    "cost": {
+     "black": 0,
+     "white": 0,
+     "red": 0,
+     "blue": 5,
+     "green": 3
+    }
+   },
+   {
+    "id": "DC-GRN-14",
+    "color": "Green",
+    "points": 3,
+    "cost": {
+     "black": 0,
+     "white": 0,
+     "red": 0,
+     "blue": 0,
+     "green": 6
+    }
+   },
+   {
+    "id": "DC-RED-09",
+    "color": "Red",
+    "points": 1,
+    "cost": {
+     "black": 3,
+     "white": 0,
+     "red": 2,
+     "blue": 3,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-RED-10",
+    "color": "Red",
+    "points": 1,
+    "cost": {
+     "black": 3,
+     "white": 2,
+     "red": 2,
+     "blue": 0,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-RED-11",
+    "color": "Red",
+    "points": 2,
+    "cost": {
+     "black": 0,
+     "white": 1,
+     "red": 0,
+     "blue": 4,
+     "green": 2
+    }
+   },
+   {
+    "id": "DC-RED-12",
+    "color": "Red",
+    "points": 2,
+    "cost": {
+     "black": 5,
+     "white": 3,
+     "red": 0,
+     "blue": 0,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-RED-13",
+    "color": "Red",
+    "points": 2,
+    "cost": {
+     "black": 5,
+     "white": 0,
+     "red": 0,
+     "blue": 0,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-RED-14",
+    "color": "Red",
+    "points": 3,
+    "cost": {
+     "black": 0,
+     "white": 0,
+     "red": 6,
+     "blue": 0,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-WHT-09",
+    "color": "White",
+    "points": 1,
+    "cost": {
+     "black": 2,
+     "white": 0,
+     "red": 2,
+     "blue": 0,
+     "green": 3
+    }
+   },
+   {
+    "id": "DC-WHT-10",
+    "color": "White",
+    "points": 1,
+    "cost": {
+     "black": 0,
+     "white": 2,
+     "red": 3,
+     "blue": 3,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-WHT-11",
+    "color": "White",
+    "points": 2,
+    "cost": {
+     "black": 2,
+     "white": 0,
+     "red": 4,
+     "blue": 0,
+     "green": 1
+    }
+   },
+   {
+    "id": "DC-WHT-12",
+    "color": "White",
+    "points": 2,
+    "cost": {
+     "black": 0,
+     "white": 0,
+     "red": 5,
+     "blue": 0,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-WHT-13",
+    "color": "White",
+    "points": 2,
+    "cost": {
+     "black": 3,
+     "white": 0,
+     "red": 5,
+     "blue": 0,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-WHT-14",
+    "color": "White",
+    "points": 3,
+    "cost": {
+     "black": 0,
+     "white": 6,
+     "red": 0,
+     "blue": 0,
+     "green": 0
+    }
+   }
+  ],
+  "3": [
+   {
+    "id": "DC-BLK-15",
+    "color": "Black",
+    "points": 3,
+    "cost": {
+     "black": 0,
+     "white": 3,
+     "red": 3,
+     "blue": 3,
+     "green": 5
+    }
+   },
+   {
+    "id": "DC-BLK-16",
+    "color": "Black",
+    "points": 4,
+    "cost": {
+     "black": 0,
+     "white": 0,
+     "red": 7,
+     "blue": 0,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-BLK-17",
+    "color": "Black",
+    "points": 4,
+    "cost": {
+     "black": 3,
+     "white": 0,
+     "red": 6,
+     "blue": 0,
+     "green": 3
+    }
+   },
+   {
+    "id": "DC-BLK-18",
+    "color": "Black",
+    "points": 5,
+    "cost": {
+     "black": 3,
+     "white": 0,
+     "red": 7,
+     "blue": 0,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-BLU-15",
+    "color": "Blue",
+    "points": 3,
+    "cost": {
+     "black": 5,
+     "white": 3,
+     "red": 3,
+     "blue": 0,
+     "green": 3
+    }
+   },
+   {
+    "id": "DC-BLU-16",
+    "color": "Blue",
+    "points": 4,
+    "cost": {
+     "black": 0,
+     "white": 7,
+     "red": 0,
+     "blue": 0,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-BLU-17",
+    "color": "Blue",
+    "points": 4,
+    "cost": {
+     "black": 3,
+     "white": 6,
+     "red": 0,
+     "blue": 3,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-BLU-18",
+    "color": "Blue",
+    "points": 5,
+    "cost": {
+     "black": 0,
+     "white": 7,
+     "red": 0,
+     "blue": 3,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-GRN-15",
+    "color": "Green",
+    "points": 3,
+    "cost": {
+     "black": 3,
+     "white": 5,
+     "red": 3,
+     "blue": 3,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-GRN-16",
+    "color": "Green",
+    "points": 4,
+    "cost": {
+     "black": 0,
+     "white": 3,
+     "red": 0,
+     "blue": 6,
+     "green": 3
+    }
+   },
+   {
+    "id": "DC-GRN-17",
+    "color": "Green",
+    "points": 4,
+    "cost": {
+     "black": 0,
+     "white": 0,
+     "red": 0,
+     "blue": 7,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-GRN-18",
+    "color": "Green",
+    "points": 5,
+    "cost": {
+     "black": 0,
+     "white": 0,
+     "red": 0,
+     "blue": 7,
+     "green": 3
+    }
+   },
+   {
+    "id": "DC-RED-15",
+    "color": "Red",
+    "points": 3,
+    "cost": {
+     "black": 3,
+     "white": 3,
+     "red": 0,
+     "blue": 5,
+     "green": 3
+    }
+   },
+   {
+    "id": "DC-RED-16",
+    "color": "Red",
+    "points": 4,
+    "cost": {
+     "black": 0,
+     "white": 0,
+     "red": 0,
+     "blue": 0,
+     "green": 7
+    }
+   },
+   {
+    "id": "DC-RED-17",
+    "color": "Red",
+    "points": 4,
+    "cost": {
+     "black": 0,
+     "white": 0,
+     "red": 3,
+     "blue": 3,
+     "green": 6
+    }
+   },
+   {
+    "id": "DC-RED-18",
+    "color": "Red",
+    "points": 5,
+    "cost": {
+     "black": 0,
+     "white": 0,
+     "red": 3,
+     "blue": 0,
+     "green": 7
+    }
+   },
+   {
+    "id": "DC-WHT-15",
+    "color": "White",
+    "points": 3,
+    "cost": {
+     "black": 3,
+     "white": 0,
+     "red": 5,
+     "blue": 3,
+     "green": 3
+    }
+   },
+   {
+    "id": "DC-WHT-16",
+    "color": "White",
+    "points": 4,
+    "cost": {
+     "black": 7,
+     "white": 0,
+     "red": 0,
+     "blue": 0,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-WHT-17",
+    "color": "White",
+    "points": 4,
+    "cost": {
+     "black": 6,
+     "white": 3,
+     "red": 3,
+     "blue": 0,
+     "green": 0
+    }
+   },
+   {
+    "id": "DC-WHT-18",
+    "color": "White",
+    "points": 5,
+    "cost": {
+     "black": 7,
+     "white": 3,
+     "red": 0,
+     "blue": 0,
+     "green": 0
+    }
+   }
+  ]
+ },
+ "noble_tiles": [
+  {
+   "id": "NT-01",
+   "name": "Mary Stuart",
+   "cost": {
+    "black": 0,
+    "white": 0,
+    "red": 4,
+    "blue": 0,
+    "green": 4
+   }
+  },
+  {
+   "id": "NT-02",
+   "name": "Niccolo Machiavelli",
+   "cost": {
+    "black": 0,
+    "white": 4,
+    "red": 0,
+    "blue": 4,
+    "green": 0
+   }
+  },
+  {
+   "id": "NT-03",
+   "name": "Isabella I of Castile",
+   "cost": {
+    "black": 4,
+    "white": 4,
+    "red": 0,
+    "blue": 0,
+    "green": 0
+   }
+  },
+  {
+   "id": "NT-04",
+   "name": "Suleiman the Magnificent",
+   "cost": {
+    "black": 0,
+    "white": 0,
+    "red": 0,
+    "blue": 4,
+    "green": 4
+   }
+  },
+  {
+   "id": "NT-05",
+   "name": "King Henry VIII of England",
+   "cost": {
+    "black": 4,
+    "white": 0,
+    "red": 0,
+    "blue": 0,
+    "green": 4
+   }
+  },
+  {
+   "id": "NT-06",
+   "name": "Charles V of Holy Roman Empire",
+   "cost": {
+    "black": 3,
+    "white": 3,
+    "red": 3,
+    "blue": 0,
+    "green": 0
+   }
+  },
+  {
+   "id": "NT-07",
+   "name": "Catherine of Medici",
+   "cost": {
+    "black": 0,
+    "white": 0,
+    "red": 3,
+    "blue": 3,
+    "green": 3
+   }
+  },
+  {
+   "id": "NT-08",
+   "name": "Anne of Brittany",
+   "cost": {
+    "black": 0,
+    "white": 3,
+    "red": 0,
+    "blue": 3,
+    "green": 3
+   }
+  },
+  {
+   "id": "NT-09",
+   "name": "Elisabeth of Austria, Queen of France",
+   "cost": {
+    "black": 3,
+    "white": 3,
+    "red": 0,
+    "blue": 3,
+    "green": 0
+   }
+  },
+  {
+   "id": "NT-10",
+   "name": "Francis I of France",
+   "cost": {
+    "black": 3,
+    "white": 0,
+    "red": 3,
+    "blue": 0,
+    "green": 3
+   }
+  }
+ ]
+}
