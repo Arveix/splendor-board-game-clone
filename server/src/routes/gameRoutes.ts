@@ -150,8 +150,8 @@ router.post('/:id/start', (req: AuthenticatedRequest, res: Response) => {
   res.json({ game: game.toJSON() });
 });
 
-// POST /api/games/:id/next-turn - Switch active player to the next player
-router.post('/:id/next-turn', (req: AuthenticatedRequest, res: Response) => {
+// POST /api/games/:id/end-turn - End current player's turn and switch active player to next player
+router.post(['/:id/end-turn', '/:id/next-turn'], (req: AuthenticatedRequest, res: Response) => {
   const game = games.get(getParamId(req));
   if (!game) {
     return res.status(404).json({ error: 'Game not found' });
@@ -161,7 +161,7 @@ router.post('/:id/next-turn', (req: AuthenticatedRequest, res: Response) => {
     return res.status(400).json({ error: 'Game is not active' });
   }
 
-  game.nextTurn();
+  game.endTurn();
 
   broadcastGameUpdate(game.id, {
     type: 'GAME_UPDATED',

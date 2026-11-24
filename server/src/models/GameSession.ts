@@ -235,12 +235,16 @@ export class GameSession {
     };
   }
 
-  // Switch activePlayer to next player in the array (current turn ends, next player's turn starts)
-  public nextTurn(): void {
+  // Switch activePlayer to next player in the array (player ends turn, next player's turn starts)
+  public endTurn(): void {
     if (this.players.length === 0) return;
     const currentIndex = this.players.findIndex((p) => p.id === this.activePlayer?.id);
     const nextIndex = (currentIndex + 1) % this.players.length;
     this.activePlayer = this.players[nextIndex];
+  }
+
+  public nextTurn(): void {
+    this.endTurn();
   }
 
   public toJSON(): GameSessionData {

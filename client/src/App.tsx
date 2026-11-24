@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { GamePage } from './components/GamePage';
 import HomePage from './components/HomePage';
 import LobbyPage from './components/LobbyPage';
 import UsernameGate from './components/UsernameGate';
@@ -301,17 +302,28 @@ export default function App() {
         </div>
       </header>
 
-      {/* Main View: Render LobbyPage (handling waiting, active, completed states) if in game; HomePage otherwise */}
+      {/* Main View: Render GamePage if active; LobbyPage if in waiting lobby; HomePage otherwise */}
       {isInGame && activeGameId ? (
-        <LobbyPage
-          gameId={activeGameId}
-          sessionId={session.sessionId}
-          currentUsername={session.username}
-          initialStatus={gameStatus}
-          onStatusChange={setGameStatus}
-          onLeaveGame={handleLeaveGame}
-          onGameNotFound={handleGameNotFound}
-        />
+        gameStatus === 'active' ? (
+          <GamePage
+            gameId={activeGameId}
+            sessionId={session.sessionId}
+            currentUsername={session.username}
+            onStatusChange={setGameStatus}
+            onLeaveGame={handleLeaveGame}
+            onGameNotFound={handleGameNotFound}
+          />
+        ) : (
+          <LobbyPage
+            gameId={activeGameId}
+            sessionId={session.sessionId}
+            currentUsername={session.username}
+            initialStatus={gameStatus}
+            onStatusChange={setGameStatus}
+            onLeaveGame={handleLeaveGame}
+            onGameNotFound={handleGameNotFound}
+          />
+        )
       ) : (
         <HomePage
           session={session}
