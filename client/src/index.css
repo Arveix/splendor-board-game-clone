@@ -1,31 +1,97 @@
 @import "tailwindcss";
 
 @theme {
-  /* Primary interface colors */
-  --color-walnut-black: #171615;
-  --color-dark-wood: #25211D;
-  --color-warm-brown: #302A22;
-  --color-parchment: #D8C8A5;
-  --color-antique-gold: #B69A65;
-  --color-muted-bronze: #80643D;
+  /* Surfaces & UI Colors per Splendor Style Guide */
+  --color-table-felt: #0F2A22;
+  --color-table-vignette: #07140F;
+  --color-panel-leather: #1B1712;
+  --color-border-brass: #B8923A;
+  --color-button-primary: #B8923A;
+  --color-button-hover: #D4A83A;
+  --color-button-disabled: #4A4338;
+  --color-button-disabled-text: #8A8272;
+  --color-card-parchment: #E8DCC0;
+  --color-text-main: #F3E9D2;
+  --color-text-secondary: #B9AE96;
+  --color-text-parchment: #2A1F14;
 
-  /* Gemstone colors */
-  --color-gem-emerald: #278451;
-  --color-gem-sapphire: #2766B5;
-  --color-gem-ruby: #C33C42;
-  --color-gem-diamond: #E6E3D9;
-  --color-gem-onyx: #343638;
-  --color-gem-gold: #D5A936;
+  /* Gemstone Colors (Main, Highlight, Shadow) */
+  --color-gem-emerald: #2E9E5B;
+  --color-gem-emerald-highlight: #6FD79A;
+  --color-gem-emerald-shadow: #17613A;
+
+  --color-gem-sapphire: #2F6FD6;
+  --color-gem-sapphire-highlight: #7FAAF0;
+  --color-gem-sapphire-shadow: #1B4391;
+
+  --color-gem-ruby: #C8283B;
+  --color-gem-ruby-highlight: #F0707F;
+  --color-gem-ruby-shadow: #7E1523;
+
+  --color-gem-onyx: #2B2B33;
+  --color-gem-onyx-highlight: #6B6B78;
+  --color-gem-onyx-shadow: #111116;
+
+  --color-gem-diamond: #F2EEE4;
+  --color-gem-diamond-highlight: #FFFFFF;
+  --color-gem-diamond-shadow: #B9B2A0;
+
+  --color-gem-gold: #D4A83A;
+  --color-gem-gold-highlight: #F3D679;
+  --color-gem-gold-shadow: #8C6A17;
+
+  /* Feedback Colors */
+  --color-feedback-glow: #F3D679;
+  --color-feedback-afford: #6FD79A;
+  --color-feedback-error: #F0707F;
 
   /* Typography */
   --font-cinzel: 'Cinzel', serif;
-  --font-cormorant: 'Cormorant Garamond', Georgia, serif;
-  --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-ibm-plex: 'IBM Plex Sans', monospace;
+  --font-garamond: 'EB Garamond', Georgia, serif;
+  --font-inter: 'Inter', sans-serif;
 }
 
 body {
-  background-color: #171615;
-  color: #D8C8A5;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #0F2A22;
+  color: #F3E9D2;
+  font-family: 'EB Garamond', Georgia, serif;
+}
+
+/* Reusable Renaissance Style Guide Utility Classes */
+.table-felt-bg {
+  background: radial-gradient(ellipse at center, #0F2A22 0%, #07140F 100%);
+}
+
+.leather-panel {
+  background-color: #1B1712;
+  border: 1px solid #B8923A;
+}
+
+.parchment-surface {
+  background-color: #E8DCC0;
+  background-image: url('/textures/parchment.jpg');
+  background-size: cover;
+  background-blend-mode: multiply;
+  color: #2A1F14;
+}
+
+.btn-brass-primary {
+  background-color: #B8923A;
+  color: #1B1712;
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: all 0.15s ease-in-out;
+}
+
+.btn-brass-primary:hover:not(:disabled) {
+  background-color: #D4A83A;
+}
+
+.btn-brass-primary:disabled {
+  background-color: #4A4338;
+  color: #8A8272;
+  cursor: not-allowed;
 }

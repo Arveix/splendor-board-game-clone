@@ -114,18 +114,18 @@ export default function HomePage({
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto flex-1 flex flex-col gap-6 p-4 sm:p-6 overflow-y-auto font-['Inter',sans-serif]">
+    <div className="w-full max-w-4xl mx-auto flex-1 flex flex-col gap-6 p-4 sm:p-6 overflow-y-auto font-['EB_Garamond',serif]">
       {/* Top Banner / Create Game Card */}
-      <div className="w-full bg-[#25211D] border border-[#B69A65]/40 rounded-2xl p-5 sm:p-6 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="w-full bg-[#1B1712] border border-[#B8923A] rounded-2xl p-5 sm:p-6 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <span className="text-[10px] font-bold text-[#B69A65] uppercase tracking-widest block font-['Inter']">
+          <span className="text-xs font-semibold text-[#B9AE96] uppercase tracking-wider block font-['EB_Garamond']">
             Merchant Guildhall
           </span>
-          <h2 className="text-lg sm:text-xl font-black text-white mt-0.5 font-['Cinzel']">
+          <h2 className="text-xl sm:text-2xl font-semibold text-[#F3E9D2] mt-0.5 font-['Cinzel']">
             Start a New Game
           </h2>
-          <p className="text-xs text-[#D8C8A5]/70 mt-1 max-w-md leading-relaxed">
-            Welcome, <strong className="text-[#B69A65] font-bold">{session.username}</strong>. Establish an open trading session for other Renaissance merchants to join.
+          <p className="text-base text-[#B9AE96] mt-1 max-w-md leading-relaxed font-['EB_Garamond']">
+            Welcome, <strong className="text-[#B8923A] font-medium">{session.username}</strong>. Establish an open trading session for other Renaissance merchants to join.
           </p>
         </div>
 
@@ -134,7 +134,7 @@ export default function HomePage({
           type="button"
           onClick={handleCreateGameClick}
           disabled={creating}
-          className="self-start sm:self-auto px-5 py-3 rounded-xl bg-[#B69A65] hover:bg-[#D5A936] text-[#171615] font-black text-xs uppercase tracking-wider shadow-md transition-all cursor-pointer whitespace-nowrap disabled:opacity-50"
+          className="self-start sm:self-auto px-5 py-3 rounded-xl bg-[#B8923A] hover:bg-[#D4A83A] text-[#1B1712] font-['Cinzel'] font-semibold text-sm uppercase tracking-[0.08em] shadow-md transition-all cursor-pointer whitespace-nowrap disabled:bg-[#4A4338] disabled:text-[#8A8272]"
         >
           {creating ? 'Creating Session...' : '+ Create Game Session'}
         </button>
@@ -144,10 +144,10 @@ export default function HomePage({
       <div className="w-full flex flex-col gap-3">
         <div className="flex items-center justify-between px-1">
           <div className="flex items-center gap-2">
-            <h3 className="text-xs font-bold text-[#D8C8A5] uppercase tracking-wider font-['Cinzel']">
+            <h3 className="text-xl font-semibold text-[#B8923A] uppercase tracking-wider font-['Cinzel']">
               Active Lobbies
             </h3>
-            <span className="text-xs font-mono font-bold text-[#B69A65] bg-[#171615] border border-[#80643D]/50 px-2.5 py-0.5 rounded-full font-['IBM_Plex_Sans']">
+            <span className="text-xs font-bold text-[#B8923A] bg-[#111116] border border-[#B8923A]/50 px-2.5 py-0.5 rounded-full font-['Inter']">
               {games.length}
             </span>
           </div>
@@ -156,7 +156,7 @@ export default function HomePage({
             type="button"
             onClick={fetchActiveLobbies}
             disabled={loading}
-            className="text-xs text-[#80643D] hover:text-[#D8C8A5] transition-colors disabled:opacity-50 cursor-pointer"
+            className="text-sm text-[#B9AE96] hover:text-[#F3E9D2] transition-colors disabled:opacity-50 cursor-pointer font-['EB_Garamond']"
           >
             {loading ? 'Refreshing...' : 'Refresh'}
           </button>
@@ -164,19 +164,19 @@ export default function HomePage({
 
         {/* Loading state */}
         {loading && games.length === 0 && (
-          <div className="w-full py-12 rounded-2xl border border-[#302A22] bg-[#25211D]/60 text-center flex flex-col items-center justify-center gap-2">
-            <div className="w-6 h-6 border-2 border-[#B69A65] border-t-transparent rounded-full animate-spin" />
-            <p className="text-xs text-[#D8C8A5]/70">Loading active lobbies from guildhall...</p>
+          <div className="w-full py-12 rounded-2xl border border-[#B8923A]/40 bg-[#1B1712]/80 text-center flex flex-col items-center justify-center gap-2">
+            <div className="w-6 h-6 border-2 border-[#B8923A] border-t-transparent rounded-full animate-spin" />
+            <p className="text-base text-[#B9AE96]">Loading active lobbies from guildhall...</p>
           </div>
         )}
 
         {/* Error state */}
         {error && (
-          <div className="w-full p-4 rounded-xl bg-[#C33C42]/20 border border-[#C33C42]/50 text-[#D8C8A5] text-xs flex items-center justify-between">
+          <div className="w-full p-4 rounded-xl bg-[#C8283B]/20 border border-[#C8283B]/60 text-[#F0707F] text-sm flex items-center justify-between font-['EB_Garamond']">
             <span>{error}</span>
             <button
               onClick={fetchActiveLobbies}
-              className="text-xs font-bold underline hover:text-white cursor-pointer"
+              className="text-sm font-semibold underline hover:text-[#FFFFFF] cursor-pointer"
             >
               Retry
             </button>
@@ -185,11 +185,11 @@ export default function HomePage({
 
         {/* Empty state */}
         {!loading && games.length === 0 && !error && (
-          <div className="w-full py-12 px-4 rounded-2xl border border-dashed border-[#302A22] bg-[#25211D]/40 text-center flex flex-col items-center justify-center gap-2">
-            <span className="text-xs font-bold text-[#80643D] uppercase tracking-wider font-['Cinzel']">
+          <div className="w-full py-12 px-4 rounded-2xl border border-dashed border-[#B8923A]/40 bg-[#1B1712]/50 text-center flex flex-col items-center justify-center gap-2">
+            <span className="text-lg font-semibold text-[#B8923A] uppercase tracking-wider font-['Cinzel']">
               No Active Lobbies Found
             </span>
-            <p className="text-xs text-[#D8C8A5]/60 max-w-xs leading-relaxed font-['Cormorant_Garamond'] italic text-sm">
+            <p className="text-base text-[#B9AE96] max-w-xs leading-relaxed font-['EB_Garamond'] italic">
               There are currently no waiting game sessions. Click &quot;+ Create Game Session&quot; above to establish one.
             </p>
           </div>
@@ -206,35 +206,35 @@ export default function HomePage({
               return (
                 <div
                   key={game.id}
-                  className="w-full p-4 rounded-xl border border-[#302A22] bg-[#25211D] hover:border-[#B69A65]/50 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-md"
+                  className="w-full p-4 rounded-xl border border-[#B8923A]/60 bg-[#1B1712] hover:border-[#B8923A] transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-md"
                 >
                   <div className="flex flex-col gap-1 text-left">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-mono font-bold text-[#B69A65] bg-[#171615] border border-[#80643D]/50 px-2 py-0.5 rounded font-['IBM_Plex_Sans']">
+                      <span className="text-xs font-bold text-[#B8923A] bg-[#111116] border border-[#B8923A]/40 px-2 py-0.5 rounded font-['Inter']">
                         {game.id}
                       </span>
                       <span
-                        className={`text-[9px] font-bold uppercase px-2 py-0.5 rounded border ${
+                        className={`text-[10px] font-semibold uppercase px-2 py-0.5 rounded border font-['Cinzel'] ${
                           isWaiting
-                            ? 'bg-[#302A22] text-[#B69A65] border-[#80643D]/50'
-                            : 'bg-[#171615] text-[#278451] border-[#278451]/50'
+                            ? 'bg-[#1B1712] text-[#B8923A] border-[#B8923A]/50'
+                            : 'bg-[#111116] text-[#6FD79A] border-[#2E9E5B]/50'
                         }`}
                       >
                         {game.status}
                       </span>
                     </div>
 
-                    <h4 className="text-base font-bold text-white mt-0.5 font-['Cormorant_Garamond'] text-lg">
+                    <h4 className="text-lg font-semibold text-[#F3E9D2] mt-0.5 font-['Cinzel']">
                       {game.name}
                     </h4>
 
-                    <div className="flex items-center gap-3 text-xs text-[#D8C8A5]/70">
+                    <div className="flex items-center gap-3 text-sm text-[#B9AE96] font-['EB_Garamond']">
                       <span>
-                        Host: <strong className="text-[#D8C8A5]">{game.hostUsername}</strong>
+                        Host: <strong className="text-[#F3E9D2] font-medium">{game.hostUsername}</strong>
                       </span>
-                      <span className="text-[#80643D]">&bull;</span>
+                      <span className="text-[#B8923A]">&bull;</span>
                       <span>
-                        Players: <strong className="text-[#D8C8A5] font-['IBM_Plex_Sans']">{game.playerCount}/{game.maxPlayers}</strong>
+                        Players: <strong className="text-[#F3E9D2] font-['Inter'] font-bold">{game.playerCount}/{game.maxPlayers}</strong>
                       </span>
                     </div>
 
@@ -244,7 +244,7 @@ export default function HomePage({
                         {game.players.map((p) => (
                           <span
                             key={p.id}
-                            className="text-[10px] bg-[#171615] border border-[#302A22] px-2 py-0.5 rounded text-[#D8C8A5]/90"
+                            className="text-xs bg-[#111116] border border-[#B8923A]/30 px-2 py-0.5 rounded text-[#F3E9D2] font-['EB_Garamond']"
                           >
                             {p.name}
                             {p.name === game.hostUsername ? ' (Host)' : ''}
@@ -260,10 +260,10 @@ export default function HomePage({
                       type="button"
                       disabled={isFull || isJoining}
                       onClick={() => handleJoinLobby(game.id)}
-                      className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                      className={`px-4 py-2 rounded-xl text-xs font-['Cinzel'] font-semibold uppercase tracking-[0.08em] transition-all cursor-pointer ${
                         isFull
-                          ? 'bg-[#171615] border border-[#302A22] text-[#80643D] cursor-not-allowed'
-                          : 'bg-[#B69A65] hover:bg-[#D5A936] text-[#171615] shadow-md active:scale-95'
+                          ? 'bg-[#4A4338] text-[#8A8272] cursor-not-allowed'
+                          : 'bg-[#B8923A] hover:bg-[#D4A83A] text-[#1B1712] shadow-md active:scale-95'
                       }`}
                     >
                       {isJoining ? 'Joining...' : isFull ? 'Full' : 'Join'}

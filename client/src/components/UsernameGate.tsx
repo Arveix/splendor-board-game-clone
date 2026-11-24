@@ -70,37 +70,37 @@ export default function UsernameGate({ onSessionInitialized }: UsernameGateProps
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#171615]/95 p-4 font-['Inter',sans-serif]">
-      <div className="w-full max-w-md bg-[#25211D] border border-[#B69A65]/40 rounded-2xl p-6 sm:p-8 shadow-2xl text-center flex flex-col items-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#07140F]/90 p-4 font-['EB_Garamond',serif]">
+      <div className="w-full max-w-md bg-[#1B1712] border border-[#B8923A] rounded-2xl p-6 sm:p-8 shadow-2xl text-center flex flex-col items-center">
         {/* Brand Crest */}
         <div className="mb-4">
-          <div className="w-14 h-14 rounded-xl bg-[#171615] border border-[#B69A65]/60 flex items-center justify-center mx-auto shadow-md">
-            <span className="text-2xl font-black text-[#B69A65] font-['Cinzel']">
+          <div className="w-14 h-14 rounded-xl bg-[#1B1712] border border-[#B8923A] flex items-center justify-center mx-auto shadow-md">
+            <span className="text-2xl font-bold text-[#B8923A] font-['Cinzel']">
               S
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black tracking-widest text-[#B69A65] font-['Cinzel'] mt-3">
+          <h1 className="text-3xl font-bold tracking-wider text-[#B8923A] font-['Cinzel'] mt-3">
             SPLENDOR
           </h1>
-          <p className="text-xs text-[#D8C8A5]/80 font-['Cormorant_Garamond'] italic tracking-wide mt-0.5">
-            The Renaissance Merchant&apos;s Guild
+          <p className="text-sm text-[#B9AE96] font-['EB_Garamond'] italic tracking-wide mt-0.5">
+            Renaissance Merchant&apos;s Guild
           </p>
         </div>
 
         {/* Informational Prompt */}
         <div className="mb-6">
-          <h2 className="text-base font-bold text-white font-['Cinzel']">
+          <h2 className="text-lg font-semibold text-[#F3E9D2] font-['Cinzel']">
             Welcome, Merchant
           </h2>
-          <p className="text-xs text-[#D8C8A5]/70 mt-1 max-w-xs mx-auto leading-relaxed">
-            Please enter your username to enter the guildhall. Your session will remain active across pages and reloads.
+          <p className="text-sm text-[#B9AE96] mt-1 max-w-xs mx-auto leading-relaxed">
+            Please enter your merchant name to enter the guildhall. Your session will remain active across pages and reloads.
           </p>
         </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
           <div className="flex flex-col text-left gap-1">
-            <label htmlFor="username-input" className="text-[11px] font-bold text-[#D8C8A5] uppercase tracking-wider">
+            <label htmlFor="username-input" className="text-xs font-semibold text-[#B9AE96] uppercase tracking-wider">
               Merchant Identity
             </label>
             <input
@@ -114,10 +114,10 @@ export default function UsernameGate({ onSessionInitialized }: UsernameGateProps
                 setUsernameInput(e.target.value);
                 if (error) setError('');
               }}
-              className="w-full px-4 py-3 rounded-xl bg-[#171615] border border-[#302A22] focus:border-[#B69A65] focus:outline-none text-[#D8C8A5] placeholder-[#80643D] font-medium text-sm transition-all"
+              className="w-full px-4 py-3 rounded-xl bg-[#111116] border border-[#B8923A]/40 focus:border-[#B8923A] focus:outline-none text-[#F3E9D2] placeholder-[#B9AE96]/40 font-['EB_Garamond'] text-base transition-all"
             />
             {error && (
-              <span className="text-xs text-[#C33C42] mt-1 font-medium">
+              <span className="text-xs text-[#F0707F] mt-1 font-['EB_Garamond'] font-medium">
                 {error}
               </span>
             )}
@@ -126,13 +126,13 @@ export default function UsernameGate({ onSessionInitialized }: UsernameGateProps
           <button
             type="submit"
             disabled={loading}
-            className="w-full mt-2 py-3.5 px-4 rounded-xl bg-[#B69A65] hover:bg-[#D5A936] text-[#171615] font-black text-xs uppercase tracking-wider shadow-md active:scale-[0.99] transition-all cursor-pointer disabled:opacity-50"
+            className="w-full mt-2 py-3.5 px-4 rounded-xl bg-[#B8923A] hover:bg-[#D4A83A] text-[#1B1712] font-['Cinzel'] font-semibold text-base uppercase tracking-[0.08em] shadow-md active:scale-[0.99] transition-all cursor-pointer disabled:bg-[#4A4338] disabled:text-[#8A8272]"
           >
             {loading ? 'Entering Guildhall...' : 'Enter Splendor'}
           </button>
         </form>
 
-        <p className="text-[10px] text-[#80643D] mt-6 max-w-xs leading-relaxed font-['Cormorant_Garamond'] italic">
+        <p className="text-xs text-[#B9AE96]/70 mt-6 max-w-xs leading-relaxed font-['EB_Garamond'] italic">
           Access to any part of this website requires an active merchant session stored in your browser.
         </p>
       </div>

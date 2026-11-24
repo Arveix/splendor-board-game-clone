@@ -12,6 +12,60 @@ interface LobbyPageProps {
   onStatusChange?: (status: GameStatus) => void;
 }
 
+const GEM_STYLES: Record<
+  string,
+  {
+    main: string;
+    highlight: string;
+    shadow: string;
+    text: string;
+    label: string;
+  }
+> = {
+  emerald: {
+    main: '#2E9E5B',
+    highlight: '#6FD79A',
+    shadow: '#17613A',
+    text: '#FFFFFF',
+    label: 'Emerald',
+  },
+  sapphire: {
+    main: '#2F6FD6',
+    highlight: '#7FAAF0',
+    shadow: '#1B4391',
+    text: '#FFFFFF',
+    label: 'Sapphire',
+  },
+  ruby: {
+    main: '#C8283B',
+    highlight: '#F0707F',
+    shadow: '#7E1523',
+    text: '#FFFFFF',
+    label: 'Ruby',
+  },
+  onyx: {
+    main: '#2B2B33',
+    highlight: '#6B6B78',
+    shadow: '#111116',
+    text: '#FFFFFF',
+    label: 'Onyx',
+  },
+  diamond: {
+    main: '#F2EEE4',
+    highlight: '#FFFFFF',
+    shadow: '#B9B2A0',
+    text: '#2A1F14',
+    label: 'Diamond',
+  },
+  gold: {
+    main: '#D4A83A',
+    highlight: '#F3D679',
+    shadow: '#8C6A17',
+    text: '#2A1F14',
+    label: 'Gold',
+  },
+};
+
 export default function LobbyPage({
   gameId,
   sessionId,
@@ -90,7 +144,6 @@ export default function LobbyPage({
       .then((res) => {
         if (isCancelled) return;
         if (res.status === 404) {
-          // Game does not exist anymore: clear game session ID and navigate home
           onGameNotFound();
           return;
         }
@@ -114,7 +167,7 @@ export default function LobbyPage({
     };
   }, [gameId, sessionId, onGameNotFound, onStatusChange]);
 
-  // WebSocket connection: push changes from the server whenever an update is made to the game session
+  // WebSocket connection
   useEffect(() => {
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     const host =
@@ -206,7 +259,7 @@ export default function LobbyPage({
   const isHost = Boolean(game && currentUsername && game.hostUsername === currentUsername);
 
   return (
-    <div className="w-full flex-1 flex flex-col items-center justify-center p-4 font-['Inter',sans-serif]">
+    <div className="w-full flex-1 flex flex-col items-center justify-center p-4 font-['EB_Garamond',serif]">
       <div className="w-full max-w-2xl flex flex-col items-center gap-6">
         {/* ============================================================ */}
         {/* ACTIVE GAME SCREEN: Displays all initialized game information */}
@@ -215,108 +268,108 @@ export default function LobbyPage({
           <div className="w-full flex flex-col items-center gap-5">
             {/* Header */}
             <div className="text-center">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-[#278451] bg-[#278451]/15 border border-[#278451]/40 px-3 py-1 rounded-full inline-block mb-1.5 font-['Cinzel']">
+              <span className="text-xs font-semibold uppercase tracking-[0.08em] text-[#6FD79A] bg-[#0F2A22] border border-[#2E9E5B] px-3 py-1 rounded-full inline-block mb-1.5 font-['Cinzel']">
                 Game is active
               </span>
-              <h2 className="text-2xl sm:text-3xl font-black text-[#D8C8A5] font-['Cinzel']">
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#F3E9D2] font-['Cinzel']">
                 {game?.name || 'Splendor Session'}
               </h2>
-              <span className="text-xs font-bold text-[#B69A65] bg-[#25211D] border border-[#B69A65]/40 px-3 py-1 rounded-lg inline-block mt-2 font-['IBM_Plex_Sans']">
+              <span className="text-xs font-bold text-[#B8923A] bg-[#1B1712] border border-[#B8923A] px-3 py-1 rounded-lg inline-block mt-2 font-['Inter']">
                 Session ID: {gameId}
               </span>
             </div>
 
             {/* Game Settings & Resources Overview */}
-            <div className="w-full bg-[#25211D] border border-[#80643D]/40 rounded-2xl p-5 shadow-xl flex flex-col gap-4">
-              <div className="flex items-center justify-between border-b border-[#302A22] pb-3">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-[#B69A65] font-['Cinzel']">
+            <div className="w-full bg-[#1B1712] border border-[#B8923A] rounded-2xl p-5 shadow-2xl flex flex-col gap-4">
+              <div className="flex items-center justify-between border-b border-[#B8923A]/40 pb-3">
+                <h3 className="text-lg font-semibold uppercase tracking-wider text-[#B8923A] font-['Cinzel']">
                   Initialized Game Settings
                 </h3>
-                <span className="text-[11px] text-[#80643D] font-['Inter']">
+                <span className="text-sm text-[#B9AE96] font-['EB_Garamond'] italic">
                   Standard Splendor Rules
                 </span>
               </div>
 
               {/* Settings Summary Cards */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                <div className="p-3 bg-[#302A22] border border-[#80643D]/30 rounded-xl text-center">
-                  <span className="text-[10px] text-[#80643D] uppercase tracking-wider block font-['Inter']">
+                <div className="p-3 bg-[#111116] border border-[#B8923A]/30 rounded-xl text-center">
+                  <span className="text-xs text-[#B9AE96] uppercase tracking-wider block font-['EB_Garamond']">
                     Noble Tiles
                   </span>
-                  <span className="text-lg font-bold text-[#D8C8A5] font-['IBM_Plex_Sans']">
+                  <span className="text-xl font-bold text-[#F3E9D2] font-['Inter']">
                     {game?.settings?.nobleTilesCount ?? game?.nobleTiles?.length ?? 0}
                   </span>
                 </div>
 
-                <div className="p-3 bg-[#302A22] border border-[#80643D]/30 rounded-xl text-center">
-                  <span className="text-[10px] text-[#80643D] uppercase tracking-wider block font-['Inter']">
+                <div className="p-3 bg-[#111116] border border-[#B8923A]/30 rounded-xl text-center">
+                  <span className="text-xs text-[#B9AE96] uppercase tracking-wider block font-['EB_Garamond']">
                     Face-Up Cards
                   </span>
-                  <span className="text-lg font-bold text-[#D8C8A5] font-['IBM_Plex_Sans']">
+                  <span className="text-xl font-bold text-[#F3E9D2] font-['Inter']">
                     {game?.settings?.faceUpCardsCount ?? 4}
                   </span>
                 </div>
 
-                <div className="p-3 bg-[#302A22] border border-[#80643D]/30 rounded-xl text-center">
-                  <span className="text-[10px] text-[#80643D] uppercase tracking-wider block font-['Inter']">
+                <div className="p-3 bg-[#111116] border border-[#B8923A]/30 rounded-xl text-center">
+                  <span className="text-xs text-[#B9AE96] uppercase tracking-wider block font-['EB_Garamond']">
                     Gem Tokens
                   </span>
-                  <span className="text-lg font-bold text-[#D8C8A5] font-['IBM_Plex_Sans']">
-                    {game?.settings?.gemTokenCount ?? 7} <span className="text-xs text-[#80643D] font-normal font-['Inter']">/color</span>
+                  <span className="text-xl font-bold text-[#F3E9D2] font-['Inter']">
+                    {game?.settings?.gemTokenCount ?? 7} <span className="text-xs text-[#B9AE96] font-normal font-['EB_Garamond']">/color</span>
                   </span>
                 </div>
 
-                <div className="p-3 bg-[#302A22] border border-[#80643D]/30 rounded-xl text-center">
-                  <span className="text-[10px] text-[#80643D] uppercase tracking-wider block font-['Inter']">
+                <div className="p-3 bg-[#111116] border border-[#B8923A]/30 rounded-xl text-center">
+                  <span className="text-xs text-[#B9AE96] uppercase tracking-wider block font-['EB_Garamond']">
                     Gold Tokens
                   </span>
-                  <span className="text-lg font-bold text-[#D5A936] font-['IBM_Plex_Sans']">
-                    {game?.settings?.goldTokenCount ?? 5} <span className="text-xs text-[#80643D] font-normal font-['Inter']">wild</span>
+                  <span className="text-xl font-bold text-[#D4A83A] font-['Inter']">
+                    {game?.settings?.goldTokenCount ?? 5} <span className="text-xs text-[#B9AE96] font-normal font-['EB_Garamond']">wild</span>
                   </span>
                 </div>
               </div>
 
               {/* Tokens Bank */}
               <div className="mt-1 flex flex-col gap-2">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-[#80643D] font-['Cinzel']">
+                <span className="text-sm font-semibold uppercase tracking-wider text-[#B9AE96] font-['Cinzel']">
                   Available Token Bank
                 </span>
                 <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
-                  <div className="p-2.5 rounded-xl bg-[#278451]/15 border border-[#278451]/40 text-center">
-                    <span className="text-[10px] uppercase font-bold text-[#278451] block font-['Cinzel']">Emerald</span>
-                    <span className="text-base font-bold text-[#278451] font-['IBM_Plex_Sans']">{game?.tokens?.emerald ?? 0}</span>
+                  <div className="p-2.5 rounded-xl bg-[#2E9E5B] border-2 border-[#17613A] shadow-md text-center text-white">
+                    <span className="text-xs uppercase font-semibold block font-['Cinzel']">Emerald</span>
+                    <span className="text-lg font-bold font-['Inter']">{game?.tokens?.emerald ?? 0}</span>
                   </div>
-                  <div className="p-2.5 rounded-xl bg-[#2766B5]/15 border border-[#2766B5]/40 text-center">
-                    <span className="text-[10px] uppercase font-bold text-[#2766B5] block font-['Cinzel']">Sapphire</span>
-                    <span className="text-base font-bold text-[#2766B5] font-['IBM_Plex_Sans']">{game?.tokens?.sapphire ?? 0}</span>
+                  <div className="p-2.5 rounded-xl bg-[#2F6FD6] border-2 border-[#1B4391] shadow-md text-center text-white">
+                    <span className="text-xs uppercase font-semibold block font-['Cinzel']">Sapphire</span>
+                    <span className="text-lg font-bold font-['Inter']">{game?.tokens?.sapphire ?? 0}</span>
                   </div>
-                  <div className="p-2.5 rounded-xl bg-[#C33C42]/15 border border-[#C33C42]/40 text-center">
-                    <span className="text-[10px] uppercase font-bold text-[#C33C42] block font-['Cinzel']">Ruby</span>
-                    <span className="text-base font-bold text-[#C33C42] font-['IBM_Plex_Sans']">{game?.tokens?.ruby ?? 0}</span>
+                  <div className="p-2.5 rounded-xl bg-[#C8283B] border-2 border-[#7E1523] shadow-md text-center text-white">
+                    <span className="text-xs uppercase font-semibold block font-['Cinzel']">Ruby</span>
+                    <span className="text-lg font-bold font-['Inter']">{game?.tokens?.ruby ?? 0}</span>
                   </div>
-                  <div className="p-2.5 rounded-xl bg-[#E6E3D9]/15 border border-[#E6E3D9]/30 text-center">
-                    <span className="text-[10px] uppercase font-bold text-[#E6E3D9] block font-['Cinzel']">Diamond</span>
-                    <span className="text-base font-bold text-[#E6E3D9] font-['IBM_Plex_Sans']">{game?.tokens?.diamond ?? 0}</span>
+                  <div className="p-2.5 rounded-xl bg-[#F2EEE4] border-2 border-[#B9B2A0] shadow-md text-center text-[#2A1F14]">
+                    <span className="text-xs uppercase font-semibold block font-['Cinzel']">Diamond</span>
+                    <span className="text-lg font-bold font-['Inter']">{game?.tokens?.diamond ?? 0}</span>
                   </div>
-                  <div className="p-2.5 rounded-xl bg-[#343638]/40 border border-[#80643D]/40 text-center">
-                    <span className="text-[10px] uppercase font-bold text-[#D8C8A5] block font-['Cinzel']">Onyx</span>
-                    <span className="text-base font-bold text-[#D8C8A5] font-['IBM_Plex_Sans']">{game?.tokens?.onyx ?? 0}</span>
+                  <div className="p-2.5 rounded-xl bg-[#2B2B33] border-2 border-[#111116] shadow-md text-center text-white">
+                    <span className="text-xs uppercase font-semibold block font-['Cinzel']">Onyx</span>
+                    <span className="text-lg font-bold font-['Inter']">{game?.tokens?.onyx ?? 0}</span>
                   </div>
-                  <div className="p-2.5 rounded-xl bg-[#D5A936]/15 border border-[#D5A936]/40 text-center">
-                    <span className="text-[10px] uppercase font-bold text-[#D5A936] block font-['Cinzel']">Gold</span>
-                    <span className="text-base font-bold text-[#D5A936] font-['IBM_Plex_Sans']">{game?.tokens?.gold ?? 0}</span>
+                  <div className="p-2.5 rounded-xl bg-[#D4A83A] border-2 border-[#8C6A17] shadow-md text-center text-[#2A1F14]">
+                    <span className="text-xs uppercase font-semibold block font-['Cinzel']">Gold</span>
+                    <span className="text-lg font-bold font-['Inter']">{game?.tokens?.gold ?? 0}</span>
                   </div>
                 </div>
               </div>
 
               {/* Revealed Cards (Face-Up on Table) */}
               <div className="mt-2 flex flex-col gap-3">
-                <div className="flex items-center justify-between border-b border-[#302A22] pb-2">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#B69A65] font-['Cinzel']">
+                <div className="flex items-center justify-between border-b border-[#B8923A]/40 pb-2">
+                  <span className="text-base font-semibold uppercase tracking-wider text-[#B8923A] font-['Cinzel']">
                     Revealed Cards (Face-Up on Table)
                   </span>
-                  <span className="text-[10px] text-[#80643D] font-['Inter']">
-                    Derived from unique card IDs
+                  <span className="text-xs text-[#B9AE96] font-['EB_Garamond'] italic">
+                    Parchment cards with brass borders
                   </span>
                 </div>
 
@@ -328,41 +381,32 @@ export default function LobbyPage({
                   const topDeckId = game?.topDeckCards?.[tierKey];
 
                   const tierColorClass =
-                    tierNum === 3 ? 'text-[#2766B5]' : tierNum === 2 ? 'text-[#D5A936]' : 'text-[#278451]';
+                    tierNum === 3 ? 'text-[#7FAAF0]' : tierNum === 2 ? 'text-[#F3D679]' : 'text-[#6FD79A]';
 
                   return (
-                    <div key={tierKey} className="p-3.5 rounded-xl bg-[#302A22] border border-[#80643D]/30 flex flex-col gap-2.5">
-                      <div className="flex items-center justify-between text-xs font-bold border-b border-[#25211D] pb-1.5 font-['Cinzel']">
+                    <div key={tierKey} className="p-3.5 rounded-xl bg-[#111116] border border-[#B8923A]/40 flex flex-col gap-2.5">
+                      <div className="flex items-center justify-between text-sm font-semibold border-b border-[#1B1712] pb-1.5 font-['Cinzel']">
                         <span className={tierColorClass}>
                           {tierLabel} ({tierRevealed.length} Face-Up)
                         </span>
-                        <span className="text-[11px] font-['IBM_Plex_Sans'] text-[#80643D]">
-                          Unrevealed Deck: <strong className="text-[#D8C8A5]">{deckRemaining}</strong> cards | Top Card ID: <strong className="text-[#B69A65]">{topDeckId || 'Empty'}</strong>
+                        <span className="text-xs font-['EB_Garamond'] text-[#B9AE96]">
+                          Unrevealed Deck: <strong className="text-[#F3E9D2] font-['Inter'] font-bold">{deckRemaining}</strong> cards | Top Card ID: <strong className="text-[#B8923A] font-['Inter'] font-bold">{topDeckId || 'Empty'}</strong>
                         </span>
                       </div>
 
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                         {tierRevealed.map((cardId) => {
                           const details = getCardDetails(cardId);
-                          const color = details?.color;
-                          const gemBadgeClass =
-                            color === 'emerald'
-                              ? 'bg-[#278451] text-white'
-                              : color === 'sapphire'
-                              ? 'bg-[#2766B5] text-white'
-                              : color === 'ruby'
-                              ? 'bg-[#C33C42] text-white'
-                              : color === 'diamond'
-                              ? 'bg-[#E6E3D9] text-[#171615] border border-[#80643D]/40'
-                              : 'bg-[#343638] text-white';
+                          const gemKey = details?.color || 'diamond';
+                          const gemStyle = GEM_STYLES[gemKey] || GEM_STYLES.diamond;
 
                           const costItems = details?.cost
                             ? [
-                                { key: 'emerald', label: 'E', count: details.cost.emerald, color: 'text-[#278451] bg-[#278451]/10' },
-                                { key: 'sapphire', label: 'S', count: details.cost.sapphire, color: 'text-[#2766B5] bg-[#2766B5]/10' },
-                                { key: 'ruby', label: 'R', count: details.cost.ruby, color: 'text-[#C33C42] bg-[#C33C42]/10' },
-                                { key: 'diamond', label: 'D', count: details.cost.diamond, color: 'text-[#171615] bg-[#171615]/10' },
-                                { key: 'onyx', label: 'O', count: details.cost.onyx, color: 'text-[#343638] bg-[#343638]/10' },
+                                { key: 'emerald', label: 'E', count: details.cost.emerald, style: GEM_STYLES.emerald },
+                                { key: 'sapphire', label: 'S', count: details.cost.sapphire, style: GEM_STYLES.sapphire },
+                                { key: 'ruby', label: 'R', count: details.cost.ruby, style: GEM_STYLES.ruby },
+                                { key: 'diamond', label: 'D', count: details.cost.diamond, style: GEM_STYLES.diamond },
+                                { key: 'onyx', label: 'O', count: details.cost.onyx, style: GEM_STYLES.onyx },
                               ].filter((c) => c.count > 0)
                             : [];
 
@@ -371,25 +415,53 @@ export default function LobbyPage({
                               key={cardId}
                               id={cardId}
                               data-card-id={cardId}
-                              className="p-2.5 rounded-xl bg-[#D8C8A5] text-[#171615] border border-[#80643D]/50 hover:border-[#B69A65] shadow-md transition-all flex flex-col justify-between gap-1.5 text-left"
+                              className="rounded-xl overflow-hidden bg-[#E8DCC0] border-2 border-[#B8923A] shadow-lg flex flex-col justify-between text-left transition-all hover:scale-[1.02] hover:border-[#D4A83A]"
+                              style={{
+                                backgroundImage: `url('/textures/parchment.jpg')`,
+                                backgroundSize: 'cover',
+                                backgroundBlendMode: 'multiply',
+                              }}
                             >
-                              <div className="flex items-center justify-between">
-                                <span className="text-[10px] font-['IBM_Plex_Sans'] font-bold text-[#80643D]">{cardId}</span>
-                                {details && (
-                                  <span className={`text-[9px] font-['Cinzel'] font-bold uppercase px-1.5 py-0.5 rounded shadow-xs ${gemBadgeClass}`}>
-                                    {details.color}
-                                  </span>
-                                )}
+                              {/* Top Card Color Band */}
+                              <div
+                                className="px-2 py-1 flex items-center justify-between border-b border-[#B8923A]/40"
+                                style={{ backgroundColor: gemStyle.main, color: gemStyle.text }}
+                              >
+                                <span className="text-xs font-['Inter'] font-bold">
+                                  {cardId}
+                                </span>
+                                <span className="text-[10px] font-['Cinzel'] font-bold uppercase tracking-wider px-1.5 py-0.2 rounded" style={{ backgroundColor: gemStyle.shadow }}>
+                                  {gemStyle.label}
+                                </span>
                               </div>
-                              <div className="flex items-baseline justify-between mt-0.5">
-                                <span className="text-[10px] text-[#80643D] font-['Inter']">Prestige</span>
-                                <span className="text-base font-bold text-[#171615] font-['Cinzel']">{details?.points ?? 0}</span>
+
+                              {/* Card Body: Points */}
+                              <div className="p-2.5 flex items-baseline justify-between text-[#2A1F14]">
+                                <div>
+                                  {Boolean(details?.points && details.points > 0) && (
+                                    <div className="flex items-baseline gap-1">
+                                      <span className="text-2xl font-black font-['Inter'] leading-none text-[#2A1F14]">
+                                        {details?.points}
+                                      </span>
+                                      <span className="text-[10px] font-['Cinzel'] font-bold uppercase text-[#2A1F14]/70">
+                                        Pts
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>
                               </div>
+
+                              {/* Card Costs at Bottom Left */}
                               {costItems.length > 0 && (
-                                <div className="flex flex-wrap gap-1 mt-0.5 font-['IBM_Plex_Sans'] text-[9px] font-bold">
+                                <div className="p-2 pt-0 flex flex-wrap gap-1 items-center font-['Inter']">
                                   {costItems.map((c) => (
-                                    <span key={c.key} className={`px-1 py-0.5 rounded border border-[#80643D]/30 ${c.color}`}>
-                                      {c.label}:{c.count}
+                                    <span
+                                      key={c.key}
+                                      className="w-5 h-5 rounded-full flex items-center justify-center text-[11px] font-bold shadow-xs border border-black/20"
+                                      style={{ backgroundColor: c.style.main, color: c.style.text }}
+                                      title={`${c.count} ${c.style.label}`}
+                                    >
+                                      {c.count}
                                     </span>
                                   ))}
                                 </div>
@@ -406,21 +478,33 @@ export default function LobbyPage({
               {/* Selected Noble Tiles */}
               {game?.nobleTiles && game.nobleTiles.length > 0 && (
                 <div className="mt-2 flex flex-col gap-2">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#80643D] font-['Cinzel']">
+                  <span className="text-sm font-semibold uppercase tracking-wider text-[#B9AE96] font-['Cinzel']">
                     Active Noble Tiles ({game.nobleTiles.length})
                   </span>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2.5">
                     {game.nobleTiles.map((nobleId) => {
                       const nobleInfo = getNobleDetails(nobleId);
                       return (
                         <div
                           key={nobleId}
-                          className="px-3 py-2 rounded-xl bg-[#302A22] border border-[#80643D]/30 flex items-center gap-2.5 shadow-sm"
+                          className="px-3.5 py-2.5 rounded-xl bg-[#E8DCC0] border-2 border-[#B8923A] shadow-md flex items-center gap-3 text-[#2A1F14]"
+                          style={{
+                            backgroundImage: `url('/textures/parchment.jpg')`,
+                            backgroundSize: 'cover',
+                            backgroundBlendMode: 'multiply',
+                          }}
                         >
-                          <span className="text-[10px] font-['IBM_Plex_Sans'] font-bold text-[#B69A65]">{nobleId}</span>
-                          <span className="text-xs text-[#D8C8A5] font-['Cormorant_Garamond'] italic font-medium">
-                            {nobleInfo?.name || 'Noble Patron'}
+                          <span className="w-6 h-6 rounded-full bg-[#B8923A] text-[#1B1712] font-['Inter'] font-bold text-xs flex items-center justify-center shadow-xs">
+                            3
                           </span>
+                          <div className="flex flex-col">
+                            <span className="text-xs font-['Cinzel'] font-bold text-[#2A1F14]">
+                              {nobleInfo?.name || 'Noble Patron'}
+                            </span>
+                            <span className="text-[10px] font-['Inter'] text-[#2A1F14]/70">
+                              {nobleId}
+                            </span>
+                          </div>
                         </div>
                       );
                     })}
@@ -429,20 +513,20 @@ export default function LobbyPage({
               )}
 
               {/* Players in Game */}
-              <div className="mt-2 flex flex-col gap-2 border-t border-[#302A22] pt-3">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-[#80643D] font-['Cinzel']">
+              <div className="mt-2 flex flex-col gap-2 border-t border-[#B8923A]/40 pt-3">
+                <span className="text-sm font-semibold uppercase tracking-wider text-[#B9AE96] font-['Cinzel']">
                   Players in Current Game ({playersList.length})
                 </span>
                 <div className="flex flex-wrap gap-2">
                   {playersList.map((player, idx) => (
                     <div
                       key={player.id}
-                      className="px-3 py-1.5 rounded-xl bg-[#302A22] border border-[#80643D]/30 flex items-center gap-2"
+                      className="px-3 py-1.5 rounded-xl bg-[#111116] border border-[#B8923A]/30 flex items-center gap-2"
                     >
-                      <span className="text-xs text-[#80643D] font-['IBM_Plex_Sans']">{idx + 1}.</span>
-                      <span className="text-xs font-bold text-[#D8C8A5] font-['Inter']">{player.name}</span>
+                      <span className="text-xs text-[#B9AE96] font-['Inter'] font-bold">{idx + 1}.</span>
+                      <span className="text-base font-medium text-[#F3E9D2] font-['EB_Garamond']">{player.name}</span>
                       {game?.hostUsername === player.name && (
-                        <span className="text-[9px] font-bold uppercase text-[#171615] bg-[#B69A65] px-1.5 py-0.5 rounded font-['Cinzel']">
+                        <span className="text-[10px] font-bold uppercase text-[#1B1712] bg-[#B8923A] px-1.5 py-0.5 rounded font-['Cinzel']">
                           Host
                         </span>
                       )}
@@ -459,10 +543,10 @@ export default function LobbyPage({
         {/* ============================================================ */}
         {gameStatus === 'completed' && (
           <div className="text-center">
-            <h2 className="text-2xl sm:text-3xl font-black text-[#D8C8A5] font-['Cinzel'] mb-2">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#F3E9D2] font-['Cinzel'] mb-2">
               Game is completed
             </h2>
-            <span className="text-xs font-bold text-[#B69A65] bg-[#25211D] border border-[#B69A65]/40 px-4 py-1.5 rounded-xl inline-block mb-2 font-['IBM_Plex_Sans']">
+            <span className="text-sm font-bold text-[#B8923A] bg-[#1B1712] border border-[#B8923A] px-4 py-1.5 rounded-xl inline-block mb-2 font-['Inter']">
               Session ID: {gameId}
             </span>
           </div>
@@ -476,11 +560,11 @@ export default function LobbyPage({
             <div className="w-full flex flex-col items-center gap-3">
               {/* Game Session ID with Copy Button */}
               <div className="text-center flex flex-col items-center">
-                <span className="text-[11px] font-bold text-[#80643D] uppercase tracking-widest block mb-2 font-['Cinzel']">
+                <span className="text-xs font-semibold text-[#B9AE96] uppercase tracking-[0.08em] block mb-2 font-['Cinzel']">
                   Game Session ID
                 </span>
                 <div className="flex items-center justify-center gap-2">
-                  <span className="text-3xl sm:text-4xl font-black font-['IBM_Plex_Sans'] tracking-widest text-[#B69A65] bg-[#25211D] border border-[#B69A65]/40 px-6 py-2.5 rounded-2xl shadow-xl inline-block">
+                  <span className="text-3xl sm:text-4xl font-bold font-['Inter'] tracking-wider text-[#B8923A] bg-[#1B1712] border border-[#B8923A] px-6 py-2.5 rounded-2xl shadow-xl inline-block">
                     {gameId}
                   </span>
                   <button
@@ -488,10 +572,10 @@ export default function LobbyPage({
                     onClick={() => copyToClipboard(gameId, 'id')}
                     title={copiedGameId ? 'Copied ID' : 'Copy Game ID'}
                     aria-label="Copy Game ID"
-                    className={`p-2.5 rounded-xl bg-[#302A22]/50 hover:bg-[#302A22] border transition-colors cursor-pointer flex items-center justify-center flex-shrink-0 ${
+                    className={`p-2.5 rounded-xl bg-[#1B1712] border transition-colors cursor-pointer flex items-center justify-center flex-shrink-0 ${
                       copiedGameId
-                        ? 'border-[#278451]/50 text-[#278451]'
-                        : 'border-[#80643D]/30 hover:border-[#80643D]/60 text-[#80643D] hover:text-[#D8C8A5]'
+                        ? 'border-[#6FD79A] text-[#6FD79A]'
+                        : 'border-[#B8923A]/40 hover:border-[#B8923A] text-[#B9AE96] hover:text-[#B8923A]'
                     }`}
                   >
                     {copiedGameId ? (
@@ -527,12 +611,12 @@ export default function LobbyPage({
               </div>
 
               {/* Join Link Display & Copy Button */}
-              <div className="w-full bg-[#25211D] border border-[#80643D]/40 rounded-2xl px-4 py-3 shadow-xl flex items-center justify-between gap-3 text-left">
+              <div className="w-full bg-[#1B1712] border border-[#B8923A] rounded-2xl px-4 py-3 shadow-xl flex items-center justify-between gap-3 text-left">
                 <div className="flex flex-col min-w-0 flex-1">
-                  <span className="text-[10px] font-bold text-[#80643D] uppercase tracking-wider font-['Cinzel']">
+                  <span className="text-xs font-semibold text-[#B9AE96] uppercase tracking-wider font-['Cinzel']">
                     Join Link
                   </span>
-                  <span className="text-xs text-[#D8C8A5] font-['IBM_Plex_Sans'] truncate select-all mt-0.5">
+                  <span className="text-sm text-[#F3E9D2] font-['Inter'] truncate select-all mt-0.5">
                     {joinUrl}
                   </span>
                 </div>
@@ -541,10 +625,10 @@ export default function LobbyPage({
                   onClick={() => copyToClipboard(joinUrl, 'link')}
                   title={copiedJoinLink ? 'Copied Link' : 'Copy Join Link'}
                   aria-label="Copy Join Link"
-                  className={`p-2.5 rounded-xl bg-[#302A22]/50 hover:bg-[#302A22] border transition-colors cursor-pointer flex items-center justify-center flex-shrink-0 ${
+                  className={`p-2.5 rounded-xl bg-[#1B1712] border transition-colors cursor-pointer flex items-center justify-center flex-shrink-0 ${
                     copiedJoinLink
-                      ? 'border-[#278451]/50 text-[#278451]'
-                      : 'border-[#80643D]/30 hover:border-[#80643D]/60 text-[#80643D] hover:text-[#D8C8A5]'
+                      ? 'border-[#6FD79A] text-[#6FD79A]'
+                      : 'border-[#B8923A]/40 hover:border-[#B8923A] text-[#B9AE96] hover:text-[#B8923A]'
                   }`}
                 >
                   {copiedJoinLink ? (
@@ -580,18 +664,18 @@ export default function LobbyPage({
             </div>
 
             {/* List of joined players */}
-            <div className="w-full bg-[#25211D] border border-[#80643D]/40 rounded-2xl p-5 shadow-xl flex flex-col gap-4">
-              <div className="flex items-center justify-between border-b border-[#302A22] pb-3">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#D8C8A5] font-['Cinzel']">
+            <div className="w-full bg-[#1B1712] border border-[#B8923A] rounded-2xl p-5 shadow-2xl flex flex-col gap-4">
+              <div className="flex items-center justify-between border-b border-[#B8923A]/40 pb-3">
+                <span className="text-base font-semibold uppercase tracking-wider text-[#F3E9D2] font-['Cinzel']">
                   Joined Players
                 </span>
-                <span className="text-xs font-['IBM_Plex_Sans'] font-bold text-[#B69A65] bg-[#171615] px-2.5 py-0.5 rounded-md border border-[#80643D]/50">
+                <span className="text-xs font-['Inter'] font-bold text-[#B8923A] bg-[#111116] px-2.5 py-0.5 rounded-md border border-[#B8923A]/50">
                   {playersList.length} / {maxPlayers}
                 </span>
               </div>
 
               {playersList.length === 0 ? (
-                <div className="py-4 text-center text-xs text-[#80643D] font-['Cormorant_Garamond'] italic text-sm">
+                <div className="py-4 text-center text-base text-[#B9AE96] font-['EB_Garamond'] italic">
                   Waiting for players to join...
                 </div>
               ) : (
@@ -601,19 +685,19 @@ export default function LobbyPage({
                     return (
                       <div
                         key={player.id}
-                        className="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-[#302A22] border border-[#80643D]/30"
+                        className="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-[#111116] border border-[#B8923A]/30"
                       >
                         <div className="flex items-center gap-2.5">
-                          <span className="text-xs font-['IBM_Plex_Sans'] text-[#80643D]">
+                          <span className="text-xs font-['Inter'] text-[#B9AE96] font-bold">
                             {idx + 1}.
                           </span>
-                          <span className="text-xs font-bold text-[#D8C8A5] font-['Inter']">
+                          <span className="text-base font-medium text-[#F3E9D2] font-['EB_Garamond']">
                             {player.name}
                           </span>
                         </div>
 
                         {isPlayerHost && (
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-[#171615] bg-[#B69A65] px-2 py-0.5 rounded font-['Cinzel']">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-[#1B1712] bg-[#B8923A] px-2 py-0.5 rounded font-['Cinzel']">
                             Host
                           </span>
                         )}
@@ -625,12 +709,12 @@ export default function LobbyPage({
 
               {/* Host Setup & Start Game Controls */}
               {isHost ? (
-                <div className="flex flex-col gap-3.5 border-t border-[#302A22] pt-4 mt-1">
+                <div className="flex flex-col gap-3.5 border-t border-[#B8923A]/40 pt-4 mt-1">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold uppercase tracking-wider text-[#B69A65] font-['Cinzel']">
+                    <span className="text-sm font-semibold uppercase tracking-wider text-[#B8923A] font-['Cinzel']">
                       Game Setup Options
                     </span>
-                    <span className="text-[10px] text-[#80643D] font-['Inter']">
+                    <span className="text-xs text-[#B9AE96] font-['EB_Garamond'] italic">
                       Host Configuration
                     </span>
                   </div>
@@ -639,7 +723,7 @@ export default function LobbyPage({
                   <div className="grid grid-cols-2 gap-3 text-left">
                     {/* Gem Tokens per Color */}
                     <div className="flex flex-col gap-1">
-                      <label className="text-[11px] text-[#D8C8A5]/80 font-medium font-['Inter']">
+                      <label className="text-xs text-[#B9AE96] font-medium font-['EB_Garamond']">
                         Gem Tokens (max 8)
                       </label>
                       <select
@@ -648,7 +732,7 @@ export default function LobbyPage({
                           setGemTokens(Number(e.target.value));
                           setHasUserCustomized(true);
                         }}
-                        className="px-3 py-2 rounded-xl bg-[#171615] border border-[#80643D]/50 text-xs font-bold text-[#D8C8A5] font-['IBM_Plex_Sans'] focus:outline-none focus:border-[#B69A65]"
+                        className="px-3 py-2 rounded-xl bg-[#111116] border border-[#B8923A]/50 text-xs font-bold text-[#F3E9D2] font-['Inter'] focus:outline-none focus:border-[#B8923A]"
                       >
                         {[4, 5, 6, 7, 8].map((num) => (
                           <option key={num} value={num}>
@@ -660,7 +744,7 @@ export default function LobbyPage({
 
                     {/* Gold Tokens */}
                     <div className="flex flex-col gap-1">
-                      <label className="text-[11px] text-[#D8C8A5]/80 font-medium font-['Inter']">
+                      <label className="text-xs text-[#B9AE96] font-medium font-['EB_Garamond']">
                         Gold Tokens (max 5)
                       </label>
                       <select
@@ -669,7 +753,7 @@ export default function LobbyPage({
                           setGoldTokens(Number(e.target.value));
                           setHasUserCustomized(true);
                         }}
-                        className="px-3 py-2 rounded-xl bg-[#171615] border border-[#80643D]/50 text-xs font-bold text-[#D5A936] font-['IBM_Plex_Sans'] focus:outline-none focus:border-[#B69A65]"
+                        className="px-3 py-2 rounded-xl bg-[#111116] border border-[#B8923A]/50 text-xs font-bold text-[#D4A83A] font-['Inter'] focus:outline-none focus:border-[#B8923A]"
                       >
                         {[1, 2, 3, 4, 5].map((num) => (
                           <option key={num} value={num}>
@@ -681,7 +765,7 @@ export default function LobbyPage({
 
                     {/* Face-up Cards */}
                     <div className="flex flex-col gap-1">
-                      <label className="text-[11px] text-[#D8C8A5]/80 font-medium font-['Inter']">
+                      <label className="text-xs text-[#B9AE96] font-medium font-['EB_Garamond']">
                         Face-Up Cards
                       </label>
                       <div className="grid grid-cols-2 gap-1.5">
@@ -691,10 +775,10 @@ export default function LobbyPage({
                             setFaceUpCards(3);
                             setHasUserCustomized(true);
                           }}
-                          className={`py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer font-['Inter'] ${
+                          className={`py-2 rounded-xl text-xs font-semibold border transition-all cursor-pointer font-['Cinzel'] ${
                             faceUpCards === 3
-                              ? 'bg-[#B69A65] text-[#171615] border-[#B69A65] shadow-xs'
-                              : 'bg-[#171615] text-[#80643D] border-[#80643D]/40 hover:border-[#80643D]'
+                              ? 'bg-[#B8923A] text-[#1B1712] border-[#B8923A] shadow-xs'
+                              : 'bg-[#111116] text-[#B9AE96] border-[#B8923A]/30 hover:border-[#B8923A]'
                           }`}
                         >
                           3 Cards
@@ -705,10 +789,10 @@ export default function LobbyPage({
                             setFaceUpCards(4);
                             setHasUserCustomized(true);
                           }}
-                          className={`py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer font-['Inter'] ${
+                          className={`py-2 rounded-xl text-xs font-semibold border transition-all cursor-pointer font-['Cinzel'] ${
                             faceUpCards === 4
-                              ? 'bg-[#B69A65] text-[#171615] border-[#B69A65] shadow-xs'
-                              : 'bg-[#171615] text-[#80643D] border-[#80643D]/40 hover:border-[#80643D]'
+                              ? 'bg-[#B8923A] text-[#1B1712] border-[#B8923A] shadow-xs'
+                              : 'bg-[#111116] text-[#B9AE96] border-[#B8923A]/30 hover:border-[#B8923A]'
                           }`}
                         >
                           4 Cards
@@ -718,7 +802,7 @@ export default function LobbyPage({
 
                     {/* Noble Tiles Count */}
                     <div className="flex flex-col gap-1">
-                      <label className="text-[11px] text-[#D8C8A5]/80 font-medium font-['Inter']">
+                      <label className="text-xs text-[#B9AE96] font-medium font-['EB_Garamond']">
                         Noble Tiles
                       </label>
                       <select
@@ -727,7 +811,7 @@ export default function LobbyPage({
                           setNobleCount(Number(e.target.value));
                           setHasUserCustomized(true);
                         }}
-                        className="px-3 py-2 rounded-xl bg-[#171615] border border-[#80643D]/50 text-xs font-bold text-[#D8C8A5] font-['IBM_Plex_Sans'] focus:outline-none focus:border-[#B69A65]"
+                        className="px-3 py-2 rounded-xl bg-[#111116] border border-[#B8923A]/50 text-xs font-bold text-[#F3E9D2] font-['Inter'] focus:outline-none focus:border-[#B8923A]"
                       >
                         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
                           <option key={num} value={num}>
@@ -744,32 +828,32 @@ export default function LobbyPage({
                       type="button"
                       disabled={!canStart || starting}
                       onClick={handleStartGameClick}
-                      className={`w-full py-3.5 px-4 rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-md font-['Cinzel'] ${
+                      className={`w-full py-3.5 px-4 rounded-xl text-base font-semibold uppercase tracking-[0.08em] transition-all shadow-md font-['Cinzel'] ${
                         !canStart || starting
-                          ? 'bg-[#302A22] border border-[#80643D]/40 text-[#80643D] cursor-not-allowed opacity-60'
-                          : 'bg-[#B69A65] hover:bg-[#c4a974] text-[#171615] shadow-[#B69A65]/20 active:scale-[0.99] cursor-pointer'
+                          ? 'bg-[#4A4338] text-[#8A8272] cursor-not-allowed'
+                          : 'bg-[#B8923A] hover:bg-[#D4A83A] text-[#1B1712] shadow-[#B8923A]/20 active:scale-[0.99] cursor-pointer'
                       }`}
                     >
                       {starting ? 'Initializing Game Session...' : 'Start Game'}
                     </button>
 
                     {!canStart && (
-                      <span className="text-[11px] text-[#80643D] font-['Inter']">
+                      <span className="text-xs text-[#B9AE96] font-['EB_Garamond'] italic">
                         Waiting for at least 2 players to start
                       </span>
                     )}
 
                     {startError && (
-                      <span className="text-[11px] text-[#C33C42] font-medium font-['Inter']">
+                      <span className="text-xs text-[#F0707F] font-medium font-['EB_Garamond']">
                         {startError}
                       </span>
                     )}
                   </div>
                 </div>
               ) : (
-                <div className="text-center py-2 mt-1 border-t border-[#302A22] pt-3">
-                  <span className="text-[11px] text-[#80643D] font-['Inter']">
-                    Waiting for host <strong className="text-[#B69A65] font-bold">{game?.hostUsername}</strong> to configure and start the game...
+                <div className="text-center py-2 mt-1 border-t border-[#B8923A]/40 pt-3">
+                  <span className="text-sm text-[#B9AE96] font-['EB_Garamond']">
+                    Waiting for host <strong className="text-[#B8923A] font-semibold">{game?.hostUsername}</strong> to configure and start the game...
                   </span>
                 </div>
               )}
@@ -782,7 +866,7 @@ export default function LobbyPage({
           type="button"
           disabled={leaving}
           onClick={handleLeaveClick}
-          className="px-5 py-2.5 rounded-xl bg-[#C33C42]/20 hover:bg-[#C33C42]/30 border border-[#C33C42]/40 text-[#C33C42] text-xs font-bold uppercase tracking-wider transition-all cursor-pointer active:scale-95 disabled:opacity-50 font-['Inter']"
+          className="px-5 py-2.5 rounded-xl bg-[#C8283B]/20 hover:bg-[#C8283B]/35 border border-[#C8283B]/60 text-[#F0707F] text-xs font-semibold uppercase tracking-[0.08em] transition-all cursor-pointer active:scale-95 disabled:opacity-50 font-['Cinzel']"
         >
           {leaving ? 'Leaving Game...' : 'Leave Game'}
         </button>

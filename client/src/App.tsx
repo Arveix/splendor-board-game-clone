@@ -265,24 +265,24 @@ export default function App() {
   const isInGame = Boolean(session.currentGameSessionId);
 
   return (
-    <div className="min-h-screen bg-[#171615] text-[#D8C8A5] flex flex-col justify-between font-['Inter',sans-serif]">
+    <div className="min-h-screen bg-[#0F2A22] bg-[radial-gradient(ellipse_at_center,_#0F2A22_0%,_#07140F_100%)] text-[#F3E9D2] flex flex-col justify-between font-['EB_Garamond',serif]">
       {/* Top Header */}
-      <header className="w-full bg-[#171615] border-b border-[#302A22] px-4 py-3 flex-shrink-0 z-40">
+      <header className="w-full bg-[#1B1712] border-b border-[#B8923A] px-4 py-3 flex-shrink-0 z-40 shadow-lg">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div className="text-left">
-            <h1 className="text-base sm:text-lg font-black tracking-widest text-[#B69A65] font-['Cinzel'] leading-none">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-wider text-[#B8923A] font-['Cinzel'] leading-none">
               SPLENDOR
             </h1>
-            <p className="text-[11px] text-[#D8C8A5]/80 font-['Cormorant_Garamond'] italic leading-tight mt-0.5">
-              Renaissance Merchants
+            <p className="text-xs text-[#B9AE96] font-['EB_Garamond'] italic leading-tight mt-0.5">
+              Renaissance Merchant&apos;s Table
             </p>
           </div>
 
           {/* Right Header Navigation & Session Pill */}
           <div className="flex items-center gap-2.5">
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#25211D] border border-[#302A22] shadow-sm">
-              <span className="w-2 h-2 rounded-full bg-[#278451]" />
-              <span className="text-xs font-bold text-[#D8C8A5]">
+            <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#1B1712] border border-[#B8923A] shadow-sm">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#2E9E5B] shadow-[0_0_6px_#6FD79A]" />
+              <span className="text-base font-medium text-[#F3E9D2] font-['EB_Garamond']">
                 {session.username}
               </span>
             </div>
@@ -291,7 +291,7 @@ export default function App() {
               <button
                 onClick={handleSessionInvalidated}
                 title="Reset username session"
-                className="text-xs text-[#80643D] hover:text-[#C33C42] bg-[#25211D] hover:bg-[#302A22] border border-[#302A22] px-2.5 py-1.5 rounded-xl transition-colors cursor-pointer"
+                className="text-xs font-['Cinzel'] uppercase tracking-wider text-[#B9AE96] hover:text-[#F0707F] bg-[#1B1712] hover:bg-[#25211D] border border-[#B8923A]/50 px-3 py-1.5 rounded-xl transition-colors cursor-pointer"
               >
                 Exit
               </button>
@@ -320,8 +320,8 @@ export default function App() {
       )}
 
       {/* Footer */}
-      <footer className="w-full border-t border-[#25211D] py-3 text-center text-[11px] text-[#80643D] font-['Cormorant_Garamond'] italic">
-        Splendor Renaissance Merchants &bull; Luxury Board Game
+      <footer className="w-full border-t border-[#B8923A]/30 py-3 text-center text-xs text-[#B9AE96] font-['EB_Garamond'] italic">
+        Splendor Renaissance Merchant&apos;s Table &bull; Private Game
       </footer>
     </div>
   );
