@@ -26,6 +26,37 @@ export default function LobbyPage({
   const [leaving, setLeaving] = useState(false);
   const [starting, setStarting] = useState(false);
   const [startError, setStartError] = useState<string | null>(null);
+  const [copiedGameId, setCopiedGameId] = useState(false);
+  const [copiedJoinLink, setCopiedJoinLink] = useState(false);
+
+  const joinUrl =
+    typeof window !== 'undefined'
+      ? `${window.location.origin}/${encodeURIComponent(gameId)}`
+      : `/${encodeURIComponent(gameId)}`;
+
+  const copyToClipboard = async (text: string, type: 'id' | 'link') => {
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+      }
+      if (type === 'id') {
+        setCopiedGameId(true);
+        setTimeout(() => setCopiedGameId(false), 2000);
+      } else {
+        setCopiedJoinLink(true);
+        setTimeout(() => setCopiedJoinLink(false), 2000);
+      }
+    } catch {
+      // Ignore clipboard write failures
+    }
+  };
 
   // Lobby Configuration Options for the Host
   const [gemTokens, setGemTokens] = useState<number>(7);
@@ -442,13 +473,44 @@ export default function LobbyPage({
         {/* ============================================================ */}
         {gameStatus === 'waiting' && (
           <>
-            <div className="text-center">
-              <span className="text-[11px] font-bold text-[#80643D] uppercase tracking-widest block mb-2 font-['Cinzel']">
-                Game Session ID
-              </span>
-              <span className="text-3xl sm:text-4xl font-black font-['IBM_Plex_Sans'] tracking-widest text-[#B69A65] bg-[#25211D] border border-[#B69A65]/40 px-6 py-3 rounded-2xl shadow-xl inline-block">
-                {gameId}
-              </span>
+            <div className="w-full flex flex-col items-center gap-3">
+              {/* Game Session ID with Copy Button */}
+              <div className="text-center flex flex-col items-center">
+                <span className="text-[11px] font-bold text-[#80643D] uppercase tracking-widest block mb-2 font-['Cinzel']">
+                  Game Session ID
+                </span>
+                <div className="flex flex-wrap items-center justify-center gap-2">
+                  <span className="text-3xl sm:text-4xl font-black font-['IBM_Plex_Sans'] tracking-widest text-[#B69A65] bg-[#25211D] border border-[#B69A65]/40 px-6 py-2.5 rounded-2xl shadow-xl inline-block">
+                    {gameId}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => copyToClipboard(gameId, 'id')}
+                    className="px-3.5 py-2.5 rounded-xl bg-[#302A22] hover:bg-[#3d352b] border border-[#80643D]/50 text-xs font-semibold text-[#D8C8A5] hover:text-[#B69A65] transition-all cursor-pointer font-['Inter'] whitespace-nowrap shadow-sm"
+                  >
+                    {copiedGameId ? 'Copied ID!' : 'Copy Game ID'}
+                  </button>
+                </div>
+              </div>
+
+              {/* Join Link Display & Copy Button */}
+              <div className="w-full bg-[#25211D] border border-[#80643D]/40 rounded-2xl p-4 shadow-xl flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 text-left">
+                <div className="flex flex-col min-w-0 flex-1">
+                  <span className="text-[10px] font-bold text-[#80643D] uppercase tracking-wider font-['Cinzel']">
+                    Join Link
+                  </span>
+                  <span className="text-xs text-[#D8C8A5] font-['IBM_Plex_Sans'] truncate select-all mt-0.5">
+                    {joinUrl}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => copyToClipboard(joinUrl, 'link')}
+                  className="px-4 py-2 rounded-xl bg-[#B69A65] hover:bg-[#c4a974] text-[#171615] text-xs font-bold transition-all cursor-pointer font-['Inter'] whitespace-nowrap self-end sm:self-auto shadow-md"
+                >
+                  {copiedJoinLink ? 'Copied Link!' : 'Copy Join Link'}
+                </button>
+              </div>
             </div>
 
             {/* List of joined players */}
