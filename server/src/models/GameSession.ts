@@ -243,10 +243,6 @@ export class GameSession {
     this.activePlayer = this.players[nextIndex];
   }
 
-  public nextTurn(): void {
-    this.endTurn();
-  }
-
   public toJSON(): GameSessionData {
     return {
       id: this.id,

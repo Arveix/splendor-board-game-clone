@@ -151,7 +151,7 @@ router.post('/:id/start', (req: AuthenticatedRequest, res: Response) => {
 });
 
 // POST /api/games/:id/end-turn - End current player's turn and switch active player to next player
-router.post(['/:id/end-turn', '/:id/next-turn'], (req: AuthenticatedRequest, res: Response) => {
+router.post('/:id/end-turn', (req: AuthenticatedRequest, res: Response) => {
   const game = games.get(getParamId(req));
   if (!game) {
     return res.status(404).json({ error: 'Game not found' });
