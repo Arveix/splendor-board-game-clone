@@ -265,22 +265,7 @@ export default function App() {
   const isInGame = Boolean(session.currentGameSessionId);
 
   return (
-    <div className="min-h-screen bg-[#2A1A10] text-[#F3E9D2] flex flex-col justify-between font-['EB_Garamond',serif] relative isolate">
-      {/* Dark wood grain at 40–50% opacity */}
-      <div
-        className="fixed inset-0 -z-20 pointer-events-none bg-repeat opacity-45"
-        style={{
-          backgroundImage: `url('/textures/dark-wood.jpg')`,
-          backgroundSize: '400px 400px',
-        }}
-      />
-      {/* Vignette to #120A05 at the edges */}
-      <div
-        className="fixed inset-0 -z-10 pointer-events-none"
-        style={{
-          background: 'radial-gradient(ellipse at center, transparent 0%, #120A05 100%)',
-        }}
-      />
+    <div className="min-h-screen text-[#F3E9D2] flex flex-col justify-between font-['EB_Garamond',serif]">
 
       {/* Top Header: #120A05 with gold line kept */}
       <header className="w-full bg-[#120A05] border-b border-[#B8923A] px-4 py-3 flex-shrink-0 z-40 shadow-lg">

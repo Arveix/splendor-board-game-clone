@@ -51,39 +51,44 @@
   --font-inter: 'Inter', sans-serif;
 }
 
+/* 4A.1 Table background: Poly Haven dark wood with vignette and tint layer */
 body {
   background-color: #2A1A10;
+  background-image:
+    radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 40%, rgba(18, 10, 5, 0.85) 100%),
+    linear-gradient(rgba(42, 26, 16, 0.55), rgba(42, 26, 16, 0.55)),
+    url("/assets/wood-dark.jpg");
+  background-size: cover, cover, 1024px auto;
+  background-attachment: fixed;
   color: #F3E9D2;
   font-family: 'EB Garamond', Georgia, serif;
   font-size: 17px;
   font-style: normal;
+  min-height: 100vh;
 }
 
-/* Page background: #2A1A10 with dark wood grain at 40-50% opacity and vignette to #120A05 at edges */
-.page-bg-wood {
-  background-color: #2A1A10;
-  position: relative;
+/* 4A.2 Parchment: card faces and noble tiles */
+.card-face,
+.noble-tile,
+.parchment-surface {
+  background-color: #E8DCC0;
+  background-image: url("/assets/parchment.png");
+  background-blend-mode: multiply;
+  background-size: cover;
+  color: #2A1F14;
 }
 
-/* Panels: warm brown leather #1A110B, soft drop shadow, subtle inner highlight on top edge */
+/* 4A.3 Leather panels: warm brown leather #1A110B, shadow and inner top highlight */
 .leather-panel {
   background-color: #1A110B;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(243, 233, 210, 0.08);
 }
 
-/* Empty state box: fill #1A110B with a #B8923A border at 40% opacity */
+/* Empty state box: fill #1A110B with #B8923A border at 40% opacity */
 .empty-state-box {
   background-color: #1A110B;
   border: 1px solid rgba(184, 146, 58, 0.4);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-}
-
-.parchment-surface {
-  background-color: #E8DCC0;
-  background-image: url('/textures/parchment.jpg');
-  background-size: cover;
-  background-blend-mode: multiply;
-  color: #2A1F14;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(243, 233, 210, 0.08);
 }
 
 .btn-brass-primary {

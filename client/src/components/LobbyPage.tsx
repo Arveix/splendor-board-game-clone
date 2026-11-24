@@ -415,12 +415,7 @@ export default function LobbyPage({
                               key={cardId}
                               id={cardId}
                               data-card-id={cardId}
-                              className="rounded-xl overflow-hidden bg-[#E8DCC0] border-2 border-[#B8923A] shadow-lg flex flex-col justify-between text-left transition-all hover:scale-[1.02] hover:border-[#D4A83A]"
-                              style={{
-                                backgroundImage: `url('/textures/parchment.jpg')`,
-                                backgroundSize: 'cover',
-                                backgroundBlendMode: 'multiply',
-                              }}
+                              className="card-face rounded-xl overflow-hidden border-2 border-[#B8923A] shadow-lg flex flex-col justify-between text-left transition-all hover:scale-[1.02] hover:border-[#D4A83A]"
                             >
                               {/* Top Card Color Band */}
                               <div
@@ -487,12 +482,7 @@ export default function LobbyPage({
                       return (
                         <div
                           key={nobleId}
-                          className="px-3.5 py-2.5 rounded-xl bg-[#E8DCC0] border-2 border-[#B8923A] shadow-md flex items-center gap-3 text-[#2A1F14]"
-                          style={{
-                            backgroundImage: `url('/textures/parchment.jpg')`,
-                            backgroundSize: 'cover',
-                            backgroundBlendMode: 'multiply',
-                          }}
+                          className="noble-tile px-3.5 py-2.5 rounded-xl border-2 border-[#B8923A] shadow-md flex items-center gap-3 text-[#2A1F14]"
                         >
                           <span className="w-6 h-6 rounded-full bg-[#B8923A] text-[#1B1712] font-['Inter'] font-bold text-xs flex items-center justify-center shadow-xs">
                             3
