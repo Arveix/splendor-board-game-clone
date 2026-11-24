@@ -4,6 +4,7 @@ import type {
   GameSessionData,
   GameSettings,
   GameStatus,
+  ReserveCardTarget,
   RevealedCards,
   TokenBank,
   TopDeckCards,
@@ -131,95 +132,27 @@ export class GameSession {
     this.status = 'active';
   }
 
-  // Tokens can be taken as well as returned back to the GameSession
-  public takeTokens(tokensToTake: Partial<TokenBank>): boolean {
-    if (!this.tokens) return false;
+  // ============================================================
+  // Player Actions
+  // On their turn, the active player can perform one of:
+  // 1. Buy one face-up card.
+  // 2. Reserve any one face-up card or the card from the top of the face-down deck.
+  // 3. Take tokens from the bank.
+  // ============================================================
 
-    for (const [color, amount] of Object.entries(tokensToTake)) {
-      const key = color as keyof TokenBank;
-      if (typeof amount === 'number' && amount > 0) {
-        if ((this.tokens[key] || 0) < amount) {
-          return false;
-        }
-      }
-    }
-
-    for (const [color, amount] of Object.entries(tokensToTake)) {
-      const key = color as keyof TokenBank;
-      if (typeof amount === 'number' && amount > 0) {
-        this.tokens[key] -= amount;
-      }
-    }
-    return true;
+  // Action 1: Buy one face-up card
+  public buyCard(cardId: string): void {
+    // Logic to update game state will be implemented based on the rules later
   }
 
-  public returnTokens(tokensToReturn: Partial<TokenBank>): void {
-    if (!this.tokens) return;
-
-    for (const [color, amount] of Object.entries(tokensToReturn)) {
-      const key = color as keyof TokenBank;
-      if (typeof amount === 'number' && amount > 0) {
-        this.tokens[key] = (this.tokens[key] || 0) + amount;
-      }
-    }
+  // Action 2: Reserve any one face-up card or the card from the top of the face-down deck
+  public reserveCard(target: ReserveCardTarget): void {
+    // Logic to update game state will be implemented based on the rules later
   }
 
-  // If the player takes the top deck card:
-  // Nothing is changed in the revealed cards, but a new top deck card takes its place.
-  public takeTopDeckCard(tier: 'tier1' | 'tier2' | 'tier3'): string | null {
-    if (!this.availableCards || this.availableCards[tier].length === 0) {
-      return null;
-    }
-    // Shift top card from unrevealed deck; next card becomes topDeckCard
-    const takenCardId = this.availableCards[tier].shift()!;
-    return takenCardId;
-  }
-
-  // Development cards, once taken by a player, cannot be returned.
-  // If taken from revealed cards, replace with the next available deck card if present.
-  // If taken from unrevealed deck, revealed cards remain untouched.
-  public takeCard(cardId: string): { success: boolean; from: 'revealed' | 'deck' | null } {
-    if (!this.availableCards || !this.revealedCards) {
-      return { success: false, from: null };
-    }
-
-    // 1. Check if card is among revealed cards
-    for (const tier of ['tier1', 'tier2', 'tier3'] as const) {
-      const revIndex = this.revealedCards[tier].indexOf(cardId);
-      if (revIndex !== -1) {
-        this.revealedCards[tier].splice(revIndex, 1);
-        // Replace with top card from available unrevealed deck if available
-        if (this.availableCards[tier].length > 0) {
-          const replacement = this.availableCards[tier].shift()!;
-          this.revealedCards[tier].push(replacement);
-        }
-        return { success: true, from: 'revealed' };
-      }
-    }
-
-    // 2. Check if card is in unrevealed deck (e.g. top of deck reserve)
-    for (const tier of ['tier1', 'tier2', 'tier3'] as const) {
-      const deckIndex = this.availableCards[tier].indexOf(cardId);
-      if (deckIndex !== -1) {
-        this.availableCards[tier].splice(deckIndex, 1);
-        // Nothing is changed in revealed cards
-        return { success: true, from: 'deck' };
-      }
-    }
-
-    return { success: false, from: null };
-  }
-
-  // Noble tiles, once taken by a player, cannot be returned
-  public takeNoble(nobleId: string): boolean {
-    if (!this.nobleTiles) return false;
-
-    const idx = this.nobleTiles.indexOf(nobleId);
-    if (idx !== -1) {
-      this.nobleTiles.splice(idx, 1);
-      return true;
-    }
-    return false;
+  // Action 3: Take tokens from the bank
+  public takeTokens(tokensToTake: Partial<TokenBank>): void {
+    // Logic to update game state will be implemented based on the rules later
   }
 
   // Track the unique ID of the card at the top of the unrevealed deck for each tier
