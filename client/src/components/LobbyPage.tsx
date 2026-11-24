@@ -479,22 +479,55 @@ export default function LobbyPage({
                 <span className="text-[11px] font-bold text-[#80643D] uppercase tracking-widest block mb-2 font-['Cinzel']">
                   Game Session ID
                 </span>
-                <div className="flex flex-wrap items-center justify-center gap-2">
+                <div className="flex items-center justify-center gap-2">
                   <span className="text-3xl sm:text-4xl font-black font-['IBM_Plex_Sans'] tracking-widest text-[#B69A65] bg-[#25211D] border border-[#B69A65]/40 px-6 py-2.5 rounded-2xl shadow-xl inline-block">
                     {gameId}
                   </span>
                   <button
                     type="button"
                     onClick={() => copyToClipboard(gameId, 'id')}
-                    className="px-3.5 py-2.5 rounded-xl bg-[#302A22] hover:bg-[#3d352b] border border-[#80643D]/50 text-xs font-semibold text-[#D8C8A5] hover:text-[#B69A65] transition-all cursor-pointer font-['Inter'] whitespace-nowrap shadow-sm"
+                    title={copiedGameId ? 'Copied ID' : 'Copy Game ID'}
+                    aria-label="Copy Game ID"
+                    className={`p-2.5 rounded-xl bg-[#302A22]/50 hover:bg-[#302A22] border transition-colors cursor-pointer flex items-center justify-center flex-shrink-0 ${
+                      copiedGameId
+                        ? 'border-[#278451]/50 text-[#278451]'
+                        : 'border-[#80643D]/30 hover:border-[#80643D]/60 text-[#80643D] hover:text-[#D8C8A5]'
+                    }`}
                   >
-                    {copiedGameId ? 'Copied ID!' : 'Copy Game ID'}
+                    {copiedGameId ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-4 h-4"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-4 h-4"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                      </svg>
+                    )}
                   </button>
                 </div>
               </div>
 
               {/* Join Link Display & Copy Button */}
-              <div className="w-full bg-[#25211D] border border-[#80643D]/40 rounded-2xl p-4 shadow-xl flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 text-left">
+              <div className="w-full bg-[#25211D] border border-[#80643D]/40 rounded-2xl px-4 py-3 shadow-xl flex items-center justify-between gap-3 text-left">
                 <div className="flex flex-col min-w-0 flex-1">
                   <span className="text-[10px] font-bold text-[#80643D] uppercase tracking-wider font-['Cinzel']">
                     Join Link
@@ -506,9 +539,42 @@ export default function LobbyPage({
                 <button
                   type="button"
                   onClick={() => copyToClipboard(joinUrl, 'link')}
-                  className="px-4 py-2 rounded-xl bg-[#B69A65] hover:bg-[#c4a974] text-[#171615] text-xs font-bold transition-all cursor-pointer font-['Inter'] whitespace-nowrap self-end sm:self-auto shadow-md"
+                  title={copiedJoinLink ? 'Copied Link' : 'Copy Join Link'}
+                  aria-label="Copy Join Link"
+                  className={`p-2.5 rounded-xl bg-[#302A22]/50 hover:bg-[#302A22] border transition-colors cursor-pointer flex items-center justify-center flex-shrink-0 ${
+                    copiedJoinLink
+                      ? 'border-[#278451]/50 text-[#278451]'
+                      : 'border-[#80643D]/30 hover:border-[#80643D]/60 text-[#80643D] hover:text-[#D8C8A5]'
+                  }`}
                 >
-                  {copiedJoinLink ? 'Copied Link!' : 'Copy Join Link'}
+                  {copiedJoinLink ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-4 h-4"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-4 h-4"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                    </svg>
+                  )}
                 </button>
               </div>
             </div>
