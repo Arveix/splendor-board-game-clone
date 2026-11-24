@@ -266,7 +266,7 @@ export default function App() {
   const isInGame = Boolean(session.currentGameSessionId);
 
   return (
-    <div className="min-h-screen text-[#F3E9D2] flex flex-col justify-between font-['EB_Garamond',serif]">
+    <div className="min-h-screen min-h-dvh text-[#F3E9D2] flex flex-col justify-between font-['EB_Garamond',serif]">
 
       {/* Top Header: #120A05 with gold line kept */}
       <header className="w-full bg-[#120A05] border-b border-[#B8923A] px-4 py-3 flex-shrink-0 z-40 shadow-lg">
