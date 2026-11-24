@@ -70,7 +70,7 @@ export default function UsernameGate({ onSessionInitialized }: UsernameGateProps
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#07140F]/90 p-4 font-['EB_Garamond',serif]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#120A05]/90 p-4 font-['EB_Garamond',serif]">
       <div className="w-full max-w-md bg-[#1B1712] border border-[#B8923A] rounded-2xl p-6 sm:p-8 shadow-2xl text-center flex flex-col items-center">
         {/* Brand Crest */}
         <div className="mb-4">

@@ -268,7 +268,7 @@ export default function LobbyPage({
           <div className="w-full flex flex-col items-center gap-5">
             {/* Header */}
             <div className="text-center">
-              <span className="text-xs font-semibold uppercase tracking-[0.08em] text-[#6FD79A] bg-[#0F2A22] border border-[#2E9E5B] px-3 py-1 rounded-full inline-block mb-1.5 font-['Cinzel']">
+              <span className="text-xs font-semibold uppercase tracking-[0.08em] text-[#6FD79A] bg-[#120A05] border border-[#2E9E5B] px-3 py-1 rounded-full inline-block mb-1.5 font-['Cinzel']">
                 Game is active
               </span>
               <h2 className="text-2xl sm:text-3xl font-bold text-[#F3E9D2] font-['Cinzel']">
