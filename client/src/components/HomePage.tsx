@@ -172,13 +172,28 @@ export default function HomePage({
 
         {/* Error state */}
         {error && (
-          <div className="w-full p-4 rounded-xl bg-[#C8283B]/20 border border-[#C8283B]/60 text-[#F0707F] text-sm flex items-center justify-between font-['EB_Garamond']">
-            <span>{error}</span>
+          <div className="w-full p-3 sm:p-4 rounded-xl bg-[#C8283B]/20 border border-[#C8283B]/60 text-[#F0707F] text-sm flex items-center justify-between gap-3 font-['EB_Garamond']">
+            <span className="flex-1">{error}</span>
             <button
-              onClick={fetchActiveLobbies}
-              className="text-sm font-semibold underline hover:text-[#FFFFFF] cursor-pointer"
+              type="button"
+              onClick={() => setError(null)}
+              title="Close"
+              aria-label="Close error message"
+              className="w-8 h-8 rounded-lg hover:bg-[#C8283B]/30 text-[#F0707F] hover:text-[#FFFFFF] flex items-center justify-center transition-colors cursor-pointer flex-shrink-0"
             >
-              Retry
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-4 h-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
             </button>
           </div>
         )}
