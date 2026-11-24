@@ -54,6 +54,7 @@ export interface GameSession {
   topDeckCards?: TopDeckCards;
   nobleTiles?: string[];
   createdAt: number;
+  activePlayer?: Player | null;
 }
 
 export interface UserSession {

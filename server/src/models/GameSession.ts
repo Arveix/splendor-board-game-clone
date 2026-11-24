@@ -26,6 +26,7 @@ export class GameSession {
   public revealedCards?: RevealedCards;
   public availableCards?: AvailableCards;
   public nobleTiles?: string[];
+  public activePlayer: Player | null = null;
 
   constructor(name: string, host: Player, maxPlayers: number = 4) {
     this.id = GameSession.generateId();
@@ -123,6 +124,10 @@ export class GameSession {
     // Initialize noble tiles (only storing unique IDs)
     const allNobles = shuffleArray(getAllNobleIds());
     this.nobleTiles = allNobles.slice(0, this.settings.nobleTilesCount);
+
+    // Randomize player array. Player at index 0 starts by default.
+    this.players = shuffleArray(this.players);
+    this.activePlayer = this.players[0] || null;
 
     this.status = 'active';
   }
@@ -230,6 +235,14 @@ export class GameSession {
     };
   }
 
+  // Switch activePlayer to next player in the array (current turn ends, next player's turn starts)
+  public nextTurn(): void {
+    if (this.players.length === 0) return;
+    const currentIndex = this.players.findIndex((p) => p.id === this.activePlayer?.id);
+    const nextIndex = (currentIndex + 1) % this.players.length;
+    this.activePlayer = this.players[nextIndex];
+  }
+
   public toJSON(): GameSessionData {
     return {
       id: this.id,
@@ -246,6 +259,7 @@ export class GameSession {
       topDeckCards: this.getTopDeckCards(),
       nobleTiles: this.nobleTiles,
       createdAt: this.createdAt,
+      activePlayer: this.activePlayer?.toJSON() || null,
     };
   }
 }
