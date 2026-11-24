@@ -70,11 +70,11 @@ export default function UsernameGate({ onSessionInitialized }: UsernameGateProps
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#120A05]/90 p-4 font-['EB_Garamond',serif]">
-      <div className="w-full max-w-md bg-[#1B1712] border border-[#B8923A] rounded-2xl p-6 sm:p-8 shadow-2xl text-center flex flex-col items-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#120A05]/95 p-4 font-['EB_Garamond',serif]">
+      <div className="w-full max-w-md bg-[#1A110B] border border-black/40 shadow-[0_8px_24px_rgba(0,0,0,0.45),_inset_0_1px_0_rgba(255,255,255,0.08)] rounded-2xl p-6 sm:p-8 text-center flex flex-col items-center">
         {/* Brand Crest */}
         <div className="mb-4">
-          <div className="w-14 h-14 rounded-xl bg-[#1B1712] border border-[#B8923A] flex items-center justify-center mx-auto shadow-md">
+          <div className="w-14 h-14 rounded-xl bg-[#120A05] border border-black/50 flex items-center justify-center mx-auto shadow-md">
             <span className="text-2xl font-bold text-[#B8923A] font-['Cinzel']">
               S
             </span>
@@ -83,7 +83,7 @@ export default function UsernameGate({ onSessionInitialized }: UsernameGateProps
             SPLENDOR
           </h1>
           <p className="text-sm text-[#B9AE96] font-['EB_Garamond'] italic tracking-wide mt-0.5">
-            Renaissance Merchant&apos;s Guild
+            The Renaissance Merchant&apos;s Guild
           </p>
         </div>
 
@@ -92,7 +92,7 @@ export default function UsernameGate({ onSessionInitialized }: UsernameGateProps
           <h2 className="text-lg font-semibold text-[#F3E9D2] font-['Cinzel']">
             Welcome, Merchant
           </h2>
-          <p className="text-sm text-[#B9AE96] mt-1 max-w-xs mx-auto leading-relaxed">
+          <p className="text-[17px] not-italic text-[#F3E9D2] mt-1.5 max-w-xs mx-auto leading-relaxed">
             Please enter your merchant name to enter the guildhall. Your session will remain active across pages and reloads.
           </p>
         </div>
@@ -114,10 +114,10 @@ export default function UsernameGate({ onSessionInitialized }: UsernameGateProps
                 setUsernameInput(e.target.value);
                 if (error) setError('');
               }}
-              className="w-full px-4 py-3 rounded-xl bg-[#111116] border border-[#B8923A]/40 focus:border-[#B8923A] focus:outline-none text-[#F3E9D2] placeholder-[#B9AE96]/40 font-['EB_Garamond'] text-base transition-all"
+              className="w-full px-4 py-3 rounded-xl bg-[#120A05] border border-black/40 focus:border-[#B8923A] focus:outline-none text-[#F3E9D2] placeholder-[#B9AE96]/40 font-['EB_Garamond'] text-[17px] transition-all"
             />
             {error && (
-              <span className="text-xs text-[#F0707F] mt-1 font-['EB_Garamond'] font-medium">
+              <span className="text-sm text-[#F0707F] mt-1 font-['EB_Garamond'] font-medium">
                 {error}
               </span>
             )}

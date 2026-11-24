@@ -265,9 +265,25 @@ export default function App() {
   const isInGame = Boolean(session.currentGameSessionId);
 
   return (
-    <div className="min-h-screen bg-[#2A1A10] bg-[radial-gradient(ellipse_at_center,_#2A1A10_0%,_#120A05_100%)] text-[#F3E9D2] flex flex-col justify-between font-['EB_Garamond',serif]">
-      {/* Top Header */}
-      <header className="w-full bg-[#1B1712] border-b border-[#B8923A] px-4 py-3 flex-shrink-0 z-40 shadow-lg">
+    <div className="min-h-screen bg-[#2A1A10] text-[#F3E9D2] flex flex-col justify-between font-['EB_Garamond',serif] relative isolate">
+      {/* Dark wood grain at 40–50% opacity */}
+      <div
+        className="fixed inset-0 -z-20 pointer-events-none bg-repeat opacity-45"
+        style={{
+          backgroundImage: `url('/textures/dark-wood.jpg')`,
+          backgroundSize: '400px 400px',
+        }}
+      />
+      {/* Vignette to #120A05 at the edges */}
+      <div
+        className="fixed inset-0 -z-10 pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse at center, transparent 0%, #120A05 100%)',
+        }}
+      />
+
+      {/* Top Header: #120A05 with gold line kept */}
+      <header className="w-full bg-[#120A05] border-b border-[#B8923A] px-4 py-3 flex-shrink-0 z-40 shadow-lg">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div className="text-left">
             <h1 className="text-xl sm:text-2xl font-bold tracking-wider text-[#B8923A] font-['Cinzel'] leading-none">
@@ -280,9 +296,9 @@ export default function App() {
 
           {/* Right Header Navigation & Session Pill */}
           <div className="flex items-center gap-2.5">
-            <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#1B1712] border border-[#B8923A] shadow-sm">
+            <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#1A110B] border border-black/30 shadow-[0_4px_12px_rgba(0,0,0,0.35)]">
               <span className="w-2.5 h-2.5 rounded-full bg-[#2E9E5B] shadow-[0_0_6px_#6FD79A]" />
-              <span className="text-base font-medium text-[#F3E9D2] font-['EB_Garamond']">
+              <span className="text-[17px] font-normal text-[#F3E9D2] font-['EB_Garamond']">
                 {session.username}
               </span>
             </div>
@@ -291,7 +307,7 @@ export default function App() {
               <button
                 onClick={handleSessionInvalidated}
                 title="Reset username session"
-                className="text-xs font-['Cinzel'] uppercase tracking-wider text-[#B9AE96] hover:text-[#F0707F] bg-[#1B1712] hover:bg-[#25211D] border border-[#B8923A]/50 px-3 py-1.5 rounded-xl transition-colors cursor-pointer"
+                className="text-xs font-['Cinzel'] uppercase tracking-wider text-[#B9AE96] hover:text-[#F0707F] bg-[#1A110B] hover:bg-[#25211D] border border-black/40 px-3 py-1.5 rounded-xl transition-colors cursor-pointer"
               >
                 Exit
               </button>
@@ -319,8 +335,8 @@ export default function App() {
         />
       )}
 
-      {/* Footer */}
-      <footer className="w-full border-t border-[#B8923A]/30 py-3 text-center text-xs text-[#B9AE96] font-['EB_Garamond'] italic">
+      {/* Footer: #120A05 with gold line kept */}
+      <footer className="w-full bg-[#120A05] border-t border-[#B8923A] py-3 text-center text-xs text-[#B9AE96] font-['EB_Garamond'] italic">
         Splendor Renaissance Merchant&apos;s Table &bull; Private Game
       </footer>
     </div>

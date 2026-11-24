@@ -4,7 +4,7 @@
   /* Surfaces & UI Colors per Splendor Style Guide */
   --color-table-wood: #2A1A10;
   --color-table-vignette: #120A05;
-  --color-panel-leather: #1B1712;
+  --color-panel-leather: #1A110B;
   --color-border-brass: #B8923A;
   --color-button-primary: #B8923A;
   --color-button-hover: #D4A83A;
@@ -55,17 +55,27 @@ body {
   background-color: #2A1A10;
   color: #F3E9D2;
   font-family: 'EB Garamond', Georgia, serif;
+  font-size: 17px;
+  font-style: normal;
 }
 
-/* Reusable Renaissance Style Guide Utility Classes */
-.table-felt-bg,
-.table-wood-bg {
-  background: radial-gradient(ellipse at center, #2A1A10 0%, #120A05 100%);
+/* Page background: #2A1A10 with dark wood grain at 40-50% opacity and vignette to #120A05 at edges */
+.page-bg-wood {
+  background-color: #2A1A10;
+  position: relative;
 }
 
+/* Panels: warm brown leather #1A110B, soft drop shadow, subtle inner highlight on top edge */
 .leather-panel {
-  background-color: #1B1712;
-  border: 1px solid #B8923A;
+  background-color: #1A110B;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* Empty state box: fill #1A110B with a #B8923A border at 40% opacity */
+.empty-state-box {
+  background-color: #1A110B;
+  border: 1px solid rgba(184, 146, 58, 0.4);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .parchment-surface {

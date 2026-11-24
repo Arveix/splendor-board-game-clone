@@ -274,14 +274,14 @@ export default function LobbyPage({
               <h2 className="text-2xl sm:text-3xl font-bold text-[#F3E9D2] font-['Cinzel']">
                 {game?.name || 'Splendor Session'}
               </h2>
-              <span className="text-xs font-bold text-[#B8923A] bg-[#1B1712] border border-[#B8923A] px-3 py-1 rounded-lg inline-block mt-2 font-['Inter']">
+              <span className="text-xs font-bold text-[#F3E9D2] bg-[#120A05] border border-black/50 px-3 py-1 rounded-lg inline-block mt-2 font-['Inter']">
                 Session ID: {gameId}
               </span>
             </div>
 
             {/* Game Settings & Resources Overview */}
-            <div className="w-full bg-[#1B1712] border border-[#B8923A] rounded-2xl p-5 shadow-2xl flex flex-col gap-4">
-              <div className="flex items-center justify-between border-b border-[#B8923A]/40 pb-3">
+            <div className="w-full bg-[#1A110B] border border-black/40 shadow-[0_8px_24px_rgba(0,0,0,0.45),_inset_0_1px_0_rgba(255,255,255,0.08)] rounded-2xl p-5 flex flex-col gap-4">
+              <div className="flex items-center justify-between border-b border-black/40 pb-3">
                 <h3 className="text-lg font-semibold uppercase tracking-wider text-[#B8923A] font-['Cinzel']">
                   Initialized Game Settings
                 </h3>
@@ -292,7 +292,7 @@ export default function LobbyPage({
 
               {/* Settings Summary Cards */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                <div className="p-3 bg-[#111116] border border-[#B8923A]/30 rounded-xl text-center">
+                <div className="p-3 bg-[#120A05] border border-black/40 rounded-xl text-center">
                   <span className="text-xs text-[#B9AE96] uppercase tracking-wider block font-['EB_Garamond']">
                     Noble Tiles
                   </span>
@@ -301,7 +301,7 @@ export default function LobbyPage({
                   </span>
                 </div>
 
-                <div className="p-3 bg-[#111116] border border-[#B8923A]/30 rounded-xl text-center">
+                <div className="p-3 bg-[#120A05] border border-black/40 rounded-xl text-center">
                   <span className="text-xs text-[#B9AE96] uppercase tracking-wider block font-['EB_Garamond']">
                     Face-Up Cards
                   </span>
@@ -310,7 +310,7 @@ export default function LobbyPage({
                   </span>
                 </div>
 
-                <div className="p-3 bg-[#111116] border border-[#B8923A]/30 rounded-xl text-center">
+                <div className="p-3 bg-[#120A05] border border-black/40 rounded-xl text-center">
                   <span className="text-xs text-[#B9AE96] uppercase tracking-wider block font-['EB_Garamond']">
                     Gem Tokens
                   </span>
@@ -319,7 +319,7 @@ export default function LobbyPage({
                   </span>
                 </div>
 
-                <div className="p-3 bg-[#111116] border border-[#B8923A]/30 rounded-xl text-center">
+                <div className="p-3 bg-[#120A05] border border-black/40 rounded-xl text-center">
                   <span className="text-xs text-[#B9AE96] uppercase tracking-wider block font-['EB_Garamond']">
                     Gold Tokens
                   </span>
@@ -331,7 +331,7 @@ export default function LobbyPage({
 
               {/* Tokens Bank */}
               <div className="mt-1 flex flex-col gap-2">
-                <span className="text-sm font-semibold uppercase tracking-wider text-[#B9AE96] font-['Cinzel']">
+                <span className="text-sm font-semibold uppercase tracking-wider text-[#B8923A] font-['Cinzel']">
                   Available Token Bank
                 </span>
                 <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
@@ -364,7 +364,7 @@ export default function LobbyPage({
 
               {/* Revealed Cards (Face-Up on Table) */}
               <div className="mt-2 flex flex-col gap-3">
-                <div className="flex items-center justify-between border-b border-[#B8923A]/40 pb-2">
+                <div className="flex items-center justify-between border-b border-black/40 pb-2">
                   <span className="text-base font-semibold uppercase tracking-wider text-[#B8923A] font-['Cinzel']">
                     Revealed Cards (Face-Up on Table)
                   </span>
@@ -384,13 +384,13 @@ export default function LobbyPage({
                     tierNum === 3 ? 'text-[#7FAAF0]' : tierNum === 2 ? 'text-[#F3D679]' : 'text-[#6FD79A]';
 
                   return (
-                    <div key={tierKey} className="p-3.5 rounded-xl bg-[#111116] border border-[#B8923A]/40 flex flex-col gap-2.5">
-                      <div className="flex items-center justify-between text-sm font-semibold border-b border-[#1B1712] pb-1.5 font-['Cinzel']">
+                    <div key={tierKey} className="p-3.5 rounded-xl bg-[#120A05] border border-black/40 flex flex-col gap-2.5">
+                      <div className="flex items-center justify-between text-sm font-semibold border-b border-black/40 pb-1.5 font-['Cinzel']">
                         <span className={tierColorClass}>
                           {tierLabel} ({tierRevealed.length} Face-Up)
                         </span>
                         <span className="text-xs font-['EB_Garamond'] text-[#B9AE96]">
-                          Unrevealed Deck: <strong className="text-[#F3E9D2] font-['Inter'] font-bold">{deckRemaining}</strong> cards | Top Card ID: <strong className="text-[#B8923A] font-['Inter'] font-bold">{topDeckId || 'Empty'}</strong>
+                          Unrevealed Deck: <strong className="text-[#F3E9D2] font-['Inter'] font-bold">{deckRemaining}</strong> cards | Top Card ID: <strong className="text-[#F3E9D2] font-['Inter'] font-bold">{topDeckId || 'Empty'}</strong>
                         </span>
                       </div>
 
@@ -546,7 +546,7 @@ export default function LobbyPage({
             <h2 className="text-2xl sm:text-3xl font-bold text-[#F3E9D2] font-['Cinzel'] mb-2">
               Game is completed
             </h2>
-            <span className="text-sm font-bold text-[#B8923A] bg-[#1B1712] border border-[#B8923A] px-4 py-1.5 rounded-xl inline-block mb-2 font-['Inter']">
+            <span className="text-sm font-bold text-[#F3E9D2] bg-[#120A05] border border-black/50 px-4 py-1.5 rounded-xl inline-block mb-2 font-['Inter']">
               Session ID: {gameId}
             </span>
           </div>
@@ -564,7 +564,7 @@ export default function LobbyPage({
                   Game Session ID
                 </span>
                 <div className="flex items-center justify-center gap-2">
-                  <span className="text-3xl sm:text-4xl font-bold font-['Inter'] tracking-wider text-[#B8923A] bg-[#1B1712] border border-[#B8923A] px-6 py-2.5 rounded-2xl shadow-xl inline-block">
+                  <span className="text-3xl sm:text-4xl font-bold font-['Inter'] tracking-wider text-[#F3E9D2] bg-[#1A110B] border border-black/40 shadow-[0_8px_24px_rgba(0,0,0,0.45),_inset_0_1px_0_rgba(255,255,255,0.08)] px-6 py-2.5 rounded-2xl inline-block">
                     {gameId}
                   </span>
                   <button
@@ -572,10 +572,10 @@ export default function LobbyPage({
                     onClick={() => copyToClipboard(gameId, 'id')}
                     title={copiedGameId ? 'Copied ID' : 'Copy Game ID'}
                     aria-label="Copy Game ID"
-                    className={`p-2.5 rounded-xl bg-[#1B1712] border transition-colors cursor-pointer flex items-center justify-center flex-shrink-0 ${
+                    className={`p-2.5 rounded-xl bg-[#120A05] border transition-colors cursor-pointer flex items-center justify-center flex-shrink-0 ${
                       copiedGameId
                         ? 'border-[#6FD79A] text-[#6FD79A]'
-                        : 'border-[#B8923A]/40 hover:border-[#B8923A] text-[#B9AE96] hover:text-[#B8923A]'
+                        : 'border-black/40 hover:border-[#B8923A]/40 text-[#B9AE96] hover:text-[#F3E9D2]'
                     }`}
                   >
                     {copiedGameId ? (
@@ -611,12 +611,12 @@ export default function LobbyPage({
               </div>
 
               {/* Join Link Display & Copy Button */}
-              <div className="w-full bg-[#1B1712] border border-[#B8923A] rounded-2xl px-4 py-3 shadow-xl flex items-center justify-between gap-3 text-left">
+              <div className="w-full bg-[#1A110B] border border-black/40 shadow-[0_8px_24px_rgba(0,0,0,0.45),_inset_0_1px_0_rgba(255,255,255,0.08)] rounded-2xl px-4 py-3 flex items-center justify-between gap-3 text-left">
                 <div className="flex flex-col min-w-0 flex-1">
                   <span className="text-xs font-semibold text-[#B9AE96] uppercase tracking-wider font-['Cinzel']">
                     Join Link
                   </span>
-                  <span className="text-sm text-[#F3E9D2] font-['Inter'] truncate select-all mt-0.5">
+                  <span className="text-[17px] not-italic text-[#F3E9D2] font-['EB_Garamond'] truncate select-all mt-0.5">
                     {joinUrl}
                   </span>
                 </div>
@@ -625,10 +625,10 @@ export default function LobbyPage({
                   onClick={() => copyToClipboard(joinUrl, 'link')}
                   title={copiedJoinLink ? 'Copied Link' : 'Copy Join Link'}
                   aria-label="Copy Join Link"
-                  className={`p-2.5 rounded-xl bg-[#1B1712] border transition-colors cursor-pointer flex items-center justify-center flex-shrink-0 ${
+                  className={`p-2.5 rounded-xl bg-[#120A05] border transition-colors cursor-pointer flex items-center justify-center flex-shrink-0 ${
                     copiedJoinLink
                       ? 'border-[#6FD79A] text-[#6FD79A]'
-                      : 'border-[#B8923A]/40 hover:border-[#B8923A] text-[#B9AE96] hover:text-[#B8923A]'
+                      : 'border-black/40 hover:border-[#B8923A]/40 text-[#B9AE96] hover:text-[#F3E9D2]'
                   }`}
                 >
                   {copiedJoinLink ? (
@@ -664,18 +664,18 @@ export default function LobbyPage({
             </div>
 
             {/* List of joined players */}
-            <div className="w-full bg-[#1B1712] border border-[#B8923A] rounded-2xl p-5 shadow-2xl flex flex-col gap-4">
-              <div className="flex items-center justify-between border-b border-[#B8923A]/40 pb-3">
+            <div className="w-full bg-[#1A110B] border border-black/40 shadow-[0_8px_24px_rgba(0,0,0,0.45),_inset_0_1px_0_rgba(255,255,255,0.08)] rounded-2xl p-5 flex flex-col gap-4">
+              <div className="flex items-center justify-between border-b border-black/40 pb-3">
                 <span className="text-base font-semibold uppercase tracking-wider text-[#F3E9D2] font-['Cinzel']">
                   Joined Players
                 </span>
-                <span className="text-xs font-['Inter'] font-bold text-[#B8923A] bg-[#111116] px-2.5 py-0.5 rounded-md border border-[#B8923A]/50">
+                <span className="text-xs font-['Inter'] font-bold text-[#F3E9D2] bg-[#120A05] px-2.5 py-0.5 rounded-md border border-black/50">
                   {playersList.length} / {maxPlayers}
                 </span>
               </div>
 
               {playersList.length === 0 ? (
-                <div className="py-4 text-center text-base text-[#B9AE96] font-['EB_Garamond'] italic">
+                <div className="py-4 text-center text-[17px] text-[#B9AE96] font-['EB_Garamond'] italic">
                   Waiting for players to join...
                 </div>
               ) : (
@@ -685,13 +685,13 @@ export default function LobbyPage({
                     return (
                       <div
                         key={player.id}
-                        className="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-[#111116] border border-[#B8923A]/30"
+                        className="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-[#120A05] border border-black/30"
                       >
                         <div className="flex items-center gap-2.5">
                           <span className="text-xs font-['Inter'] text-[#B9AE96] font-bold">
                             {idx + 1}.
                           </span>
-                          <span className="text-base font-medium text-[#F3E9D2] font-['EB_Garamond']">
+                          <span className="text-[17px] not-italic font-normal text-[#F3E9D2] font-['EB_Garamond']">
                             {player.name}
                           </span>
                         </div>
@@ -709,7 +709,7 @@ export default function LobbyPage({
 
               {/* Host Setup & Start Game Controls */}
               {isHost ? (
-                <div className="flex flex-col gap-3.5 border-t border-[#B8923A]/40 pt-4 mt-1">
+                <div className="flex flex-col gap-3.5 border-t border-black/40 pt-4 mt-1">
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-semibold uppercase tracking-wider text-[#B8923A] font-['Cinzel']">
                       Game Setup Options
@@ -732,7 +732,7 @@ export default function LobbyPage({
                           setGemTokens(Number(e.target.value));
                           setHasUserCustomized(true);
                         }}
-                        className="px-3 py-2 rounded-xl bg-[#111116] border border-[#B8923A]/50 text-xs font-bold text-[#F3E9D2] font-['Inter'] focus:outline-none focus:border-[#B8923A]"
+                        className="px-3 py-2 rounded-xl bg-[#120A05] border border-black/50 text-xs font-bold text-[#F3E9D2] font-['Inter'] focus:outline-none focus:border-[#B8923A]"
                       >
                         {[4, 5, 6, 7, 8].map((num) => (
                           <option key={num} value={num}>
@@ -753,7 +753,7 @@ export default function LobbyPage({
                           setGoldTokens(Number(e.target.value));
                           setHasUserCustomized(true);
                         }}
-                        className="px-3 py-2 rounded-xl bg-[#111116] border border-[#B8923A]/50 text-xs font-bold text-[#D4A83A] font-['Inter'] focus:outline-none focus:border-[#B8923A]"
+                        className="px-3 py-2 rounded-xl bg-[#120A05] border border-black/50 text-xs font-bold text-[#D4A83A] font-['Inter'] focus:outline-none focus:border-[#B8923A]"
                       >
                         {[1, 2, 3, 4, 5].map((num) => (
                           <option key={num} value={num}>
@@ -778,7 +778,7 @@ export default function LobbyPage({
                           className={`py-2 rounded-xl text-xs font-semibold border transition-all cursor-pointer font-['Cinzel'] ${
                             faceUpCards === 3
                               ? 'bg-[#B8923A] text-[#1B1712] border-[#B8923A] shadow-xs'
-                              : 'bg-[#111116] text-[#B9AE96] border-[#B8923A]/30 hover:border-[#B8923A]'
+                              : 'bg-[#120A05] text-[#B9AE96] border-black/40 hover:border-[#B8923A]'
                           }`}
                         >
                           3 Cards
@@ -792,7 +792,7 @@ export default function LobbyPage({
                           className={`py-2 rounded-xl text-xs font-semibold border transition-all cursor-pointer font-['Cinzel'] ${
                             faceUpCards === 4
                               ? 'bg-[#B8923A] text-[#1B1712] border-[#B8923A] shadow-xs'
-                              : 'bg-[#111116] text-[#B9AE96] border-[#B8923A]/30 hover:border-[#B8923A]'
+                              : 'bg-[#120A05] text-[#B9AE96] border-black/40 hover:border-[#B8923A]'
                           }`}
                         >
                           4 Cards
@@ -811,7 +811,7 @@ export default function LobbyPage({
                           setNobleCount(Number(e.target.value));
                           setHasUserCustomized(true);
                         }}
-                        className="px-3 py-2 rounded-xl bg-[#111116] border border-[#B8923A]/50 text-xs font-bold text-[#F3E9D2] font-['Inter'] focus:outline-none focus:border-[#B8923A]"
+                        className="px-3 py-2 rounded-xl bg-[#120A05] border border-black/50 text-xs font-bold text-[#F3E9D2] font-['Inter'] focus:outline-none focus:border-[#B8923A]"
                       >
                         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
                           <option key={num} value={num}>
@@ -851,7 +851,7 @@ export default function LobbyPage({
                   </div>
                 </div>
               ) : (
-                <div className="text-center py-2 mt-1 border-t border-[#B8923A]/40 pt-3">
+                <div className="text-center py-2 mt-1 border-t border-black/40 pt-3">
                   <span className="text-sm text-[#B9AE96] font-['EB_Garamond']">
                     Waiting for host <strong className="text-[#B8923A] font-semibold">{game?.hostUsername}</strong> to configure and start the game...
                   </span>
