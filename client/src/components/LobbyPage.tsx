@@ -175,7 +175,7 @@ export default function LobbyPage({
   const isHost = Boolean(game && currentUsername && game.hostUsername === currentUsername);
 
   return (
-    <div className="w-full flex-1 flex flex-col items-center justify-center p-4 select-none font-['Inter',sans-serif]">
+    <div className="w-full flex-1 flex flex-col items-center justify-center p-4 font-['Inter',sans-serif]">
       <div className="w-full max-w-2xl flex flex-col items-center gap-6">
         {/* ============================================================ */}
         {/* ACTIVE GAME SCREEN: Displays all initialized game information */}

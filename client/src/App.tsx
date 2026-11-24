@@ -265,7 +265,7 @@ export default function App() {
   const isInGame = Boolean(session.currentGameSessionId);
 
   return (
-    <div className="min-h-screen bg-[#171615] text-[#D8C8A5] flex flex-col justify-between select-none font-['Inter',sans-serif]">
+    <div className="min-h-screen bg-[#171615] text-[#D8C8A5] flex flex-col justify-between font-['Inter',sans-serif]">
       {/* Top Header */}
       <header className="w-full bg-[#171615] border-b border-[#302A22] px-4 py-3 flex-shrink-0 z-40">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
