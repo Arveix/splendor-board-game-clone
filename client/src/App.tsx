@@ -318,7 +318,6 @@ export default function App() {
             gameId={activeGameId}
             sessionId={session.sessionId}
             currentUsername={session.username}
-            initialStatus={gameStatus}
             onStatusChange={setGameStatus}
             onLeaveGame={handleLeaveGame}
             onGameNotFound={handleGameNotFound}

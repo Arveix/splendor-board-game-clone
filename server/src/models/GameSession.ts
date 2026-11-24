@@ -5,7 +5,6 @@ import type {
   GameSettings,
   GameStatus,
   RevealedCards,
-  TierCards,
   TokenBank,
   TopDeckCards,
 } from '../types.js';

@@ -5,7 +5,6 @@ interface LobbyPageProps {
   gameId: string;
   sessionId: string;
   currentUsername: string;
-  initialStatus?: GameStatus;
   onLeaveGame: () => Promise<void> | void;
   onGameNotFound: () => void;
   onStatusChange?: (status: GameStatus) => void;
