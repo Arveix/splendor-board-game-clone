@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import type { GameSession } from '../types';
+import { BACKEND_URL } from '../api/config';
 
 interface UseGameWebSocketOptions {
   gameId: string | null | undefined;
@@ -17,12 +18,9 @@ export function useGameWebSocket({
   useEffect(() => {
     if (!gameId || !sessionId) return;
 
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const host =
-      window.location.port === '5173'
-        ? `${window.location.hostname}:3000`
-        : window.location.host;
-    const wsUrl = `${protocol}//${host}/ws?gameId=${encodeURIComponent(gameId)}&sessionId=${encodeURIComponent(sessionId)}`;
+    const wsProto = BACKEND_URL.startsWith('https:') ? 'wss:' : 'ws:';
+    const host = BACKEND_URL.replace(/^https?:\/\//, '');
+    const wsUrl = `${wsProto}//${host}/ws?gameId=${encodeURIComponent(gameId)}&sessionId=${encodeURIComponent(sessionId)}`;
 
     let ws: WebSocket | null = null;
     try {

@@ -1,11 +1,12 @@
 import type { GameSettings } from '../types';
+import { API_BASE } from './config';
 
 /**
  * List all available games
  * GET /api/games
  */
 export async function listGamesApi(sessionId: string): Promise<Response> {
-  return fetch('/api/games', {
+  return fetch(`${API_BASE}/games`, {
     headers: {
       'x-session-id': sessionId,
     },
@@ -20,7 +21,7 @@ export async function createGameApi(
   sessionId: string,
   params: { name?: string; maxPlayers?: number; winPoints?: number }
 ): Promise<Response> {
-  return fetch('/api/games', {
+  return fetch(`${API_BASE}/games`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -35,7 +36,7 @@ export async function createGameApi(
  * GET /api/games/:id
  */
 export async function getGameApi(sessionId: string, gameId: string): Promise<Response> {
-  return fetch(`/api/games/${encodeURIComponent(gameId)}`, {
+  return fetch(`${API_BASE}/games/${encodeURIComponent(gameId)}`, {
     headers: {
       'x-session-id': sessionId,
     },
@@ -47,7 +48,7 @@ export async function getGameApi(sessionId: string, gameId: string): Promise<Res
  * POST /api/games/:id/join
  */
 export async function joinGameApi(sessionId: string, gameId: string): Promise<Response> {
-  return fetch(`/api/games/${encodeURIComponent(gameId)}/join`, {
+  return fetch(`${API_BASE}/games/${encodeURIComponent(gameId)}/join`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -65,7 +66,7 @@ export async function removePlayerApi(
   gameId: string,
   playerId?: string
 ): Promise<Response> {
-  return fetch(`/api/games/${encodeURIComponent(gameId)}/remove-player`, {
+  return fetch(`${API_BASE}/games/${encodeURIComponent(gameId)}/remove-player`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -84,7 +85,7 @@ export async function startGameApi(
   gameId: string,
   settings: GameSettings
 ): Promise<Response> {
-  return fetch(`/api/games/${encodeURIComponent(gameId)}/start`, {
+  return fetch(`${API_BASE}/games/${encodeURIComponent(gameId)}/start`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -99,7 +100,7 @@ export async function startGameApi(
  * POST /api/games/:id/rematch
  */
 export async function rematchGameApi(sessionId: string, gameId: string): Promise<Response> {
-  return fetch(`/api/games/${encodeURIComponent(gameId)}/rematch`, {
+  return fetch(`${API_BASE}/games/${encodeURIComponent(gameId)}/rematch`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -113,7 +114,7 @@ export async function rematchGameApi(sessionId: string, gameId: string): Promise
  * POST /api/games/:id/execute-player-action/end-turn
  */
 export async function endTurnApi(sessionId: string, gameId: string): Promise<Response> {
-  return fetch(`/api/games/${encodeURIComponent(gameId)}/execute-player-action/end-turn`, {
+  return fetch(`${API_BASE}/games/${encodeURIComponent(gameId)}/execute-player-action/end-turn`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -131,7 +132,7 @@ export async function buyCardApi(
   gameId: string,
   cardId: string
 ): Promise<Response> {
-  return fetch(`/api/games/${encodeURIComponent(gameId)}/execute-player-action/buy-card`, {
+  return fetch(`${API_BASE}/games/${encodeURIComponent(gameId)}/execute-player-action/buy-card`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -150,7 +151,7 @@ export async function reserveCardApi(
   gameId: string,
   cardId: string
 ): Promise<Response> {
-  return fetch(`/api/games/${encodeURIComponent(gameId)}/execute-player-action/reserve-card`, {
+  return fetch(`${API_BASE}/games/${encodeURIComponent(gameId)}/execute-player-action/reserve-card`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -170,7 +171,7 @@ export async function updateTokensApi(
   tokensToTake: Partial<Record<string, number>> | null,
   tokensToReturn: Partial<Record<string, number>> | null
 ): Promise<Response> {
-  return fetch(`/api/games/${encodeURIComponent(gameId)}/execute-player-action/update-tokens`, {
+  return fetch(`${API_BASE}/games/${encodeURIComponent(gameId)}/execute-player-action/update-tokens`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -189,7 +190,7 @@ export async function inviteNobleApi(
   gameId: string,
   nobleId: string
 ): Promise<Response> {
-  return fetch(`/api/games/${encodeURIComponent(gameId)}/execute-player-action/invite-noble`, {
+  return fetch(`${API_BASE}/games/${encodeURIComponent(gameId)}/execute-player-action/invite-noble`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
