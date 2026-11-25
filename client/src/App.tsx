@@ -5,31 +5,15 @@ import HomePage from './components/HomePage';
 import LobbyPage from './components/LobbyPage';
 import UsernameGate from './components/UsernameGate';
 import type { GameStatus, UserSession } from './types';
-
-const STORAGE_USERNAME_KEY = 'splendor_username';
-const STORAGE_SESSION_ID_KEY = 'splendor_session_id';
-const STORAGE_CURRENT_GAME_KEY = 'splendor_current_game_id';
+import {
+  clearStoredSession,
+  getStoredSession,
+  saveStoredSession,
+  updateStoredGameId,
+} from './utils/authStorage';
 
 export default function App() {
-  const [session, setSession] = useState<UserSession | null>(() => {
-    try {
-      const storedName = localStorage.getItem(STORAGE_USERNAME_KEY);
-      const storedId = localStorage.getItem(STORAGE_SESSION_ID_KEY);
-      const storedGameId = localStorage.getItem(STORAGE_CURRENT_GAME_KEY);
-
-      if (storedName && storedName.trim() && storedId && storedId.trim()) {
-        return {
-          username: storedName.trim(),
-          sessionId: storedId.trim(),
-          currentGameSessionId: storedGameId && storedGameId.trim() ? storedGameId.trim() : null,
-          createdAt: Date.now(),
-        };
-      }
-      return null;
-    } catch {
-      return null;
-    }
-  });
+  const [session, setSession] = useState<UserSession | null>(getStoredSession);
 
   // URL format: Base URL followed by the game session ID without any keyword in between
   const getGameIdFromUrl = (): string | null => {
@@ -47,13 +31,7 @@ export default function App() {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   const handleSessionInvalidated = () => {
-    try {
-      localStorage.removeItem(STORAGE_USERNAME_KEY);
-      localStorage.removeItem(STORAGE_SESSION_ID_KEY);
-      localStorage.removeItem(STORAGE_CURRENT_GAME_KEY);
-    } catch {
-      // Ignore storage errors
-    }
+    clearStoredSession();
     setSession(null);
     setUrlGameId(null);
     window.history.replaceState(null, '', '/');
@@ -67,11 +45,7 @@ export default function App() {
         currentGameSessionId: null,
       };
     });
-    try {
-      localStorage.removeItem(STORAGE_CURRENT_GAME_KEY);
-    } catch {
-      // Ignore
-    }
+    updateStoredGameId(null);
     window.history.replaceState(null, '', '/');
     setUrlGameId(null);
     setGameStatus('waiting');
@@ -96,17 +70,7 @@ export default function App() {
       .then((serverSession: UserSession | null) => {
         if (serverSession) {
           setSession(serverSession);
-          try {
-            localStorage.setItem(STORAGE_USERNAME_KEY, serverSession.username);
-            localStorage.setItem(STORAGE_SESSION_ID_KEY, serverSession.sessionId);
-            if (serverSession.currentGameSessionId) {
-              localStorage.setItem(STORAGE_CURRENT_GAME_KEY, serverSession.currentGameSessionId);
-            } else {
-              localStorage.removeItem(STORAGE_CURRENT_GAME_KEY);
-            }
-          } catch {
-            // Ignore
-          }
+          saveStoredSession(serverSession);
         }
       })
       .catch(() => {
@@ -180,17 +144,7 @@ export default function App() {
 
   const handleSessionInitialized = (newSession: UserSession) => {
     setSession(newSession);
-    try {
-      localStorage.setItem(STORAGE_USERNAME_KEY, newSession.username);
-      localStorage.setItem(STORAGE_SESSION_ID_KEY, newSession.sessionId);
-      if (newSession.currentGameSessionId) {
-        localStorage.setItem(STORAGE_CURRENT_GAME_KEY, newSession.currentGameSessionId);
-      } else {
-        localStorage.removeItem(STORAGE_CURRENT_GAME_KEY);
-      }
-    } catch {
-      // Ignore
-    }
+    saveStoredSession(newSession);
   };
 
   const handleGameJoined = (gameId: string) => {
@@ -201,11 +155,7 @@ export default function App() {
     };
     setSession(updatedSession);
     setGameStatus('waiting');
-    try {
-      localStorage.setItem(STORAGE_CURRENT_GAME_KEY, gameId);
-    } catch {
-      // Ignore
-    }
+    updateStoredGameId(gameId);
     // Base URL followed directly by game session ID without any keyword
     window.history.pushState(null, '', `/${encodeURIComponent(gameId)}`);
     setUrlGameId(gameId);
@@ -233,12 +183,7 @@ export default function App() {
     };
     setSession(updatedSession);
     setGameStatus('waiting');
-
-    try {
-      localStorage.removeItem(STORAGE_CURRENT_GAME_KEY);
-    } catch {
-      // Ignore
-    }
+    updateStoredGameId(null);
 
     window.history.pushState(null, '', '/');
     setUrlGameId(null);

@@ -11,7 +11,7 @@ export default function UsernameGate({ onSessionInitialized }: UsernameGateProps
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
     const cleanName = usernameInput.trim();
 
@@ -33,10 +33,9 @@ export default function UsernameGate({ onSessionInitialized }: UsernameGateProps
     setLoading(true);
     setError('');
 
-    let session: UserSession;
-
     try {
-      session = await createSessionApi(cleanName);
+      const session = await createSessionApi(cleanName);
+      onSessionInitialized(session);
     } catch (err: unknown) {
       const errorObj = err as { status?: number; message?: string };
       if (errorObj?.status === 409 || errorObj?.message === 'Username is already taken') {
@@ -44,20 +43,9 @@ export default function UsernameGate({ onSessionInitialized }: UsernameGateProps
       } else {
         setError(errorObj?.message || 'Failed to connect to server. Please try again.');
       }
-      return;
     } finally {
       setLoading(false);
     }
-
-    // Persist session in local storage
-    try {
-      localStorage.setItem('splendor_username', session.username);
-      localStorage.setItem('splendor_session_id', session.sessionId);
-    } catch {
-      // Local storage protection
-    }
-
-    onSessionInitialized(session);
   };
 
   return (

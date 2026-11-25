@@ -102,7 +102,7 @@ export default function HomePage({
     }
   };
 
-  const handleJoinByIdSubmit = (e: React.FormEvent) => {
+  const handleJoinByIdSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();
     const trimmed = joinGameId.trim();
     if (!trimmed) return;
