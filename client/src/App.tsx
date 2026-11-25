@@ -143,6 +143,7 @@ export default function App() {
   }, [session?.currentGameSessionId]);
 
   const handleSessionInitialized = (newSession: UserSession) => {
+    console.log("setting new session on frontend");
     setSession(newSession);
     saveStoredSession(newSession);
   };

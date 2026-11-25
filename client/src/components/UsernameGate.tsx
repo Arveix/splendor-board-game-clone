@@ -35,6 +35,7 @@ export default function UsernameGate({ onSessionInitialized }: UsernameGateProps
 
     try {
       const session = await createSessionApi(cleanName);
+      console.log("New session created successfully: ", session);
       onSessionInitialized(session);
     } catch (err: unknown) {
       const errorObj = err as { status?: number; message?: string };
