@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
+import { createGameApi, joinGameApi, listGamesApi } from '../api';
 import type { GameSession, UserSession } from '../types';
+import { WarningPlaque } from './WarningPlaque';
 
 interface HomePageProps {
   session: UserSession;
@@ -16,17 +18,14 @@ export default function HomePage({
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
   const [joiningId, setJoiningId] = useState<string | null>(null);
+  const [joinGameId, setJoinGameId] = useState('');
   const [error, setError] = useState<string | null>(null);
 
   const fetchActiveLobbies = async () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch('/api/games', {
-        headers: {
-          'x-session-id': session.sessionId,
-        },
-      });
+      const res = await listGamesApi(session.sessionId);
 
       if (res.status === 401) {
         onSessionInvalidated();
@@ -46,23 +45,19 @@ export default function HomePage({
   };
 
   useEffect(() => {
-    fetchActiveLobbies();
+    const timer = setTimeout(() => {
+      fetchActiveLobbies();
+    }, 0);
+    return () => clearTimeout(timer);
   }, [session.sessionId]);
 
   const handleCreateGameClick = async () => {
     setCreating(true);
     setError(null);
     try {
-      const res = await fetch('/api/games', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-session-id': session.sessionId,
-        },
-        body: JSON.stringify({
-          name: `${session.username}'s Guild`,
-          maxPlayers: 4,
-        }),
+      const res = await createGameApi(session.sessionId, {
+        name: `${session.username}'s Guild`,
+        maxPlayers: 4,
       });
 
       if (res.status === 401) {
@@ -87,13 +82,7 @@ export default function HomePage({
     setJoiningId(gameId);
     setError(null);
     try {
-      const res = await fetch(`/api/games/${gameId}/join`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-session-id': session.sessionId,
-        },
-      });
+      const res = await joinGameApi(session.sessionId, gameId);
 
       if (res.status === 401) {
         onSessionInvalidated();
@@ -113,41 +102,89 @@ export default function HomePage({
     }
   };
 
-  return (
-    <div className="w-full max-w-4xl mx-auto flex-1 flex flex-col gap-6 p-4 sm:p-6 overflow-y-auto font-['EB_Garamond',serif]">
-      {/* Top Banner / Create Game Card */}
-      <div className="w-full bg-[#1A110B] border border-black/40 shadow-[0_8px_24px_rgba(0,0,0,0.45),_inset_0_1px_0_rgba(255,255,255,0.08)] rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <span className="text-xs font-semibold text-[#B9AE96] uppercase tracking-wider block font-['EB_Garamond']">
-            Merchant Guildhall
-          </span>
-          <h2 className="text-xl sm:text-2xl font-semibold text-[#B8923A] mt-0.5 font-['Cinzel']">
-            Start a New Game
-          </h2>
-          <p className="text-[17px] not-italic text-[#F3E9D2] mt-1 max-w-md leading-relaxed font-['EB_Garamond']">
-            Welcome, <strong className="text-[#F3E9D2] font-semibold">{session.username}</strong>. Establish an open trading session for other Renaissance merchants to join.
-          </p>
-        </div>
+  const handleJoinByIdSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmed = joinGameId.trim();
+    if (!trimmed) return;
+    handleJoinLobby(trimmed);
+  };
 
-        {/* Create Game Session Button */}
-        <button
-          type="button"
-          onClick={handleCreateGameClick}
-          disabled={creating}
-          className="self-start sm:self-auto px-5 py-3 rounded-xl bg-[#B8923A] hover:bg-[#D4A83A] text-[#1B1712] font-['Cinzel'] font-semibold text-base uppercase tracking-[0.08em] shadow-md transition-all cursor-pointer whitespace-nowrap disabled:bg-[#4A4338] disabled:text-[#8A8272]"
-        >
-          {creating ? 'Creating Session...' : '+ Create Game Session'}
-        </button>
+  return (
+    <div className="w-full max-w-4xl mx-auto flex-1 flex flex-col gap-7 sm:gap-8 p-4 sm:p-6 overflow-y-auto font-garamond">
+      {/* Page Title & User Welcome */}
+      <div className="text-left px-1 flex flex-col">
+        <h2 className="text-[24px] font-semibold uppercase tracking-wider text-[#B8923A] font-cinzel leading-none">
+          Merchant Guildhall
+        </h2>
+        <p className="text-[15px] font-normal text-[#B9AE96]/75 font-garamond leading-none mt-1">
+          Welcome, <strong className="text-[#F3E9D2]/90 font-medium">{session.username}</strong>. Ready to trade?
+        </p>
       </div>
 
-      {/* Active Lobbies Section */}
+      {/* Top Banner: Two-Column Layout (Join Game | Create a New Game) */}
+      <div className="w-full splendor-panel rounded-lg p-5 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-stretch">
+        {/* Left Column: Join Game */}
+        <div className="flex flex-col justify-between gap-4 text-left">
+          <div>
+            <h3 className="text-[22px] font-semibold text-[#F3E9D2] font-garamond">
+              Join Game
+            </h3>
+            <p className="text-[17px] font-normal leading-[1.5] text-[#B9AE96] mt-1 font-garamond">
+              Enter a game ID to join an active trading session.
+            </p>
+          </div>
+
+          <form onSubmit={handleJoinByIdSubmit} className="flex items-center gap-2.5 mt-auto pt-2">
+            <input
+              type="text"
+              value={joinGameId}
+              onChange={(e) => setJoinGameId(e.target.value.toUpperCase())}
+              placeholder="ENTER GAME ID"
+              maxLength={12}
+              className="flex-1 min-w-0 bg-[#120A05] border border-[#B8923A]/40 rounded-lg px-3.5 py-2.5 text-[#F3E9D2] font-garamond text-base placeholder:text-[#B9AE96]/40 uppercase tracking-wider focus:outline-none focus:border-[#B8923A] transition-colors"
+            />
+            <button
+              type="submit"
+              disabled={!joinGameId.trim()}
+              className="px-5 py-2.5 rounded-lg btn-brass-primary shadow-md cursor-pointer whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Join Game
+            </button>
+          </form>
+        </div>
+
+        {/* Right Column: Create a New Game */}
+        <div className="flex flex-col justify-between gap-4 text-left border-t md:border-t-0 md:border-l border-[#B8923A]/30 pt-5 md:pt-0 md:pl-8">
+          <div>
+            <h3 className="text-[22px] font-semibold text-[#F3E9D2] font-garamond">
+              Create a New Game
+            </h3>
+            <p className="text-[17px] font-normal leading-[1.5] text-[#B9AE96] mt-1 font-garamond">
+              Start a trading session for other merchants to join.
+            </p>
+          </div>
+
+          <div className="mt-auto pt-2 flex justify-end">
+            <button
+              type="button"
+              onClick={handleCreateGameClick}
+              disabled={creating}
+              className="px-5 py-2.5 rounded-lg btn-brass-primary shadow-md cursor-pointer whitespace-nowrap"
+            >
+              {creating ? 'Creating...' : 'Create Game'}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Current Games Section */}
       <div className="w-full flex flex-col gap-3">
         <div className="flex items-center justify-between px-1">
           <div className="flex items-center gap-2">
-            <h3 className="text-xl font-semibold text-[#B8923A] uppercase tracking-wider font-['Cinzel']">
-              Active Lobbies
-            </h3>
-            <span className="text-xs font-bold text-[#F3E9D2] bg-[#120A05] border border-black/50 px-2.5 py-0.5 rounded-full font-['Inter']">
+            <span className="text-[12px] sm:text-[13px] font-medium text-[#B8923A] uppercase tracking-[0.16em] font-cinzel">
+              Current Games
+            </span>
+            <span className="text-[13px] font-bold text-[#B8923A] bg-[#120A05] border border-[#B8923A]/60 px-3 py-1 rounded-full font-cinzel leading-none inline-flex items-center justify-center min-w-[26px]">
               {games.length}
             </span>
           </div>
@@ -156,7 +193,7 @@ export default function HomePage({
             type="button"
             onClick={fetchActiveLobbies}
             disabled={loading}
-            className="text-sm text-[#B9AE96] hover:text-[#F3E9D2] transition-colors disabled:opacity-50 cursor-pointer font-['EB_Garamond']"
+            className="text-[17px] font-medium font-garamond text-[#B9AE96] hover:text-[#F3E9D2] transition-colors disabled:opacity-50 cursor-pointer"
           >
             {loading ? 'Refreshing...' : 'Refresh'}
           </button>
@@ -164,125 +201,97 @@ export default function HomePage({
 
         {/* Loading state */}
         {loading && games.length === 0 && (
-          <div className="w-full py-12 rounded-2xl bg-[#1A110B] border border-black/40 shadow-[0_8px_24px_rgba(0,0,0,0.45),_inset_0_1px_0_rgba(255,255,255,0.08)] text-center flex flex-col items-center justify-center gap-2">
+          <div className="w-full py-12 rounded-lg splendor-panel text-center flex flex-col items-center justify-center gap-2">
             <div className="w-6 h-6 border-2 border-[#B8923A] border-t-transparent rounded-full animate-spin" />
-            <p className="text-[17px] not-italic text-[#F3E9D2]">Loading active lobbies from guildhall...</p>
+            <p className="text-[17px] font-normal leading-[1.5] text-[#F3E9D2] font-garamond">Loading current games from guildhall...</p>
           </div>
         )}
 
-        {/* Error state */}
+        {/* Error state: Section 3.5 compact red-wax warning plaque */}
         {error && (
-          <div className="w-full p-3 sm:p-4 rounded-xl bg-[#C8283B]/20 border border-[#C8283B]/60 text-[#F0707F] text-sm flex items-center justify-between gap-3 font-['EB_Garamond']">
-            <span className="flex-1">{error}</span>
-            <button
-              type="button"
-              onClick={() => setError(null)}
-              title="Close"
-              aria-label="Close error message"
-              className="w-8 h-8 rounded-lg hover:bg-[#C8283B]/30 text-[#F0707F] hover:text-[#FFFFFF] flex items-center justify-center transition-colors cursor-pointer flex-shrink-0"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-4 h-4"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-            </button>
-          </div>
+          <WarningPlaque
+            message={error}
+            heading="ERROR"
+            onClose={() => setError(null)}
+          />
         )}
 
-        {/* Empty state box: fill #1A110B, with a #B8923A border at 40% opacity */}
+        {/* Empty state box */}
         {!loading && games.length === 0 && !error && (
-          <div className="w-full py-12 px-4 rounded-2xl border border-[#B8923A]/40 bg-[#1A110B] shadow-[0_8px_24px_rgba(0,0,0,0.45),_inset_0_1px_0_rgba(255,255,255,0.08)] text-center flex flex-col items-center justify-center gap-2">
-            <span className="text-lg font-semibold text-[#F3E9D2] uppercase tracking-wider font-['Cinzel']">
-              No Active Lobbies Found
+          <div className="w-full py-12 px-4 rounded-lg empty-state-box text-center flex flex-col items-center justify-center gap-2">
+            <span className="text-[22px] font-semibold text-[#F3E9D2] font-garamond">
+              No current games found
             </span>
-            <p className="text-[17px] not-italic text-[#F3E9D2] max-w-sm leading-relaxed font-['EB_Garamond']">
-              There are currently no waiting game sessions. Click &quot;+ Create Game Session&quot; above to establish one.
+            <p className="text-[17px] font-normal leading-[1.5] text-[#B9AE96] max-w-sm font-garamond">
+              There are currently no waiting game sessions. Click &quot;Create Game&quot; above to establish one.
             </p>
           </div>
         )}
 
-        {/* Lobbies List */}
+        {/* Lobbies List: Single Unified Container */}
         {games.length > 0 && (
-          <div className="flex flex-col gap-2.5">
-            {games.map((game) => {
+          <div className="w-full rounded-lg splendor-panel flex flex-col overflow-hidden">
+            {games.map((game, index) => {
+              const isActive = game.status === 'active';
               const isFull = game.playerCount >= game.maxPlayers;
-              const isWaiting = game.status === 'waiting';
               const isJoining = joiningId === game.id;
+              const isDisabled = isActive || isFull || isJoining;
+
+              let buttonText = 'Join';
+              let tooltip = '';
+              if (isJoining) {
+                buttonText = 'Joining...';
+              } else if (isActive) {
+                buttonText = 'Active';
+                tooltip = 'Cannot join active games.';
+              } else if (isFull) {
+                buttonText = 'Full';
+                tooltip = 'Lobby is full.';
+              }
 
               return (
-                <div
-                  key={game.id}
-                  className="w-full p-4 rounded-xl border border-black/40 bg-[#1A110B] shadow-[0_8px_24px_rgba(0,0,0,0.45),_inset_0_1px_0_rgba(255,255,255,0.08)] hover:border-[#B8923A]/40 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-3"
-                >
-                  <div className="flex flex-col gap-1 text-left">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold text-[#F3E9D2] bg-[#120A05] border border-black/50 px-2 py-0.5 rounded font-['Inter']">
-                        {game.id}
-                      </span>
-                      <span
-                        className={`text-[10px] font-semibold uppercase px-2 py-0.5 rounded border font-['Cinzel'] ${
-                          isWaiting
-                            ? 'bg-[#120A05] text-[#F3E9D2] border-black/40'
-                            : 'bg-[#120A05] text-[#6FD79A] border-[#2E9E5B]/50'
+                <div key={game.id} className="flex flex-col">
+                  {index > 0 && <div className="mx-4 my-1 h-px bg-[#B8923A]/20" />}
+                  <div className="w-full px-4 py-4 sm:py-4.5 hover:bg-white/[0.02] transition-colors flex items-center justify-between gap-3">
+                    {/* Left Column: Lobby Name + ID on Line 1; Host & Player count on Line 2 */}
+                    <div className="flex flex-col text-left min-w-0 flex-1">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <h4 className="text-[20px] font-semibold text-[#F3E9D2] font-garamond truncate leading-tight">
+                          {game.name}
+                        </h4>
+                        <span className="text-[14px] font-medium text-[#B9AE96] bg-[#120A05]/80 border border-black/50 px-2 py-0.5 rounded-lg font-garamond shrink-0 leading-none">
+                          {game.id}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-2 text-[14px] text-[#B9AE96] font-garamond leading-snug mt-0.5">
+                        <span>
+                          Host: <strong className="text-[#F3E9D2] font-medium font-garamond text-[14px]">{game.hostUsername}</strong>
+                        </span>
+                        <span className="text-[#B9AE96]/40">&bull;</span>
+                        <span>
+                          Players: <strong className="text-[#F3E9D2] font-medium font-garamond text-[14px]">{game.playerCount}/{game.maxPlayers}</strong>
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Right Column: Consolidated Action Button on the same line */}
+                    <div title={tooltip || undefined} className="shrink-0 flex items-center">
+                      <button
+                        type="button"
+                        disabled={isDisabled}
+                        onClick={() => handleJoinLobby(game.id)}
+                        className={`px-4 py-1.5 rounded-lg text-[14px] font-cinzel font-bold uppercase tracking-[0.1em] transition-all ${
+                          isActive
+                            ? 'bg-[#1E1712] text-[#8A8272] border border-[#B8923A]/20 cursor-not-allowed opacity-60'
+                            : isFull
+                            ? 'bg-[#3A3026] text-[#8A8272] border border-black/40 cursor-not-allowed'
+                            : 'btn-brass-primary shadow-sm cursor-pointer active:scale-95'
                         }`}
                       >
-                        {game.status}
-                      </span>
+                        {buttonText}
+                      </button>
                     </div>
-
-                    <h4 className="text-lg font-semibold text-[#F3E9D2] mt-0.5 font-['Cinzel']">
-                      {game.name}
-                    </h4>
-
-                    <div className="flex items-center gap-3 text-[17px] not-italic text-[#F3E9D2] font-['EB_Garamond']">
-                      <span>
-                        Host: <strong className="text-[#F3E9D2] font-medium">{game.hostUsername}</strong>
-                      </span>
-                      <span className="text-[#B9AE96]">&bull;</span>
-                      <span>
-                        Players: <strong className="text-[#F3E9D2] font-['Inter'] font-bold">{game.playerCount}/{game.maxPlayers}</strong>
-                      </span>
-                    </div>
-
-                    {/* Players list */}
-                    {game.players && game.players.length > 0 && (
-                      <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
-                        {game.players.map((p) => (
-                          <span
-                            key={p.id}
-                            className="text-sm bg-[#120A05] border border-black/30 px-2 py-0.5 rounded text-[#F3E9D2] font-['EB_Garamond']"
-                          >
-                            {p.name}
-                            {p.name === game.hostUsername ? ' (Host)' : ''}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Join Button */}
-                  <div className="flex items-center gap-2 self-end sm:self-center">
-                    <button
-                      type="button"
-                      disabled={isFull || isJoining}
-                      onClick={() => handleJoinLobby(game.id)}
-                      className={`px-4 py-2 rounded-xl text-xs font-['Cinzel'] font-semibold uppercase tracking-[0.08em] transition-all cursor-pointer ${
-                        isFull
-                          ? 'bg-[#4A4338] text-[#8A8272] cursor-not-allowed'
-                          : 'bg-[#B8923A] hover:bg-[#D4A83A] text-[#1B1712] shadow-md active:scale-95'
-                      }`}
-                    >
-                      {isJoining ? 'Joining...' : isFull ? 'Full' : 'Join'}
-                    </button>
                   </div>
                 </div>
               );

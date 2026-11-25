@@ -1,10 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @theme {
   /* Surfaces & UI Colors per Splendor Style Guide */
   --color-table-wood: #2A1A10;
   --color-table-vignette: #120A05;
-  --color-panel-leather: #1A110B;
+  --color-panel-surface: #1A110B;
   --color-border-brass: #B8923A;
   --color-button-primary: #B8923A;
   --color-button-hover: #D4A83A;
@@ -44,6 +45,8 @@
   --color-feedback-glow: #F3D679;
   --color-feedback-afford: #6FD79A;
   --color-feedback-error: #F0707F;
+  --color-feedback-oxblood: #260F10;
+  --color-feedback-ruby-border: #9B3038;
 
   /* Typography */
   --font-cinzel: 'Cinzel', serif;
@@ -51,54 +54,185 @@
   --font-inter: 'Inter', sans-serif;
 }
 
-/* 4A.1 Table background: Poly Haven dark wood with vignette and tint layer */
+/* Explicit typography utility classes to guarantee font application across components */
+.font-cinzel {
+  font-family: 'Cinzel', serif;
+}
+
+.font-garamond {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.font-inter {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+html,
+#root {
+  min-height: 100dvh;
+}
+
+/* Table background: Splendor background with vignette and atmospheric tint layer */
 body {
   background-color: #2A1A10;
   background-image:
-    radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 40%, rgba(18, 10, 5, 0.85) 100%),
-    linear-gradient(rgba(42, 26, 16, 0.55), rgba(42, 26, 16, 0.55)),
-    url("/assets/wood-dark.jpg");
-  background-size: cover, cover, 1024px auto;
+    radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 40%, rgba(18, 10, 5, 0.60) 100%),
+    linear-gradient(rgba(42, 26, 16, 0.60), rgba(18, 10, 5, 0.78)),
+    url("/assets/splendor_background.webp");
+  background-size: cover, cover, cover;
+  background-position: center;
   background-attachment: fixed;
   color: #F3E9D2;
   font-family: 'EB Garamond', Georgia, serif;
+  font-variant-numeric: lining-nums tabular-nums;
   font-size: 17px;
   font-style: normal;
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 /* 4A.2 Parchment: card faces and noble tiles */
 .card-face,
-.noble-tile,
-.parchment-surface {
+.noble-tile {
   background-color: #E8DCC0;
-  background-image: url("/assets/parchment.png");
+  background-image: url("/assets/parchment.jpg");
   background-blend-mode: multiply;
   background-size: cover;
   color: #2A1F14;
 }
 
-/* 4A.3 Leather panels: warm brown leather #1A110B, shadow and inner top highlight */
-.leather-panel {
-  background-color: #1A110B;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(243, 233, 210, 0.08);
+
+/* Shared Frosted Panel base: flat warm brown with backdrop-blur, borderless, shadowless, refined rounding */
+.splendor-panel,
+.empty-state-box {
+  background-color: rgba(26, 17, 11, 0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 0.5rem;
 }
 
-/* Empty state box: fill #1A110B with #B8923A border at 40% opacity */
-.empty-state-box {
-  background-color: #1A110B;
+/* Deck back: dark surface #1B1712 (border & shadow handled via Tailwind) */
+.deck-back {
+  background-color: #1B1712;
+}
+
+/* Card slot empty state */
+.card-slot-empty {
+  width: 100%;
+  aspect-ratio: 180 / 250;
+  border-radius: 0.5rem;
+  border: 2px dashed rgba(184, 146, 58, 0.2);
+  background-color: rgba(18, 10, 5, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-cinzel);
+  font-size: 10px;
+  color: rgba(185, 174, 150, 0.4);
+}
+
+/* Modal layout components */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  overflow: auto;
+  display: flex;
+  padding: 1rem;
+}
+
+.btn-icon-close {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #B9AE96;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+  cursor: pointer;
+}
+
+.btn-icon-close:hover {
+  color: #F3E9D2;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.menu-option-btn {
+  min-height: 44px;
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  border-radius: 0.5rem;
+  background-color: #120A05;
+  border: 1px solid rgba(184, 146, 58, 0.3);
+  text-align: left;
+  font-family: var(--font-inter);
+  font-size: 14px;
+  font-weight: 600;
+  color: #F3E9D2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.15s ease-in-out;
+  cursor: pointer;
+}
+
+.menu-option-btn:hover {
+  background-color: #25211D;
+  border-color: #B8923A;
+}
+
+.input-select-brass {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: #120A05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23B9AE96' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem 1rem;
+  padding: 0.5rem 2.25rem 0.5rem 0.75rem;
+  border-radius: 0.5rem;
   border: 1px solid rgba(184, 146, 58, 0.4);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(243, 233, 210, 0.08);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  font-family: var(--font-garamond);
+  color: #F3E9D2;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.15s ease-in-out;
+}
+
+.input-select-brass:focus {
+  border-color: #B8923A;
+}
+
+.settings-stat-box {
+  padding: 0.5rem 0.625rem;
+  background-color: #120A05;
+  border: 1px solid rgba(184, 146, 58, 0.3);
+  border-radius: 0.5rem;
+  text-align: center;
+}
+
+/* 3.5 Red-wax warning plaque */
+.warning-plaque {
+  background-color: #260F10;
+  border: 1px solid #9B3038;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
 }
 
 .btn-brass-primary {
   background-color: #B8923A;
   color: #1B1712;
   font-family: 'Cinzel', serif;
-  font-weight: 600;
-  font-size: 16px;
+  font-weight: 700;
+  font-size: 15px;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   transition: all 0.15s ease-in-out;
 }
 
@@ -110,4 +244,57 @@ body {
   background-color: #4A4338;
   color: #8A8272;
   cursor: not-allowed;
+}
+
+/* Utility / secondary buttons: Inter 600, 14-15px */
+.btn-utility {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.15s ease-in-out;
+}
+
+/* Custom refined thin scrollbar matching Renaissance brass theme */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(184, 146, 58, 0.35);
+  border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(212, 168, 58, 0.6);
+}
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(184, 146, 58, 0.35) transparent;
+}
+
+/* Ensure noble card cost blocks fit snugly on landscape mobile viewports */
+@media (orientation: landscape) and (max-height: 500px) {
+  .noble-cost-container {
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+    padding-left: 2px !important;
+    gap: 3px !important;
+  }
+  .noble-cost-item {
+    width: 16px !important;
+    height: 19px !important;
+    font-size: 12px !important;
+  }
+}
+
+/* Subtle, in-place token pulse on existing DOM elements without spawning extra elements */
+@keyframes token-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.16); }
+  100% { transform: scale(1); }
+}
+
+.token-pulse-anim {
+  animation: token-pop 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }

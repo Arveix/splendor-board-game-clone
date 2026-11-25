@@ -1,7 +1,10 @@
 export type GameStatus = 'waiting' | 'active' | 'completed';
 
-export type GemColor = 'emerald' | 'sapphire' | 'ruby' | 'diamond' | 'onyx';
-export type TokenColor = GemColor | 'gold';
+export type GemType = 'emerald' | 'sapphire' | 'ruby' | 'diamond' | 'onyx';
+export type TokenType = GemType | 'gold';
+
+export type GemCost = Record<GemType, number>;
+export type PlayerBonuses = Record<GemType, number>;
 
 export interface TokenBank {
   emerald: number;
@@ -17,6 +20,8 @@ export interface GameSettings {
   goldTokenCount: number;
   faceUpCardsCount: number;
   nobleTilesCount: number;
+  winPoints?: number;
+  turnDurationSeconds?: number;
 }
 
 export interface TierCards {
@@ -44,6 +49,12 @@ export interface UserSession {
 export interface Player {
   id: string;
   name: string;
+  cards?: string[];
+  reservedCards?: string[];
+  nobles?: string[];
+  tokens?: TokenBank;
+  bonuses?: PlayerBonuses;
+  score?: number;
 }
 
 export interface GameSessionData {
@@ -54,6 +65,10 @@ export interface GameSessionData {
   playerCount: number;
   players: Player[];
   status: GameStatus;
+  winPoints?: number;
+  isFinalRound?: boolean;
+  round?: number;
+  winner?: Player | null;
   settings?: GameSettings;
   tokens?: TokenBank;
   revealedCards?: RevealedCards;
@@ -62,4 +77,7 @@ export interface GameSessionData {
   nobleTiles?: string[];
   createdAt: number;
   activePlayer?: Player | null;
+  turnStartTime?: number;
+  turnExpiresAt?: number;
+  currentTurnDuration?: number;
 }

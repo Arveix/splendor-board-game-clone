@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { getCurrentSessionApi, getGameApi, removePlayerApi } from './api';
 import { GamePage } from './components/GamePage';
 import HomePage from './components/HomePage';
 import LobbyPage from './components/LobbyPage';
@@ -43,6 +44,7 @@ export default function App() {
 
   const [urlGameId, setUrlGameId] = useState<string | null>(getGameIdFromUrl());
   const [gameStatus, setGameStatus] = useState<GameStatus>('waiting');
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   const handleSessionInvalidated = () => {
     try {
@@ -79,11 +81,7 @@ export default function App() {
   useEffect(() => {
     if (!session?.sessionId) return;
 
-    fetch('/api/session/me', {
-      headers: {
-        'x-session-id': session.sessionId,
-      },
-    })
+    getCurrentSessionApi(session.sessionId)
       .then((res) => {
         if (res.status === 401) {
           // Missing or invalid session ID: server rejected auth
@@ -126,11 +124,7 @@ export default function App() {
     const gameIdToCheck = session.currentGameSessionId;
     let isCancelled = false;
 
-    fetch(`/api/games/${encodeURIComponent(gameIdToCheck)}`, {
-      headers: {
-        'x-session-id': session.sessionId,
-      },
-    })
+    getGameApi(session.sessionId, gameIdToCheck)
       .then((res) => {
         if (isCancelled) return;
         if (res.status === 401) {
@@ -223,13 +217,7 @@ export default function App() {
 
     if (targetGameId) {
       try {
-        const res = await fetch(`/api/games/${targetGameId}/leave`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-session-id': session.sessionId,
-          },
-        });
+        const res = await removePlayerApi(session.sessionId, targetGameId);
         if (res.status === 401) {
           handleSessionInvalidated();
           return;
@@ -264,47 +252,96 @@ export default function App() {
 
   const activeGameId = session.currentGameSessionId || urlGameId;
   const isInGame = Boolean(session.currentGameSessionId);
+  const isGameActive = isInGame && Boolean(activeGameId) && (gameStatus === 'active' || gameStatus === 'completed');
+
+  // When game is active or completed, dedicate the entire screen to the game board (no header/footer website chrome)
+  if (isGameActive && activeGameId) {
+    return (
+      <main className="w-full min-h-[100dvh] text-[#F3E9D2] flex flex-col font-garamond">
+        <GamePage
+          gameId={activeGameId}
+          sessionId={session.sessionId}
+          currentUsername={session.username}
+          onStatusChange={setGameStatus}
+          onLeaveGame={handleLeaveGame}
+          onGameNotFound={handleGameNotFound}
+        />
+      </main>
+    );
+  }
 
   return (
-    <div className="min-h-screen min-h-dvh text-[#F3E9D2] flex flex-col justify-between font-['EB_Garamond',serif]">
+    <div className="min-h-[100dvh] text-[#F3E9D2] flex flex-col justify-between font-garamond">
 
-      {/* Top Header: #120A05 with gold line kept */}
-      <header className="w-full bg-[#120A05] border-b border-[#B8923A] px-4 py-3 flex-shrink-0 z-40 shadow-lg">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
+      {/* Top Header: #120A05 with gold 1px line on inner edge */}
+      <header className="w-full bg-[#120A05] border-b border-[#B8923A] px-4 py-3 sm:py-4 pt-[max(0.75rem,env(safe-area-inset-top))] flex-shrink-0 z-40 shadow-lg">
+        <div className="max-w-5xl mx-auto flex items-center justify-between">
           <div className="text-left">
-            <h1 className="text-xl sm:text-2xl font-bold tracking-wider text-[#B8923A] font-['Cinzel'] leading-none">
+            <h1 className="text-[28px] font-bold tracking-[0.12em] uppercase text-[#D4A83A] font-cinzel leading-none select-none">
               SPLENDOR
             </h1>
-            <p className="text-xs text-[#B9AE96] font-['EB_Garamond'] italic leading-tight mt-0.5">
-              Renaissance Merchant&apos;s Table
-            </p>
           </div>
 
-          {/* Right Header Navigation & Session Pill */}
-          <div className="flex items-center gap-2.5">
-            <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#1A110B] border border-black/30 shadow-[0_4px_12px_rgba(0,0,0,0.35)]">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#2E9E5B] shadow-[0_0_6px_#6FD79A]" />
-              <span className="text-[17px] font-normal text-[#F3E9D2] font-['EB_Garamond']">
+          {/* Right Header Navigation & Session Dropdown */}
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setIsUserMenuOpen((prev) => !prev)}
+              className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg splendor-panel hover:brightness-110 transition-all cursor-pointer"
+            >
+              <span className="text-[18px] font-medium text-[#F3E9D2] font-garamond">
                 {session.username}
               </span>
-            </div>
-
-            {!isInGame && (
-              <button
-                onClick={handleSessionInvalidated}
-                title="Reset username session"
-                className="text-xs font-['Cinzel'] uppercase tracking-wider text-[#B9AE96] hover:text-[#F0707F] bg-[#1A110B] hover:bg-[#25211D] border border-black/40 px-3 py-1.5 rounded-xl transition-colors cursor-pointer"
+              <svg
+                className={`w-3.5 h-3.5 text-[#B9AE96] transition-transform ${isUserMenuOpen ? 'rotate-180' : ''}`}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
               >
-                Exit
-              </button>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+
+            {/* User Dropdown Menu */}
+            {isUserMenuOpen && (
+              <>
+                <div
+                  className="fixed inset-0 z-40"
+                  onClick={() => setIsUserMenuOpen(false)}
+                />
+                <div className="absolute right-0 mt-2 w-48 py-1.5 rounded-lg splendor-panel z-50 flex flex-col font-garamond">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      // Placeholder for future change username feature
+                      setIsUserMenuOpen(false);
+                    }}
+                    className="w-full px-4 py-2 text-left text-[14px] font-semibold text-[#F3E9D2] hover:bg-white/5 transition-colors cursor-pointer flex items-center justify-between"
+                  >
+                    <span>Change Username</span>
+                  </button>
+                  <div className="h-[1px] bg-[#B8923A]/30 my-1 mx-2" />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsUserMenuOpen(false);
+                      handleSessionInvalidated();
+                    }}
+                    className="w-full px-4 py-2 text-left text-[14px] font-semibold text-[#F0707F] hover:bg-white/5 transition-colors cursor-pointer flex items-center justify-between"
+                  >
+                    <span>Log out</span>
+                  </button>
+                </div>
+              </>
             )}
           </div>
         </div>
       </header>
 
-      {/* Main View: Render GamePage if active; LobbyPage if in waiting lobby; HomePage otherwise */}
+      {/* Main View: Render GamePage if active or completed; LobbyPage if in waiting lobby; HomePage otherwise */}
       {isInGame && activeGameId ? (
-        gameStatus === 'active' ? (
+        gameStatus === 'active' || gameStatus === 'completed' ? (
           <GamePage
             gameId={activeGameId}
             sessionId={session.sessionId}
@@ -331,9 +368,9 @@ export default function App() {
         />
       )}
 
-      {/* Footer: #120A05 with gold line kept */}
-      <footer className="w-full bg-[#120A05] border-t border-[#B8923A] py-3 text-center text-xs text-[#B9AE96] font-['EB_Garamond'] italic">
-        Splendor Renaissance Merchant&apos;s Table &bull; Private Game
+      {/* Footer: #120A05 with gold line */}
+      <footer className="w-full bg-[#120A05] border-t border-[#B8923A] py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] text-center text-xs text-[#B9AE96] font-garamond italic shrink-0">
+        Splendor &bull; Merchant&apos;s Table
       </footer>
     </div>
   );

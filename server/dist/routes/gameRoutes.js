@@ -120,6 +120,22 @@ router.post('/:id/start', (req, res) => {
     });
     res.json({ game: game.toJSON() });
 });
+// POST /api/games/:id/end-turn - End current player's turn and switch active player to next player
+router.post('/:id/end-turn', (req, res) => {
+    const game = games.get(getParamId(req));
+    if (!game) {
+        return res.status(404).json({ error: 'Game not found' });
+    }
+    if (game.status !== 'active') {
+        return res.status(400).json({ error: 'Game is not active' });
+    }
+    game.endTurn();
+    broadcastGameUpdate(game.id, {
+        type: 'GAME_UPDATED',
+        game: game.toJSON(),
+    });
+    res.json({ game: game.toJSON() });
+});
 // DELETE /api/games/:id - Discard game session entirely
 router.delete('/:id', (req, res) => {
     const gameId = getParamId(req);
