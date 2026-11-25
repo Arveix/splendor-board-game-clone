@@ -7,6 +7,8 @@ export interface UsePlayerTurnSelectionOptions {
   currentUserTokens?: Partial<Record<TokenType, number>>;
   bankTokens?: Partial<Record<TokenType, number>>;
   currentUserBonuses?: PlayerBonuses;
+  hasTakenAction?: boolean;
+  isTurnEnding?: boolean;
 }
 
 export function usePlayerTurnSelection({
@@ -14,6 +16,8 @@ export function usePlayerTurnSelection({
   currentUserTokens,
   bankTokens,
   currentUserBonuses,
+  hasTakenAction = false,
+  isTurnEnding = false,
 }: UsePlayerTurnSelectionOptions) {
   const [selectedCard, setSelectedCard] = useState<string | null>(null);
   const [selectedNoble, setSelectedNoble] = useState<string | null>(null);
@@ -35,13 +39,13 @@ export function usePlayerTurnSelection({
   };
 
   useEffect(() => {
-    if (!isCurrentUserActive) {
+    if (!isCurrentUserActive || isTurnEnding) {
       const timer = setTimeout(() => {
         clearSelection();
       }, 0);
       return () => clearTimeout(timer);
     }
-  }, [isCurrentUserActive]);
+  }, [isCurrentUserActive, isTurnEnding]);
 
   // Reactive, live validation context
   const validationContext: ValidationContext = useMemo(
@@ -68,7 +72,7 @@ export function usePlayerTurnSelection({
   );
 
   const handleCardClick = (cardId: string) => {
-    if (!isCurrentUserActive) return;
+    if (!isCurrentUserActive || hasTakenAction || isTurnEnding) return;
     if (selectedCard === cardId) {
       setSelectedCard(null);
       return;
@@ -79,7 +83,7 @@ export function usePlayerTurnSelection({
   };
 
   const handleNobleClick = (nobleId: string) => {
-    if (!isCurrentUserActive) return;
+    if (!isCurrentUserActive || isTurnEnding) return;
     if (selectedNoble === nobleId) {
       setSelectedNoble(null);
       return;
@@ -90,7 +94,7 @@ export function usePlayerTurnSelection({
   };
 
   const handleBankTokenClick = (tokenKey: TokenType) => {
-    if (!isCurrentUserActive) return;
+    if (!isCurrentUserActive || hasTakenAction || isTurnEnding) return;
     const result = validateAction({ type: 'SELECT_BANK_TOKEN', tokenKey }, validationContext);
 
     if (result.isValid) {
@@ -114,7 +118,7 @@ export function usePlayerTurnSelection({
     setter: React.Dispatch<React.SetStateAction<Partial<Record<TokenType, number>>>>,
     tokenKey: TokenType
   ) => {
-    if (!isCurrentUserActive) return;
+    if (!isCurrentUserActive || hasTakenAction || isTurnEnding) return;
     setter((prev) => {
       const curr = prev[tokenKey] ?? 0;
       if (curr <= 1) {
@@ -130,7 +134,7 @@ export function usePlayerTurnSelection({
     decrementTokenMap(setSelectedBankTokens, tokenKey);
 
   const handleUserTokenClick = (tokenKey: TokenType) => {
-    if (!isCurrentUserActive) return;
+    if (!isCurrentUserActive || hasTakenAction || isTurnEnding) return;
     const result = validateAction({ type: 'SELECT_USER_TOKEN', tokenKey }, validationContext);
 
     if (result.isValid) {

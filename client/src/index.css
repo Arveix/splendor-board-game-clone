@@ -99,6 +99,11 @@ body {
   background-blend-mode: multiply;
   background-size: cover;
   color: #2A1F14;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  clip-path: inset(0 round 0.5rem);
+  -webkit-clip-path: inset(0 round 0.5rem);
+  background-clip: padding-box;
 }
 
 
@@ -114,6 +119,10 @@ body {
 /* Deck back: dark surface #1B1712 (border & shadow handled via Tailwind) */
 .deck-back {
   background-color: #1B1712;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  clip-path: inset(0 round 0.5rem);
+  -webkit-clip-path: inset(0 round 0.5rem);
 }
 
 /* Card slot empty state */

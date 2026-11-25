@@ -73,6 +73,7 @@ export interface GameSession {
   turnStartTime?: number;
   turnExpiresAt?: number;
   currentTurnDuration?: number;
+  hasTakenAction?: boolean;
 }
 
 export interface UserSession {

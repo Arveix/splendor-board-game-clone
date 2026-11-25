@@ -11,46 +11,7 @@ function getParamId(req: AuthenticatedRequest): string {
   return Array.isArray(raw) ? raw[0] : String(raw);
 }
 
-const turnTimers = new Map<string, NodeJS.Timeout>();
-
-export function resetTurnTimer(game: GameSession): void {
-  const existing = turnTimers.get(game.id);
-  if (existing) {
-    clearTimeout(existing);
-    turnTimers.delete(game.id);
-  }
-
-  if (game.status !== 'active' || !game.settings?.turnDurationSeconds) {
-    return;
-  }
-
-  const durationSeconds = game.currentTurnDuration ?? game.settings?.turnDurationSeconds ?? 90;
-  const durationMs = durationSeconds * 1000;
-  const timer = setTimeout(() => {
-    turnTimers.delete(game.id);
-    if (game.status === 'active') {
-      game.endTurn();
-      broadcastGameUpdate(game.id, {
-        type: 'GAME_UPDATED',
-        game: game.toJSON(),
-      });
-      resetTurnTimer(game);
-    }
-  }, durationMs);
-
-  turnTimers.set(game.id, timer);
-}
-
-export function clearGameTurnTimer(gameId: string): void {
-  const existing = turnTimers.get(gameId);
-  if (existing) {
-    clearTimeout(existing);
-    turnTimers.delete(gameId);
-  }
-}
-
 function sendGameUpdate(game: GameSession, res: Response): void {
-  resetTurnTimer(game);
   const data = game.toJSON();
   broadcastGameUpdate(game.id, {
     type: 'GAME_UPDATED',
@@ -239,8 +200,6 @@ export function startGame(req: AuthenticatedRequest, res: Response): void {
     turnDurationSeconds: typeof turnDurationSeconds === 'number' ? turnDurationSeconds : undefined,
   });
 
-  resetTurnTimer(game);
-
   broadcastGameUpdate(game.id, {
     type: 'GAME_UPDATED',
     game: game.toJSON(),
@@ -266,7 +225,6 @@ export function rematchGame(req: AuthenticatedRequest, res: Response): void {
     return;
   }
 
-  clearGameTurnTimer(game.id);
   game.resetToWaiting();
 
   broadcastGameUpdate(game.id, {

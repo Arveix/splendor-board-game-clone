@@ -71,18 +71,26 @@ export const CardBonusStacks = ({
                 return (
                   <div
                     key={`${details.id}-${idx}`}
-                    className="absolute left-0 right-0 w-full aspect-[180/250] rounded-lg overflow-hidden border border-[#B8923A] shadow-md flex flex-col justify-between text-[#2A1F14] select-none bg-cover bg-center bg-no-repeat isolate"
+                    className="absolute left-0 right-0 w-full aspect-[180/250] rounded-lg overflow-hidden border border-[#B8923A] shadow-md flex flex-col justify-between text-[#2A1F14] select-none isolate bg-clip-padding"
                     style={{
                       top: `${idx * offsetPx}px`,
                       zIndex: idx + 1,
-                      backgroundImage: `url('/assets/cards/level${details.tier}/${details.id}.jpg')`,
-                      backgroundSize: '100% 100%',
-                      backgroundPosition: 'center',
-                      backgroundRepeat: 'no-repeat',
+                      clipPath: 'inset(0 round 8px)',
                     }}
                   >
+                    {/* Card Artwork Image: explicitly rounded and clipped */}
+                    <img
+                      src={`/assets/cards/level${details.tier}/${details.id}.jpg`}
+                      alt=""
+                      className="absolute inset-0 w-full h-full object-cover rounded-[7px] pointer-events-none select-none"
+                      style={{
+                        borderRadius: '7px',
+                        clipPath: 'inset(0 round 7px)',
+                      }}
+                    />
+
                     {/* Top half: Points & Bonus Gem Icon */}
-                    <div className="px-1 py-0.5 flex items-center justify-between shrink-0 bg-black/70">
+                    <div className="relative z-10 px-1 py-0.5 flex items-center justify-between shrink-0 bg-black/70 rounded-t-[7px]">
                       <span className="font-garamond font-bold text-xs sm:text-sm leading-none text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">
                         {details.points > 0 ? details.points : ''}
                       </span>

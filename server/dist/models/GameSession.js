@@ -22,6 +22,7 @@ export class GameSession {
     activePlayer = null;
     turnStartTime;
     currentTurnDuration;
+    hasTakenAction = false;
     constructor(name, host, maxPlayers = 4, winPoints = 15) {
         this.id = GameSession.generateId();
         this.name = name;
@@ -198,6 +199,9 @@ export class GameSession {
         if (this.status !== 'active') {
             return { success: false, error: 'Game is not active' };
         }
+        if (this.hasTakenAction) {
+            return { success: false, error: 'Action already completed for this turn' };
+        }
         const player = this.activePlayer;
         if (!player) {
             return { success: false, error: 'No active player' };
@@ -236,13 +240,14 @@ export class GameSession {
         else {
             this.takeRevealedCard(cardId);
         }
-        // If active player is able to invite a noble, reset the turn timer to 60 seconds
+        // Action completed: active player can invite an eligible noble (if any), otherwise 5-second countdown to auto-turn
+        this.hasTakenAction = true;
+        this.turnStartTime = Date.now();
         const eligibleNobles = this.getEligibleNobles(player);
         if (eligibleNobles.length === 0) {
-            this.endTurn();
+            this.currentTurnDuration = 5;
         }
         else {
-            this.turnStartTime = Date.now();
             this.currentTurnDuration = 60;
         }
         return { success: true };
@@ -251,6 +256,9 @@ export class GameSession {
     reserveCard(cardId) {
         if (this.status !== 'active') {
             return { success: false, error: 'Game is not active' };
+        }
+        if (this.hasTakenAction) {
+            return { success: false, error: 'Action already completed for this turn' };
         }
         const player = this.activePlayer;
         if (!player) {
@@ -272,13 +280,14 @@ export class GameSession {
         if (this.tokens && this.tokens.gold > 0) {
             this.updateTokens({ gold: 1 }, null);
         }
-        // If active player is able to invite a noble, reset the turn timer to 60 seconds
+        // Action completed: active player can invite an eligible noble (if any), otherwise 5-second countdown to auto-turn
+        this.hasTakenAction = true;
+        this.turnStartTime = Date.now();
         const eligibleNobles = this.getEligibleNobles(player);
         if (eligibleNobles.length === 0) {
-            this.endTurn();
+            this.currentTurnDuration = 5;
         }
         else {
-            this.turnStartTime = Date.now();
             this.currentTurnDuration = 60;
         }
         return { success: true };
@@ -316,8 +325,10 @@ export class GameSession {
         }
         // Remove noble tile from board
         this.nobleTiles = this.nobleTiles.filter((id) => id !== nobleId);
-        // Finalize turn after noble visit
-        this.endTurn();
+        // Finalize turn after noble visit: no further action available, 5-second countdown to auto-turn
+        this.hasTakenAction = true;
+        this.turnStartTime = Date.now();
+        this.currentTurnDuration = 5;
         return { success: true };
     }
     // Check which noble tiles currently on the board the player has sufficient bonuses to invite
@@ -348,6 +359,9 @@ export class GameSession {
     updateTokens(tokensToTake, tokensToReturn, autoEndTurn = false) {
         if (!this.tokens || !this.activePlayer)
             return;
+        if (autoEndTurn && this.hasTakenAction) {
+            return;
+        }
         // Tokens taken from bank by the active player
         if (tokensToTake) {
             for (const [color, amount] of Object.entries(tokensToTake)) {
@@ -369,12 +383,13 @@ export class GameSession {
             }
         }
         if (autoEndTurn) {
+            this.hasTakenAction = true;
+            this.turnStartTime = Date.now();
             const eligibleNobles = this.getEligibleNobles(this.activePlayer);
             if (eligibleNobles.length === 0) {
-                this.endTurn();
+                this.currentTurnDuration = 5;
             }
             else {
-                this.turnStartTime = Date.now();
                 this.currentTurnDuration = 60;
             }
         }
@@ -417,6 +432,7 @@ export class GameSession {
             this.activePlayer = null;
             this.turnStartTime = undefined;
             this.currentTurnDuration = undefined;
+            this.hasTakenAction = false;
             return;
         }
         if (isRoundEnd) {
@@ -426,6 +442,7 @@ export class GameSession {
         this.activePlayer = this.players[nextIndex];
         this.turnStartTime = Date.now();
         this.currentTurnDuration = this.settings?.turnDurationSeconds ?? 90;
+        this.hasTakenAction = false;
     }
     toJSON() {
         return {
@@ -453,6 +470,7 @@ export class GameSession {
                 ? this.turnStartTime + (this.currentTurnDuration ?? this.settings?.turnDurationSeconds ?? 90) * 1000
                 : undefined,
             currentTurnDuration: this.currentTurnDuration ?? this.settings?.turnDurationSeconds ?? 90,
+            hasTakenAction: this.hasTakenAction,
         };
     }
 }

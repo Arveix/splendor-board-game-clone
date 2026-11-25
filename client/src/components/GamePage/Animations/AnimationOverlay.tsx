@@ -60,23 +60,27 @@ const AnimatedFlyingCard = ({ item }: { item: CardAnimationPayload }) => {
         opacity: animating ? 0.95 : 1,
         zIndex: 9999,
         pointerEvents: 'none',
+        clipPath: 'inset(0 round 8px)',
       }}
       className="rounded-lg overflow-hidden border-2 border-[#B8923A] shadow-2xl select-none"
     >
       {item.isFaceDown || !cardDetails ? (
-        <div className="w-full h-full bg-[#1B1712] flex flex-col items-center justify-center p-2 text-center text-[#B8923A]">
+        <div className="w-full h-full bg-[#1B1712] flex flex-col items-center justify-center p-2 text-center text-[#B8923A] rounded-[6px]">
           <span className="font-cinzel font-bold text-xl leading-none">{roman}</span>
         </div>
       ) : (
         <div
-          className="w-full h-full bg-cover bg-center flex flex-col justify-between"
-          style={{
-            backgroundImage: `url('/assets/cards/level${cardDetails.tier}/${cardDetails.id}.jpg')`,
-            backgroundSize: '100% 100%',
-          }}
+          className="relative w-full h-full flex flex-col justify-between rounded-[6px] overflow-hidden"
+          style={{ clipPath: 'inset(0 round 6px)' }}
         >
+          <img
+            src={`/assets/cards/level${cardDetails.tier}/${cardDetails.id}.jpg`}
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover rounded-[6px] pointer-events-none select-none"
+            style={{ borderRadius: '6px', clipPath: 'inset(0 round 6px)' }}
+          />
           {/* Header */}
-          <div className="px-1 py-0.5 flex items-center justify-between bg-black/60">
+          <div className="relative z-10 px-1 py-0.5 flex items-center justify-between bg-black/60 rounded-t-[6px]">
             <span className="font-garamond font-bold text-sm text-white drop-shadow">
               {cardDetails.points > 0 ? cardDetails.points : ''}
             </span>
@@ -127,16 +131,16 @@ const AnimatedFlyingNoble = ({ item }: { item: NobleAnimationPayload }) => {
         opacity: animating ? 0.95 : 1,
         zIndex: 9999,
         pointerEvents: 'none',
+        clipPath: 'inset(0 round 8px)',
       }}
       className="rounded-lg overflow-hidden border-2 border-[#B8923A] shadow-2xl select-none bg-cover bg-top"
     >
       {noble && (
-        <div
-          className="w-full h-full bg-cover bg-top"
-          style={{
-            backgroundImage: `url('/assets/nobles/${noble.id}.jpg')`,
-            backgroundSize: '100% 100%',
-          }}
+        <img
+          src={`/assets/nobles/${noble.id}.jpg`}
+          alt=""
+          className="w-full h-full object-cover rounded-[6px]"
+          style={{ borderRadius: '6px', clipPath: 'inset(0 round 6px)' }}
         />
       )}
     </div>

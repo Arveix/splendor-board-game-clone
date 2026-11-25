@@ -80,4 +80,5 @@ export interface GameSessionData {
   turnStartTime?: number;
   turnExpiresAt?: number;
   currentTurnDuration?: number;
+  hasTakenAction?: boolean;
 }

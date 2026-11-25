@@ -4,6 +4,10 @@ import { games, userSessions } from './store.js';
 const gameSockets = new Map();
 export function initWebSocketServer(server) {
     const wss = new WebSocketServer({ server, path: '/ws' });
+    // Log raw HTTP upgrade attempts before ws processes them
+    server.on('upgrade', (req) => {
+        console.log('Upgrade request received:', req.url, req.headers.origin);
+    });
     wss.on('connection', (ws, req) => {
         const url = new URL(req.url || '', 'http://localhost');
         const gameId = url.searchParams.get('gameId');

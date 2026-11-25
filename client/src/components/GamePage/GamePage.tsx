@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   buyCardApi,
   endTurnApi,
@@ -9,12 +9,12 @@ import {
   updateTokensApi,
 } from '../../api';
 import { useFullscreen, useGameWebSocket, usePlayerTurnSelection } from '../../hooks';
-import type { GameSession, GameStatus } from '../../types';
+import type { GameSession, GameStatus, PlayerBonuses } from '../../types';
 import { GameBoard } from './GameBoard';
 import { PlayerPanel } from './PlayerPanel';
 import { AnimationOverlay, type AnimationPayload, type AnimationPayloadInput } from './Animations';
 import { isSoundMuted, setSoundMuted, playSound } from '../../utils/audio';
-import { getCardDetails } from '../../utils/cardUtils';
+import { getCardDetails, getNobleDetails } from '../../utils/cardUtils';
 import { ALL_GEMS } from '../../constants/gems';
 
 interface GamePageProps {
@@ -84,6 +84,29 @@ export const GamePage = ({
         game.activePlayer.name === currentUserPlayer.name)
   );
 
+  // Eligible nobles on board for the current user
+  const eligibleNoblesCount = useMemo(() => {
+    if (!game?.nobleTiles || !currentUserPlayer) return 0;
+    const bonuses: Partial<PlayerBonuses> = currentUserPlayer.bonuses || {};
+    return game.nobleTiles.filter((nobleId) => {
+      const noble = getNobleDetails(nobleId);
+      if (!noble) return false;
+      for (const gem of ALL_GEMS) {
+        const required = noble.cost[gem] || 0;
+        if (required > 0 && (bonuses[gem] || 0) < required) {
+          return false;
+        }
+      }
+      return true;
+    }).length;
+  }, [game?.nobleTiles, currentUserPlayer]);
+
+  const isTurnEnding = Boolean(
+    isCurrentUserActive &&
+      (game?.currentTurnDuration === 5 ||
+        (game?.hasTakenAction && eligibleNoblesCount === 0))
+  );
+
   // Turn selection and token manipulation via custom hook
   const {
     selectedCard,
@@ -108,6 +131,8 @@ export const GamePage = ({
     currentUserTokens: currentUserPlayer?.tokens,
     bankTokens: game?.tokens,
     currentUserBonuses: currentUserPlayer?.bonuses,
+    hasTakenAction: Boolean(game?.hasTakenAction),
+    isTurnEnding,
   });
 
   // Centralized action execution helper that synchronizes game state on response
@@ -362,7 +387,34 @@ export const GamePage = ({
     }
   };
 
-  // Turn timer countdown state
+  // Handle Enter key to end turn during 5s post-action timer (or when action completed)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== 'Enter') return;
+      const target = e.target as HTMLElement | null;
+      if (
+        target &&
+        (target.tagName === 'INPUT' ||
+          target.tagName === 'TEXTAREA' ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
+      if (
+        isCurrentUserActive &&
+        !isEndingTurn &&
+        (game?.hasTakenAction || game?.currentTurnDuration === 5)
+      ) {
+        e.preventDefault();
+        handleEndTurn();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isCurrentUserActive, isEndingTurn, game?.hasTakenAction, game?.currentTurnDuration]);
+
+  // Turn timer countdown state (frontend authoritatively triggers endTurnApi on expiration)
   const turnDuration = game?.currentTurnDuration ?? game?.settings?.turnDurationSeconds ?? 90;
   const [now, setNow] = useState<number>(() => Date.now());
   const hasAutoEndedRef = useRef<boolean>(false);
@@ -375,11 +427,6 @@ export const GamePage = ({
     return () => clearInterval(interval);
   }, [game?.status]);
 
-  // Reset auto-ended guard when turn start time, duration, or active player changes
-  useEffect(() => {
-    hasAutoEndedRef.current = false;
-  }, [game?.turnStartTime, game?.currentTurnDuration, game?.activePlayer?.id]);
-
   const turnExpiresAt =
     game?.turnExpiresAt ||
     (game?.turnStartTime ? game.turnStartTime + turnDuration * 1000 : null);
@@ -388,7 +435,12 @@ export const GamePage = ({
     ? Math.max(0, Math.ceil((turnExpiresAt - now) / 1000))
     : turnDuration;
 
-  // Auto-end active player's turn when turn timer expires
+  // Reset auto-ended guard when turn, active player, or turn duration changes
+  useEffect(() => {
+    hasAutoEndedRef.current = false;
+  }, [game?.turnStartTime, game?.currentTurnDuration, game?.activePlayer?.id]);
+
+  // Frontend-driven turn expiration: active player client ends turn via endTurnApi when timer reaches 0
   useEffect(() => {
     if (
       game?.status === 'active' &&
@@ -873,35 +925,32 @@ export const GamePage = ({
           onClearSelection={clearSelection}
         />
 
-        {/* Right Column: Other Players Stacked Vertically */}
-        <div className="landscape:col-span-3 lg:col-span-3 flex flex-col gap-2 sm:gap-2.5 overflow-y-auto overflow-x-hidden max-h-full custom-scrollbar min-h-0">
-          {otherPlayers.length > 0 ? (
-            otherPlayers.map((otherPlayer) => {
-              const isOtherPlayerActive = Boolean(
-                game?.status === 'active' &&
-                  activePlayer &&
-                  (activePlayer.id === otherPlayer.id || activePlayer.name === otherPlayer.name)
-              );
-              return (
-                <PlayerPanel
-                  key={otherPlayer.id}
-                  player={otherPlayer}
-                  isCurrentUser={false}
-                  isActive={isOtherPlayerActive}
+        {/* Right Column: Controls Bar (top) & Other Players Underneath */}
+        <div className="landscape:col-span-3 lg:col-span-3 flex flex-col gap-2 sm:gap-2.5 max-h-full min-h-0 overflow-hidden">
+          {/* Top Controls Bar: Settings & Menu Button, Turn Timer, Mute Button */}
+          <div className="w-full flex items-center gap-2 shrink-0">
+            {/* Settings & Menu Button */}
+            <button
+              type="button"
+              onClick={() => setIsMenuOpen(true)}
+              className="py-2 px-3 rounded-lg splendor-panel border border-[#B8923A]/30 hover:border-[#B8923A]/70 text-[#B9AE96] hover:text-[#F3D679] flex items-center justify-center gap-1.5 cursor-pointer transition-all shrink-0 hover:bg-[#25211D]/80 shadow-sm"
+              title="Settings & Menu"
+              aria-label="Open settings menu"
+            >
+              <svg className="w-4 h-4 text-[#B8923A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
                 />
-              );
-            })
-          ) : (
-            <PlayerPanel
-              player={null}
-              isCurrentUser={false}
-              isActive={false}
-            />
-          )}
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <span className="text-xs uppercase font-cinzel font-semibold tracking-wider">
+                Menu
+              </span>
+            </button>
 
-          {/* Bottom Row: Turn Timer (left) & Settings & Menu Button (right) */}
-          <div className="w-full mt-auto flex items-center gap-2 shrink-0 pt-1">
-            {/* Turn Timer on the left */}
+            {/* Turn Timer in the center */}
             <div
               className={`flex-1 min-w-0 py-2 px-2.5 sm:px-3 rounded-lg splendor-panel border transition-all flex items-center justify-center gap-2 select-none shadow-sm ${
                 isUrgentTimer
@@ -948,27 +997,33 @@ export const GamePage = ({
                 </svg>
               )}
             </button>
+          </div>
 
-            {/* Settings & Menu Button on the right */}
-            <button
-              type="button"
-              onClick={() => setIsMenuOpen(true)}
-              className="py-2 px-3 rounded-lg splendor-panel border border-[#B8923A]/30 hover:border-[#B8923A]/70 text-[#B9AE96] hover:text-[#F3D679] flex items-center justify-center gap-1.5 cursor-pointer transition-all shrink-0 hover:bg-[#25211D]/80 shadow-sm"
-              title="Settings & Menu"
-              aria-label="Open settings menu"
-            >
-              <svg className="w-4 h-4 text-[#B8923A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                />
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              <span className="text-xs uppercase font-cinzel font-semibold tracking-wider">
-                Menu
-              </span>
-            </button>
+          {/* Other Players Stacked Vertically Underneath */}
+          <div className="flex-1 flex flex-col gap-2 sm:gap-2.5 overflow-y-auto overflow-x-hidden max-h-full custom-scrollbar min-h-0">
+            {otherPlayers.length > 0 ? (
+              otherPlayers.map((otherPlayer) => {
+                const isOtherPlayerActive = Boolean(
+                  game?.status === 'active' &&
+                    activePlayer &&
+                    (activePlayer.id === otherPlayer.id || activePlayer.name === otherPlayer.name)
+                );
+                return (
+                  <PlayerPanel
+                    key={otherPlayer.id}
+                    player={otherPlayer}
+                    isCurrentUser={false}
+                    isActive={isOtherPlayerActive}
+                  />
+                );
+              })
+            ) : (
+              <PlayerPanel
+                player={null}
+                isCurrentUser={false}
+                isActive={false}
+              />
+            )}
           </div>
         </div>
       </div>

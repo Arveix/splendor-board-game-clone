@@ -39,19 +39,14 @@ export const DevelopmentCard = ({
     <div
       data-card-id={cardId}
       onClick={isDisabled ? undefined : onClick}
-      className={`card-face relative w-full aspect-[180/250] rounded-lg overflow-hidden border-2 shadow-md flex flex-col justify-between text-[#2A1F14] select-none transition-all bg-cover bg-center bg-no-repeat isolate ${isSelected
+      className={`card-face relative w-full aspect-[180/250] rounded-lg overflow-hidden border-2 shadow-md flex flex-col justify-between text-[#2A1F14] select-none transition-all isolate bg-clip-padding ${isSelected
         ? 'border-[#F3D679] ring-4 ring-[#F3D679] scale-[1.03] z-20 cursor-pointer'
         : isDisabled
           ? 'border-[#B8923A]/40 cursor-not-allowed hover:scale-100'
           : 'border-[#B8923A] hover:scale-[1.02] cursor-pointer'
         }`}
       style={{
-        backgroundImage: `url('/assets/cards/level${details.tier}/${details.id}.jpg')`,
-        backgroundSize: '100% 100%',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        backgroundColor: 'transparent',
-        backgroundBlendMode: 'normal',
+        clipPath: 'inset(0 round 8px)',
       }}
       title={
         isDisabled
@@ -61,8 +56,19 @@ export const DevelopmentCard = ({
             : `${details.points > 0 ? `${details.points} pts, ` : ''}${gemConfig.name} bonus`
       }
     >
+      {/* Card Artwork Image: explicitly rounded to match inner border curve and clipped */}
+      <img
+        src={`/assets/cards/level${details.tier}/${details.id}.jpg`}
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover rounded-[6px] pointer-events-none select-none"
+        style={{
+          borderRadius: '6px',
+          clipPath: 'inset(0 round 6px)',
+        }}
+      />
+
       {/* Top: Points & Bonus gem icon */}
-      <div className="px-1 py-0.5 sm:px-1.5 md:px-1.5 lg:px-2 md:py-0.5 lg:py-1 flex items-center justify-between shrink-0 bg-black/60">
+      <div className="relative z-10 px-1 py-0.5 sm:px-1.5 md:px-1.5 lg:px-2 md:py-0.5 lg:py-1 flex items-center justify-between shrink-0 bg-black/60 rounded-t-[6px]">
         <span className="font-garamond font-bold text-xs sm:text-sm md:text-sm lg:text-base leading-none text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">
           {details.points > 0 ? details.points : ''}
         </span>
@@ -83,7 +89,7 @@ export const DevelopmentCard = ({
       </div>
 
       {/* Bottom-left: Cost circles starting at bottom-left and stacking upwards */}
-      <div className="mt-auto p-0.5 sm:p-1 md:p-1 lg:p-1.5 shrink-0">
+      <div className="relative z-10 mt-auto p-0.5 sm:p-1 md:p-1 lg:p-1.5 shrink-0 rounded-b-[6px]">
         <div className="flex flex-col-reverse gap-1 items-start w-fit">
           {costRows.map((row, rowIdx) => (
             <div key={rowIdx} className="flex items-center gap-1">
@@ -157,6 +163,9 @@ export const DeckBack = ({
           ? 'border-[#B8923A]/30 opacity-50 shadow-[0_4px_12px_rgba(0,0,0,0.5)] cursor-not-allowed hover:scale-100'
           : 'border-[#B8923A] shadow-[0_4px_12px_rgba(0,0,0,0.5)] hover:scale-[1.02] cursor-pointer'
         }`}
+      style={{
+        clipPath: 'inset(0 round 8px)',
+      }}
       title={
         isDisabled
           ? 'Cannot select a card while tokens are selected'
@@ -208,15 +217,14 @@ export const NobleCard = ({
     <div
       data-noble-id={nobleId}
       onClick={isDisabled ? undefined : onClick}
-      className={`card-face relative w-full aspect-[140/164] rounded-lg overflow-hidden border-2 shadow-md flex flex-col justify-between text-[#2A1F14] select-none transition-all bg-cover bg-top bg-no-repeat ${isSelected
+      className={`card-face relative w-full aspect-[140/164] rounded-lg overflow-hidden border-2 shadow-md flex flex-col justify-between text-[#2A1F14] select-none transition-all isolate bg-clip-padding ${isSelected
         ? 'border-[#F3D679] ring-4 ring-[#F3D679] scale-[1.03] z-20 cursor-pointer'
         : isDisabled
           ? 'border-[#B8923A] cursor-not-allowed hover:scale-100'
           : 'border-[#B8923A] hover:scale-[1.03] cursor-pointer'
         }`}
       style={{
-        backgroundImage: `url('/assets/nobles/${noble.id}.jpg')`,
-        backgroundBlendMode: 'normal',
+        clipPath: 'inset(0 round 8px)',
       }}
       title={
         isDisabled
@@ -226,6 +234,17 @@ export const NobleCard = ({
             : `${noble.name}: 3 prestige points. Requires ${costEntries.map((c) => `${c.count} ${GEM_CONFIG[c.gem].name}`).join(', ')} (click to invite)`
       }
     >
+      {/* Noble Artwork Image: explicitly rounded to match inner border curve and clipped */}
+      <img
+        src={`/assets/nobles/${noble.id}.jpg`}
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover rounded-[6px] pointer-events-none select-none"
+        style={{
+          borderRadius: '6px',
+          clipPath: 'inset(0 round 6px)',
+        }}
+      />
+
       {/* Top-right: Prestige points circular badge with subtle dark background and white border */}
       <div className="absolute top-1 right-1 sm:top-1.5 sm:right-1.5 w-5 h-5 sm:w-5.5 sm:h-5.5 md:w-6 md:h-6 lg:w-7 lg:h-7 rounded-full bg-black/60 backdrop-blur-xs border border-white/80 flex items-center justify-center shadow-sm select-none z-10 pointer-events-none">
         <span className="font-garamond font-bold text-xs sm:text-[13px] md:text-sm lg:text-[15px] leading-none text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">

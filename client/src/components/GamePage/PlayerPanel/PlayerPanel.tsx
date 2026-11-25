@@ -46,7 +46,7 @@ export const PlayerPanel = ({
   onUserTokenDecrement,
 }: PlayerPanelProps) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
-  const isCollapsed = isCurrentUser ? false : !isExpanded && !isActive;
+  const isCollapsed = isCurrentUser ? false : !isExpanded;
   const displayScore = score ?? player?.score ?? 0;
   const userTokens = player?.tokens;
   const ownedCards = player?.cards || [];
@@ -89,7 +89,7 @@ export const PlayerPanel = ({
               onClick={onEndTurn}
               disabled={isEndTurnDisabled}
               className="px-3 py-1.5 text-xs font-cinzel font-bold uppercase tracking-wider rounded-lg transition-all cursor-pointer disabled:cursor-not-allowed bg-[#B8923A] hover:bg-[#D4A83A] text-[#120A05] disabled:bg-[#4A4338] disabled:text-[#8A8272] shadow-sm disabled:shadow-none"
-              title={isEndTurnDisabled ? 'Not your turn' : 'End Turn'}
+              title={isEndTurnDisabled ? 'Not your turn' : 'End Turn (Press Enter)'}
             >
               End Turn
             </button>
