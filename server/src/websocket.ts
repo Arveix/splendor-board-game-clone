@@ -8,6 +8,11 @@ const gameSockets = new Map<string, Set<WebSocket>>();
 export function initWebSocketServer(server: HttpServer): WebSocketServer {
   const wss = new WebSocketServer({ server, path: '/ws' });
 
+  // Log raw HTTP upgrade attempts before ws processes them
+  server.on('upgrade', (req) => {
+    console.log('Upgrade request received:', req.url, req.headers.origin);
+  });
+
   wss.on('connection', (ws, req) => {
     const url = new URL(req.url || '', 'http://localhost');
     const gameId = url.searchParams.get('gameId');
