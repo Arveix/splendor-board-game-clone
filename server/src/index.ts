@@ -19,10 +19,29 @@ const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || '*';
 app.use(express.json());
 
 // CORS Middleware
-app.use((_req, res, next) => {
-  res.header('Access-Control-Allow-Origin', CLIENT_ORIGIN);
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (!CLIENT_ORIGIN || CLIENT_ORIGIN === '*') {
+    res.header('Access-Control-Allow-Origin', origin || '*');
+  } else {
+    const allowed = CLIENT_ORIGIN.split(',').map((o) => o.trim());
+    if (origin && (allowed.includes(origin) || allowed.includes('*'))) {
+      res.header('Access-Control-Allow-Origin', origin);
+    } else {
+      res.header('Access-Control-Allow-Origin', origin || allowed[0]);
+    }
+  }
+
   res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-session-id');
+  res.header('Access-Control-Max-Age', '86400');
+
+  // Respond immediately with 200 OK to preflight OPTIONS requests
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+
   next();
 });
 
