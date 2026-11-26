@@ -253,7 +253,7 @@ export const NobleCard = ({
       </div>
 
       {/* Left: Cost elements tagged vertically as rectangular blocks matching gem colors */}
-      <div className="noble-cost-container h-full flex flex-col justify-center py-0.5 px-0.5 lg:p-1.5 gap-0.5 lg:gap-1.5 items-start w-fit shrink-0">
+      <div className="noble-cost-container relative z-10 h-full flex flex-col justify-center py-0.5 px-0.5 lg:p-1.5 gap-0.5 lg:gap-1.5 items-start w-fit shrink-0">
         {costEntries.map((c) => {
           const costConfig = GEM_CONFIG[c.gem];
           return (

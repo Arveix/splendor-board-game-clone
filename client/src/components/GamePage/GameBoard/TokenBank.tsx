@@ -43,10 +43,8 @@ export const TokenBank = ({
             context
           );
           const canAdd = validation.isValid;
-          const isGold = tokenKey === 'gold';
-          // Gold cannot be selected directly from bank, but has NO visual change (no opacity reduction)
-          const isBankDisabled = isGold || (!isBankSelected && !canAdd) || count === 0;
-          const isVisuallyDimmed = !isGold && ((!isBankSelected && !canAdd) || count === 0);
+          const isBankDisabled = (!isBankSelected && !canAdd) || count === 0;
+          const isVisuallyDimmed = (!isBankSelected && !canAdd) || count === 0;
 
           return (
             <div
@@ -59,8 +57,6 @@ export const TokenBank = ({
               className={`flex items-center justify-center py-1.5 transition-transform min-w-0 ${
                 isVisuallyDimmed
                   ? 'opacity-40 cursor-not-allowed hover:scale-100'
-                  : isGold
-                  ? 'cursor-not-allowed hover:scale-100'
                   : 'cursor-pointer hover:scale-110 active:scale-95'
               }`}
               title={
