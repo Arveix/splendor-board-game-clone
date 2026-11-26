@@ -23,6 +23,8 @@ export interface PlayerPanelProps {
   hasCardSelected?: boolean;
   hasTokensSelected?: boolean;
   validationContext?: ValidationContext;
+  hiddenCardIds?: Set<string>;
+  hiddenNobleIds?: Set<string>;
   onCardClick?: (cardId: string) => void;
   onUserTokenClick?: (tokenKey: TokenType) => void;
   onUserTokenDecrement?: (tokenKey: TokenType) => void;
@@ -41,6 +43,8 @@ export const PlayerPanel = ({
   hasCardSelected = false,
   hasTokensSelected = false,
   validationContext,
+  hiddenCardIds,
+  hiddenNobleIds,
   onCardClick,
   onUserTokenClick,
   onUserTokenDecrement,
@@ -62,7 +66,7 @@ export const PlayerPanel = ({
           ? 'landscape:col-span-3 lg:col-span-3 overflow-y-auto overflow-x-hidden max-h-full custom-scrollbar p-3 sm:p-3.5 gap-2.5'
           : isCollapsed
             ? 'w-full shrink-0 px-2.5 py-2 gap-0'
-            : 'w-full shrink-0 p-2 sm:p-2.5 lg:p-3.5 gap-2 sm:gap-2.5'
+            : 'w-full shrink-0 p-2 sm:p-2.5 gap-2 sm:gap-2.5'
         } ${className || ''}`}
     >
       {/* Row 1: Header (Player name & score + Menu or Dropdown) */}
@@ -141,12 +145,12 @@ export const PlayerPanel = ({
           : 'grid-rows-[1fr] opacity-100'
           }`}
       >
-        <div className={`${isCurrentUser ? 'overflow-visible' : 'overflow-hidden'} flex flex-col gap-2.5 min-h-0 pt-0.5`}>
+        <div className={`${isCurrentUser || !isCollapsed ? 'overflow-visible' : 'overflow-hidden'} flex flex-col gap-2.5 min-h-0 pt-0.5`}>
           {/* Row 2: Tokens held */}
           <div className="flex flex-col gap-1.5">
             <div className={isCurrentUser
               ? "grid grid-cols-3 gap-2 sm:gap-2.5 w-full px-2 sm:px-2.5 py-1 text-center justify-items-center items-center"
-              : "flex items-center justify-between w-full py-1 px-1 sm:px-1.5 gap-1 sm:gap-1.5"
+              : "grid grid-cols-6 gap-1 sm:gap-1.5 w-full py-1 px-0.5 justify-items-center items-center"
             }>
               {ALL_TOKENS.map((tokenKey) => {
                 const config = GEM_CONFIG[tokenKey];
@@ -219,7 +223,7 @@ export const PlayerPanel = ({
                 return (
                   <div
                     key={tokenKey}
-                    className="flex-1 min-w-0 max-w-[28px] sm:max-w-[30px] lg:max-w-[32px] aspect-square rounded-full flex items-center justify-center font-garamond font-bold text-xs sm:text-[13px] lg:text-[15px] shadow-sm border border-white/80 select-none leading-none"
+                    className="w-6 h-6 sm:w-7 sm:h-7 lg:w-7.5 lg:h-7.5 rounded-full flex items-center justify-center font-garamond font-bold text-xs sm:text-[13px] shadow-sm border border-white/80 select-none leading-none shrink-0"
                     style={{ backgroundColor: config.mainColor, color: config.textColor }}
                     title={`${count} ${config.name} tokens held`}
                   >
@@ -246,12 +250,12 @@ export const PlayerPanel = ({
               </div>
               <div
                 data-nobles-tray={player?.id || 'nobles'}
-                className="grid grid-cols-3 gap-1.5 sm:gap-2 p-1 w-full"
+                className="grid grid-cols-3 gap-1.5 sm:gap-2 p-1 w-full justify-items-center items-center"
                 style={{ gridTemplateColumns: 'repeat(3, minmax(0, 1fr))' }}
               >
                 {player.nobles.map((nobleId, idx) => (
                   <div key={nobleId} data-noble-slot={idx} className="w-full col-span-1 min-w-0 flex justify-center">
-                    <NobleCard nobleId={nobleId} />
+                    <NobleCard nobleId={nobleId} isHidden={hiddenNobleIds?.has(nobleId)} />
                   </div>
                 ))}
               </div>
@@ -273,7 +277,7 @@ export const PlayerPanel = ({
                 </div>
                 <div
                   data-reserved-tray={player?.id || 'reserved'}
-                  className="grid grid-cols-3 gap-1.5 sm:gap-2 p-1 w-full"
+                  className="grid grid-cols-3 gap-1.5 sm:gap-2 p-1 w-full justify-items-center items-center"
                   style={{ gridTemplateColumns: 'repeat(3, minmax(0, 1fr))' }}
                 >
                   {[0, 1, 2].map((slotIdx) => {
@@ -293,6 +297,7 @@ export const PlayerPanel = ({
                             cardId={cardId}
                             isSelected={selectedCard === cardId}
                             isDisabled={!cardValidation.isValid && selectedCard !== cardId}
+                            isHidden={hiddenCardIds?.has(cardId)}
                             onClick={() => onCardClick?.(cardId)}
                           />
                         </div>

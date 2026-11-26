@@ -39,9 +39,14 @@ export const GamePage = ({
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
   const [isMuted, setIsMuted] = useState<boolean>(() => isSoundMuted());
   const [animations, setAnimations] = useState<AnimationPayload[]>([]);
+  const [hiddenCardIds, setHiddenCardIds] = useState<Set<string>>(new Set());
+  const [hiddenNobleIds, setHiddenNobleIds] = useState<Set<string>>(new Set());
   const [leaving, setLeaving] = useState<boolean>(false);
   const [isEndingTurn, setIsEndingTurn] = useState<boolean>(false);
   const [isRematching, setIsRematching] = useState<boolean>(false);
+
+  const animCallbacksRef = useRef<Map<string, () => void>>(new Map());
+  const activeCardFlightPromiseRef = useRef<Promise<void> | null>(null);
 
   const toggleSound = () => {
     const next = !isMuted;
@@ -52,12 +57,54 @@ export const GamePage = ({
     }
   };
 
-  const addAnimation = (anim: AnimationPayloadInput) => {
+  const addAnimation = (anim: AnimationPayloadInput, onComplete?: () => void): string => {
     const id = `${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
+    if (onComplete) {
+      animCallbacksRef.current.set(id, onComplete);
+    }
     setAnimations((prev) => [...prev, { ...anim, id } as AnimationPayload]);
+    return id;
   };
 
   const removeAnimation = (id: string) => {
+    const cb = animCallbacksRef.current.get(id);
+    if (cb) {
+      animCallbacksRef.current.delete(id);
+      try {
+        cb();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    const anim = animations.find((a) => a.id === id);
+    if (anim) {
+      if (anim.type === 'card' && anim.cardId) {
+        setHiddenCardIds((prev) => {
+          const next = new Set(prev);
+          next.delete(anim.cardId!);
+          return next;
+        });
+        const el = document.querySelector(`[data-card-id="${anim.cardId}"]`);
+        if (el) {
+          (el as HTMLElement).style.visibility = '';
+        }
+        const slotEl = el?.closest('[data-card-slot]');
+        if (slotEl) {
+          (slotEl as HTMLElement).style.visibility = '';
+        }
+      } else if (anim.type === 'noble' && anim.nobleId) {
+        setHiddenNobleIds((prev) => {
+          const next = new Set(prev);
+          next.delete(anim.nobleId);
+          return next;
+        });
+        const el = document.querySelector(`[data-noble-id="${anim.nobleId}"]`);
+        if (el) {
+          (el as HTMLElement).style.visibility = '';
+        }
+      }
+    }
     setAnimations((prev) => prev.filter((a) => a.id !== id));
   };
 
@@ -144,9 +191,15 @@ export const GamePage = ({
         if (data.game) {
           setGame(data.game);
         }
+      } else {
+        // If action rejected, restore hidden cards/nobles
+        setHiddenCardIds(new Set());
+        setHiddenNobleIds(new Set());
       }
     } catch {
-      // Handled via WebSocket or retry
+      // Handled via WebSocket or retry, restore on error
+      setHiddenCardIds(new Set());
+      setHiddenNobleIds(new Set());
     }
   };
 
@@ -168,40 +221,65 @@ export const GamePage = ({
     fromEl: Element,
     toEl: Element,
     isFaceDown = false
-  ) => {
-    const fromRect = fromEl.getBoundingClientRect();
-    const toRect = toEl.getBoundingClientRect();
+  ): Promise<void> => {
+    return new Promise<void>((resolve) => {
+      const fromRect = fromEl.getBoundingClientRect();
+      const toRect = toEl.getBoundingClientRect();
 
-    // Canonical card ratio: 180 / 250
-    const CARD_ASPECT = 180 / 250;
-    let targetWidth = toRect.width;
-    let targetHeight = toRect.height;
+      // Canonical card ratio: 180 / 250
+      const CARD_ASPECT = 180 / 250;
+      let targetWidth = toRect.width;
+      let targetHeight = toRect.height;
 
-    // If target element is wider than standard card proportions (e.g. multi-column tray),
-    // clamp width so the flying card maintains correct single-card dimensions
-    if (targetHeight > 0 && (targetWidth > targetHeight || targetWidth / targetHeight > 0.85)) {
-      targetWidth = targetHeight * CARD_ASPECT;
-    } else if (targetWidth > 0 && targetHeight === 0) {
-      targetHeight = targetWidth / CARD_ASPECT;
-    }
+      // If target element is wider than standard card proportions (e.g. multi-column tray),
+      // clamp width so the flying card maintains correct single-card dimensions
+      if (targetHeight > 0 && (targetWidth > targetHeight || targetWidth / targetHeight > 0.85)) {
+        targetWidth = targetHeight * CARD_ASPECT;
+      } else if (targetWidth > 0 && targetHeight === 0) {
+        targetHeight = targetWidth / CARD_ASPECT;
+      }
 
-    addAnimation({
-      type: 'card',
-      cardId,
-      tier,
-      isFaceDown,
-      from: {
-        x: fromRect.left,
-        y: fromRect.top,
-        width: fromRect.width || 120,
-        height: fromRect.height || 166,
-      },
-      to: {
-        x: toRect.left,
-        y: toRect.top,
-        width: targetWidth || fromRect.width || 120,
-        height: targetHeight || fromRect.height || 166,
-      },
+      // Immediately hide the card element from its origin (or destination if replenishing)
+      const toCardEl = toEl.hasAttribute('data-card-id')
+        ? toEl
+        : toEl.querySelector('[data-card-id]');
+      if (fromEl.hasAttribute('data-card-id')) {
+        (fromEl as HTMLElement).style.visibility = 'hidden';
+        setHiddenCardIds((prev) => new Set(prev).add(cardId));
+      } else if (toCardEl) {
+        (toCardEl as HTMLElement).style.visibility = 'hidden';
+        setHiddenCardIds((prev) => new Set(prev).add(cardId));
+      } else if (toEl.hasAttribute('data-card-slot')) {
+        (toEl as HTMLElement).style.visibility = 'hidden';
+        setHiddenCardIds((prev) => new Set(prev).add(cardId));
+      }
+
+      const safetyTimer = setTimeout(resolve, 600);
+
+      addAnimation(
+        {
+          type: 'card',
+          cardId,
+          tier,
+          isFaceDown,
+          from: {
+            x: fromRect.left,
+            y: fromRect.top,
+            width: fromRect.width || 120,
+            height: fromRect.height || 166,
+          },
+          to: {
+            x: toRect.left,
+            y: toRect.top,
+            width: targetWidth || fromRect.width || 120,
+            height: targetHeight || fromRect.height || 166,
+          },
+        },
+        () => {
+          clearTimeout(safetyTimer);
+          resolve();
+        }
+      );
     });
   };
 
@@ -218,6 +296,12 @@ export const GamePage = ({
       targetWidth = targetHeight * NOBLE_ASPECT;
     } else if (targetWidth > 0 && targetHeight === 0) {
       targetHeight = targetWidth / NOBLE_ASPECT;
+    }
+
+    // Immediately hide the noble from the table
+    if (fromEl.hasAttribute('data-noble-id')) {
+      (fromEl as HTMLElement).style.visibility = 'hidden';
+      setHiddenNobleIds((prev) => new Set(prev).add(nobleId));
     }
 
     addAnimation({
@@ -270,7 +354,7 @@ export const GamePage = ({
       const cardEl = document.querySelector(`[data-card-id="${cardId}"]`);
       const targetStackEl = document.querySelector(`[data-bonus-stack="${details.bonus}"]`);
       if (cardEl && targetStackEl) {
-        animateCardFlight(cardId, details.tier, cardEl, targetStackEl);
+        activeCardFlightPromiseRef.current = animateCardFlight(cardId, details.tier, cardEl, targetStackEl);
         playSound('cardBuy');
       }
     }
@@ -308,7 +392,7 @@ export const GamePage = ({
       document.querySelector(`[data-reserved-slot="0"]`) ||
       document.querySelector(`[data-reserved-tray]`);
     if (cardEl && targetSlot) {
-      animateCardFlight(cardId, tierNum, cardEl, targetSlot, isFaceDown);
+      activeCardFlightPromiseRef.current = animateCardFlight(cardId, tierNum, cardEl, targetSlot, isFaceDown);
       playSound('cardReserve');
     }
 
@@ -532,6 +616,7 @@ export const GamePage = ({
     }
 
     // 2. Auto Card Replenishment: slide new card from deck into newly opened board slot
+    const replenishments: { tier: 1 | 2 | 3; idx: number; oldCardId?: string; newCardId: string }[] = [];
     ([1, 2, 3] as const).forEach((tier) => {
       const tierKey = `tier${tier}` as const;
       const prevRevealed = prev.revealedCards?.[tierKey] || [];
@@ -540,26 +625,97 @@ export const GamePage = ({
       newRevealed.forEach((newCardId, idx) => {
         const oldCardId = prevRevealed[idx];
         if (newCardId && newCardId !== oldCardId) {
-          const deckEl = document.querySelector(`[data-tier="${tier}"]`);
-          const cardEl = document.querySelector(`[data-card-id="${newCardId}"]`);
-          if (deckEl && cardEl) {
-            animateCardFlight(newCardId, tier, deckEl, cardEl);
-            playSound('cardReserve');
-          }
+          replenishments.push({ tier, idx, oldCardId, newCardId });
         }
       });
     });
 
-    // 3. Other players' moves (multiplayer animation)
+    if (replenishments.length > 0) {
+      (async () => {
+        // Immediately hide new cards on the table so they do not flash in the slot before animating from deck
+        setHiddenCardIds((prevIds) => {
+          const next = new Set(prevIds);
+          replenishments.forEach((r) => next.add(r.newCardId));
+          return next;
+        });
+
+        // If another player bought or reserved a card from the table, animate that card moving to their player panel
+        if (prev.activePlayer && prev.activePlayer.id !== currentUserPlayer?.id) {
+          const otherId = prev.activePlayer.id;
+          const otherName = prev.activePlayer.name;
+          const prevPlayer = prev.players?.find((p) => p.id === otherId || p.name === otherName);
+          const currPlayer = game.players?.find((p) => p.id === otherId || p.name === otherName);
+          const otherPanelEl =
+            document.querySelector(`[data-player-panel="${otherId}"]`) ||
+            document.querySelector(`[data-player-panel="${otherName}"]`);
+
+          if (prevPlayer && currPlayer && otherPanelEl) {
+            for (const r of replenishments) {
+              if (r.oldCardId) {
+                const bought =
+                  (currPlayer.cards || []).includes(r.oldCardId) &&
+                  !(prevPlayer.cards || []).includes(r.oldCardId);
+                const reserved =
+                  (currPlayer.reservedCards || []).includes(r.oldCardId) &&
+                  !(prevPlayer.reservedCards || []).includes(r.oldCardId);
+
+                if (bought || reserved) {
+                  const slotEl =
+                    document.querySelector(`[data-card-slot="tier${r.tier}-${r.idx}"]`) ||
+                    document.querySelector(`[data-card-id="${r.oldCardId}"]`);
+                  if (slotEl) {
+                    activeCardFlightPromiseRef.current = animateCardFlight(
+                      r.oldCardId,
+                      r.tier,
+                      slotEl,
+                      otherPanelEl
+                    );
+                    playSound(bought ? 'cardBuy' : 'cardReserve');
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        // Wait till the bought or reserved card moves to the player before starting to move a new card from deck to card table
+        if (activeCardFlightPromiseRef.current) {
+          await activeCardFlightPromiseRef.current;
+          activeCardFlightPromiseRef.current = null;
+        }
+
+        // Now move new card(s) from deck to card table slot
+        replenishments.forEach((r) => {
+          const deckEl = document.querySelector(`[data-tier="${r.tier}"]`);
+          const cardEl =
+            document.querySelector(`[data-card-id="${r.newCardId}"]`) ||
+            document.querySelector(`[data-card-slot="tier${r.tier}-${r.idx}"]`);
+          if (deckEl && cardEl) {
+            animateCardFlight(r.newCardId, r.tier, deckEl, cardEl);
+            playSound('cardReserve');
+          } else {
+            setHiddenCardIds((prevIds) => {
+              const next = new Set(prevIds);
+              next.delete(r.newCardId);
+              return next;
+            });
+          }
+        });
+      })();
+    }
+
+    // 3. Other players' moves (multiplayer animation when not already handled by card replenish)
     if (prev.activePlayer && prev.activePlayer.id !== currentUserPlayer?.id) {
       const otherId = prev.activePlayer.id;
       const prevPlayer = prev.players?.find((p) => p.id === otherId);
       const currPlayer = game.players?.find((p) => p.id === otherId);
       if (prevPlayer && currPlayer) {
-        if ((currPlayer.cards?.length || 0) > (prevPlayer.cards?.length || 0)) {
-          playSound('cardBuy');
-        } else if ((currPlayer.reservedCards?.length || 0) > (prevPlayer.reservedCards?.length || 0)) {
-          playSound('cardReserve');
+        if (replenishments.length === 0) {
+          if ((currPlayer.cards?.length || 0) > (prevPlayer.cards?.length || 0)) {
+            playSound('cardBuy');
+          } else if ((currPlayer.reservedCards?.length || 0) > (prevPlayer.reservedCards?.length || 0)) {
+            playSound('cardReserve');
+          }
         }
         if ((currPlayer.nobles?.length || 0) > (prevPlayer.nobles?.length || 0)) {
           playSound('nobleVisit');
@@ -891,6 +1047,8 @@ export const GamePage = ({
           hasCardSelected={hasCardSelected}
           hasTokensSelected={hasTokensSelected}
           validationContext={validationContext}
+          hiddenCardIds={hiddenCardIds}
+          hiddenNobleIds={hiddenNobleIds}
           onCardClick={handleCardClick}
           onUserTokenClick={handleUserTokenClick}
           onUserTokenDecrement={handleUserTokenDecrement}
@@ -909,6 +1067,8 @@ export const GamePage = ({
           hasTokensSelected={hasTokensSelected}
           hasNobleSelected={hasNobleSelected}
           validationContext={validationContext}
+          hiddenCardIds={hiddenCardIds}
+          hiddenNobleIds={hiddenNobleIds}
           onCardClick={handleCardClick}
           onNobleClick={handleNobleClick}
           onBuyCard={handleBuyCard}
@@ -1000,7 +1160,7 @@ export const GamePage = ({
           </div>
 
           {/* Other Players Stacked Vertically Underneath */}
-          <div className="flex-1 flex flex-col gap-2 sm:gap-2.5 overflow-y-auto overflow-x-hidden max-h-full custom-scrollbar min-h-0">
+          <div className="flex-1 flex flex-col gap-2 sm:gap-2.5 overflow-y-auto overflow-x-hidden max-h-full custom-scrollbar min-h-0 pr-1 sm:pr-1.5">
             {otherPlayers.length > 0 ? (
               otherPlayers.map((otherPlayer) => {
                 const isOtherPlayerActive = Boolean(

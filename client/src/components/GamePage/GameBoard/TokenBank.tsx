@@ -31,7 +31,7 @@ export const TokenBank = ({
 
   return (
     <div className="flex flex-col gap-1.5 border-t border-[#B8923A]/30 pt-2 shrink-0 mt-auto w-full min-w-0 px-0.5 sm:px-1">
-      <div className="grid grid-cols-6 gap-1 sm:gap-1.5 w-full min-w-0">
+      <div className="grid grid-cols-6 gap-1 sm:gap-1.5 w-full min-w-0 justify-items-center items-center">
         {ALL_TOKENS.map((tokenKey) => {
           const config = GEM_CONFIG[tokenKey];
           const count = game?.tokens?.[tokenKey] ?? (tokenKey === 'gold' ? 5 : 7);

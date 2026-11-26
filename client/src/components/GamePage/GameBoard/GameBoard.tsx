@@ -18,6 +18,8 @@ export interface GameBoardProps {
   hasTokensSelected: boolean;
   hasNobleSelected?: boolean;
   validationContext?: ValidationContext;
+  hiddenCardIds?: Set<string>;
+  hiddenNobleIds?: Set<string>;
 
   // Selection handlers
   onCardClick: (cardId: string) => void;
@@ -43,6 +45,8 @@ export const GameBoard = ({
   hasTokensSelected,
   hasNobleSelected = Boolean(selectedNoble),
   validationContext,
+  hiddenCardIds,
+  hiddenNobleIds,
   onCardClick,
   onNobleClick,
   onBuyCard,
@@ -64,6 +68,8 @@ export const GameBoard = ({
         selectedCard={selectedCard}
         selectedNoble={selectedNoble}
         validationContext={validationContext}
+        hiddenCardIds={hiddenCardIds}
+        hiddenNobleIds={hiddenNobleIds}
         onCardClick={onCardClick}
         onNobleClick={onNobleClick}
       />

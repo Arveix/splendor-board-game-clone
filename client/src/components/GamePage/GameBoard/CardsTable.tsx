@@ -7,6 +7,8 @@ export interface CardsTableProps {
   selectedCard: string | null;
   selectedNoble?: string | null;
   validationContext?: ValidationContext;
+  hiddenCardIds?: Set<string>;
+  hiddenNobleIds?: Set<string>;
   onCardClick: (cardId: string) => void;
   onNobleClick?: (nobleId: string) => void;
 }
@@ -16,6 +18,8 @@ export const CardsTable = ({
   selectedCard,
   selectedNoble,
   validationContext,
+  hiddenCardIds,
+  hiddenNobleIds,
   onCardClick,
   onNobleClick,
 }: CardsTableProps) => {
@@ -41,6 +45,7 @@ export const CardsTable = ({
                     nobleId={nobleId}
                     isSelected={isNobleSelected}
                     isDisabled={isNobleDisabled}
+                    isHidden={hiddenNobleIds?.has(nobleId)}
                     onClick={() => onNobleClick?.(nobleId)}
                   />
                 </div>
@@ -71,7 +76,7 @@ export const CardsTable = ({
         const isDeckDisabled = !deckValidation.isValid && !isDeckSelected;
 
         return (
-          <div key={tierNum} className="grid grid-cols-5 gap-1 sm:gap-1.5 lg:gap-2.5 items-center">
+          <div key={tierNum} className="grid grid-cols-5 gap-1 sm:gap-1.5 lg:gap-2.5 items-center justify-items-center w-full">
             {/* Face-down Deck (Selectable when cards remain in deck) */}
             <DeckBack
               tier={tierNum}
@@ -92,19 +97,26 @@ export const CardsTable = ({
                 const isCardDisabled = !cardValidation.isValid && selectedCard !== cardId;
 
                 return (
-                  <DevelopmentCard
+                  <div
                     key={cardId}
-                    cardId={cardId}
-                    isSelected={selectedCard === cardId}
-                    isDisabled={isCardDisabled}
-                    onClick={() => onCardClick(cardId)}
-                  />
+                    data-card-slot={`tier${tierNum}-${idx}`}
+                    className="w-full flex justify-center items-center"
+                  >
+                    <DevelopmentCard
+                      cardId={cardId}
+                      isSelected={selectedCard === cardId}
+                      isDisabled={isCardDisabled}
+                      isHidden={hiddenCardIds?.has(cardId)}
+                      onClick={() => onCardClick(cardId)}
+                    />
+                  </div>
                 );
               }
               return (
                 <div
                   key={`empty-t${tierNum}-${idx}`}
-                  className="card-slot-empty"
+                  data-card-slot={`tier${tierNum}-${idx}`}
+                  className="card-slot-empty w-full flex justify-center items-center"
                 />
               );
             })}

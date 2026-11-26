@@ -8,11 +8,13 @@ export const DevelopmentCard = ({
   cardId,
   isSelected,
   isDisabled,
+  isHidden,
   onClick,
 }: {
   cardId: string;
   isSelected?: boolean;
   isDisabled?: boolean;
+  isHidden?: boolean;
   onClick?: () => void;
 }) => {
   const details = getCardDetails(cardId);
@@ -39,7 +41,9 @@ export const DevelopmentCard = ({
     <div
       data-card-id={cardId}
       onClick={isDisabled ? undefined : onClick}
-      className={`card-face relative w-full aspect-[180/250] rounded-lg overflow-hidden border-2 shadow-md flex flex-col justify-between text-[#2A1F14] select-none transition-all isolate bg-clip-padding ${isSelected
+      className={`card-face relative w-full aspect-[180/250] rounded-lg overflow-hidden border-2 shadow-md flex flex-col justify-between text-[#2A1F14] select-none transition-all isolate bg-clip-padding ${
+        isHidden ? 'invisible pointer-events-none' : ''
+      } ${isSelected
         ? 'border-[#F3D679] ring-4 ring-[#F3D679] scale-[1.03] z-20 cursor-pointer'
         : isDisabled
           ? 'border-[#B8923A]/40 cursor-not-allowed hover:scale-100'
@@ -175,7 +179,7 @@ export const DeckBack = ({
       }
     >
       {/* Top dots indicator */}
-      <div className="flex items-center gap-1">
+      <div className="flex items-center justify-center gap-1">
         {Array.from({ length: tier }).map((_, i) => (
           <span key={i} className="w-1.5 h-1.5 rounded-full bg-[#B8923A]" />
         ))}
@@ -199,11 +203,13 @@ export const NobleCard = ({
   nobleId,
   isSelected,
   isDisabled,
+  isHidden,
   onClick,
 }: {
   nobleId: string;
   isSelected?: boolean;
   isDisabled?: boolean;
+  isHidden?: boolean;
   onClick?: () => void;
 }) => {
   const noble = getNobleDetails(nobleId);
@@ -217,7 +223,9 @@ export const NobleCard = ({
     <div
       data-noble-id={nobleId}
       onClick={isDisabled ? undefined : onClick}
-      className={`card-face relative w-full aspect-[140/164] rounded-lg overflow-hidden border-2 shadow-md flex flex-col justify-between text-[#2A1F14] select-none transition-all isolate bg-clip-padding ${isSelected
+      className={`card-face relative w-full aspect-[140/164] rounded-lg overflow-hidden border-2 shadow-md flex flex-col justify-between text-[#2A1F14] select-none transition-all isolate bg-clip-padding ${
+        isHidden ? 'invisible pointer-events-none' : ''
+      } ${isSelected
         ? 'border-[#F3D679] ring-4 ring-[#F3D679] scale-[1.03] z-20 cursor-pointer'
         : isDisabled
           ? 'border-[#B8923A] cursor-not-allowed hover:scale-100'

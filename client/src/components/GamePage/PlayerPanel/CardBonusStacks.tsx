@@ -17,13 +17,13 @@ export const CardBonusStacks = ({
   bonuses?: PlayerBonuses;
 }) => {
   return (
-    <div className="flex flex-col gap-1.5">
-      <div className="flex items-center justify-between">
+    <div className="flex flex-col gap-1.5 w-full min-w-0">
+      <div className="flex items-center justify-between px-0.5">
         <span className="text-xs uppercase font-cinzel font-semibold tracking-wider text-[#B8923A]">
           Owned Cards
         </span>
       </div>
-      <div className="grid grid-cols-5 gap-1 sm:gap-1.5 items-start">
+      <div className="grid grid-cols-5 gap-1 sm:gap-1.5 items-start w-full min-w-0 px-0.5 justify-items-center">
         {ALL_GEMS.map((gemKey) => {
           const config = GEM_CONFIG[gemKey];
           const count = bonuses?.[gemKey] ?? 0;
@@ -51,13 +51,13 @@ export const CardBonusStacks = ({
             <div
               key={gemKey}
               data-bonus-stack={gemKey}
-              className="relative w-full"
+              className="relative w-full min-w-0 flex flex-col items-center"
               style={{ paddingBottom: `${(count - 1) * offsetPx}px` }}
               title={`${count} ${config.name} bonus cards (+${count} ${config.name} discount)`}
             >
               {/* Floating bonus count badge for this gem */}
               <div
-                className="absolute -top-1.5 -right-1 z-30 min-w-[16px] h-4 px-0.5 rounded-full border border-white/60 flex items-center justify-center shadow-md select-none font-garamond font-bold text-[10px] leading-none"
+                className="absolute -top-1.5 right-0 z-30 min-w-[16px] h-4 px-0.5 rounded-full border border-white/60 flex items-center justify-center shadow-md select-none font-garamond font-bold text-[10px] leading-none"
                 style={{ backgroundColor: config.mainColor, color: config.textColor }}
                 title={`+${count} ${config.name} permanent bonus`}
               >
@@ -71,7 +71,7 @@ export const CardBonusStacks = ({
                 return (
                   <div
                     key={`${details.id}-${idx}`}
-                    className="absolute left-0 right-0 w-full aspect-[180/250] rounded-lg overflow-hidden border border-[#B8923A] shadow-md flex flex-col justify-between text-[#2A1F14] select-none isolate bg-clip-padding"
+                    className="absolute top-0 left-0 w-full aspect-[180/250] rounded-lg overflow-hidden border border-[#B8923A] shadow-md flex flex-col justify-between text-[#2A1F14] select-none isolate bg-clip-padding"
                     style={{
                       top: `${idx * offsetPx}px`,
                       zIndex: idx + 1,

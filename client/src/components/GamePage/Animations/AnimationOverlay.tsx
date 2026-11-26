@@ -1,4 +1,4 @@
-import { useEffect, useState, type JSX } from 'react';
+import { useEffect, useRef, useState, type JSX } from 'react';
 import { getCardDetails, getNobleDetails } from '../../../utils/cardUtils';
 import { GEM_IMAGES } from '../../../constants/gems';
 
@@ -154,20 +154,37 @@ export const AnimationOverlay = ({
   animations: AnimationPayload[];
   onAnimationEnd: (id: string) => void;
 }): JSX.Element | null => {
-  useEffect(() => {
-    if (animations.length === 0) return;
+  const timersRef = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
 
-    const timers = animations.map((anim) => {
-      const duration = anim.type === 'noble' ? 440 : 400;
-      return setTimeout(() => {
-        onAnimationEnd(anim.id);
-      }, duration);
+  useEffect(() => {
+    // Schedule timers for any newly added animations
+    animations.forEach((anim) => {
+      if (!timersRef.current.has(anim.id)) {
+        const duration = anim.type === 'noble' ? 440 : 400;
+        const timer = setTimeout(() => {
+          timersRef.current.delete(anim.id);
+          onAnimationEnd(anim.id);
+        }, duration);
+        timersRef.current.set(anim.id, timer);
+      }
     });
 
-    return () => {
-      timers.forEach(clearTimeout);
-    };
+    // Clean up timers for animations that are no longer in the list
+    const activeIds = new Set(animations.map((a) => a.id));
+    timersRef.current.forEach((timer, id) => {
+      if (!activeIds.has(id)) {
+        clearTimeout(timer);
+        timersRef.current.delete(id);
+      }
+    });
   }, [animations, onAnimationEnd]);
+
+  useEffect(() => {
+    return () => {
+      timersRef.current.forEach((timer) => clearTimeout(timer));
+      timersRef.current.clear();
+    };
+  }, []);
 
   if (animations.length === 0) return null;
 
